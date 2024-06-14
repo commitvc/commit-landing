@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "commit",
+        "url": "https://commit.fund",
+        "logo": "https://commit.fund/favicon.jpeg",
+        "description": "Venture Capital fund backing commercial open-source startups",
+        "sameAs": [
+          "https://x.com/commitfund",
+          "https://linkedin.com/company/red-river-west",
+          "https://redriverwest.com",
+          "https://www.crunchbase.com/organization/red-river-west"
+        ]
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        setInterval(() => {
+          document.getElementById("input").focus();
+        }, 3 * 1000);
+
+        document.getElementById("input").addEventListener("keyup", (event) => {
+          if (event.key === "Enter") {
+            subscribe();
+          }
+        });
+      });
+
+      const subscribe = async () => {
+        const email = document.getElementById("input").value;
+
+        const response = await fetch("https://commit-api.rrw.ovh/email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+        if (data?.ok) {
+          document.getElementById("input").disabled = true;
+          document.getElementById("success").classList.remove("hidden");
+        } else {
+          document.getElementById("input").value = "";
+        }
+      };
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>commit</title>
+    <meta
+      name="description"
+      content="Venture Capital fund backing commercial open-source startups"
+    />
+    <meta property="og:title" content="commit" />
+    <meta
+      property="og:description"
+      content="Venture Capital fund backing commercial open-source startups"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://commit.fund/card.png" />
+    <meta property="og:url" content="https://commit.fund" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="commit.fund" />
+    <meta property="twitter:url" content="https://commit.fund" />
+    <meta name="twitter:title" content="commit" />
+    <meta
+      name="twitter:description"
+      content="Venture Capital fund backing commercial open-source startups"
+    />
+    <meta name="twitter:image" content="https://commit.fund/card.png" />
+
+    <link
+      rel="preload"
+      href="/font.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="https://commit.fund/favicon.jpeg"
+    />
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #313445;
+        color: #c8d0f2;
+      }
+
+      @font-face {
+        font-family: "MesloLGS NF";
+        src: url("/font.ttf");
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      * {
+        font-family: "MesloLGS NF", monospace;
+      }
+
+      .red {
+        color: #d98786;
+      }
+
+      .green {
+        color: #afd090;
+      }
+
+      .blue {
+        color: #92a9e9;
+      }
+
+      .yellow {
+        color: #e0c997;
+      }
+
+      .logo {
+        font-size: 7px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        margin: auto;
+
+        padding: 12px;
+      }
+
+      .neofetch-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: start;
+        margin-top: 6px;
+      }
+
+      .neofetch-data {
+        margin-left: 12px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      input.transparent {
+        background-color: transparent;
+        border: none;
+        color: #c8d0f2;
+        font-size: 16px;
+        min-width: 90vw;
+        caret-color: #c8d0f2;
+      }
+
+      input.transparent:focus {
+        outline: none;
+      }
+
+      @media screen and (max-width: 600px) {
+        .neofetch-container {
+          flex-direction: column;
+        }
+
+        .neofetch-data {
+          margin-left: 0;
+          margin-top: 6px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <p>> <span class="green">neofetch</span></p>
+
+      <div class="neofetch-container">
+        <div class="logo">
+          <p>
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c::::::::::::::::::::::::cloddddolc:::::::::::::::::::::::::</span
+            ><br />
+            <span class="red">c::::::::::::::::::::lx0X</span
+            ><span>WMMMMMMMMW</span
+            ><span class="red">X0xl:::::::::::::::::::::</span><br />
+            <span class="red">c::::::::::::::::::o0</span
+            ><span>WMMMMMMMMMMMMMMMMW</span
+            ><span class="red">Kd:::::::::::::::::::</span><br />
+            <span class="red">c::::::::::::::::oK</span
+            ><span>MMMMMMMMMMMMMMMMMMMMMM</span
+            ><span class="red">Xo:::::::::::::::::</span><br />
+            <span class="red">c:::::::::::::::k</span
+            >WMMMMMMMMMMMMMMMMMMMMMMMMW<span class="red">kc:::::::::::::::</span
+            ><br />
+            <span class="red">c::::::::::::::ok</span
+            >WWMMMMMMMMMMMMMMMMMMMMMMWW<span class="red">ko:::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:::::::::::::llllooooddddddddddddddddddddddd:::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:cc::::::::::::::cccllllooodddxxxxkkkOOO0000KKKXXX</span
+            >NNNNWWX<span class="red">::</span><br />
+            <span class="red">c:K</span>WWNNNN<span class="red"
+              >XXXKKK0000OOOkkkkxxxdddoooolllcccc:::::::::::::cc::</span
+            ><br />
+            <span class="red">c:K</span
+            >MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWNN<span class="red"
+              >XK0OOkxxdoolc::</span
+            ><br />
+            <span class="red">c:K</span>MMMMMMMWWWNNN<span class="red"
+              >XXXKKK000OOOkkkxxxdddooolllccc::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:oooolllccc:::::::::::::::::::::cccclllooodddxxxkkkOOO00O::</span
+            ><br />
+            <span class="red">c:clllooodddxxxkkkOOO00KKKKXX</span
+            >NNNWWWWMMMMMMMMMMMMMMMMMMMMM<span class="red">X::</span><br />
+            <span class="red">c:0</span
+            >WMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<span
+              class="red"
+              >X::</span
+            ><br />
+            <span class="red">c::clloddxkkO0KKX</span
+            >NNWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<span class="red">X::</span
+            ><br />
+            <span class="red">c::::::::::::::::::ccloddxkkO00KXX</span
+            >NWMMMMMMMMMMMMMMMMMMMMM<span class="red">X::</span><br />
+            <span class="red"
+              >c:OK0Okxxdollc:::::::::::::::::::::cclodxxkO0KXX</span
+            >NWMMMMMMM<span class="red">X::</span><br />
+
+            <span class="red">c:K</span>MMMMMMMMMMWNN<span class="red"
+              >XK00Okkxddolcc:::::::::::::::::::ccloodxkx::</span
+            ><br />
+            <span class="red">c:K</span>MMMMMMMMMMMMMMMMMMMMMMMMMMWNN<span
+              class="red"
+              >XKK0OOkxddollc::::::::::::::</span
+            ><br />
+            <span class="red"
+              >c:oxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxddoolcc:::::::::</span
+            ><br />
+            <span class="red"
+              >lccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc</span
+            ><br />
+          </p>
+        </div>
+        <div class="neofetch-data">
+          <p>
+            <span class="green">commit@redriverwest</span><br />
+            -------------------<br />
+            <span class="yellow">Activity</span>: Venture Capital<br />
+            <span class="yellow">Location</span>: Paris, France 🇫🇷<br />
+            <br />
+            <span class="yellow">Focus</span>: Open-source & Community-driven
+            software <br />
+            <span class="yellow">Stage</span>: Seed, Series A<br />
+            <span class="yellow">Area</span>: Worldwide 🌍 (European focus
+            🇪🇺)<br />
+          </p>
+        </div>
+      </div>
+      <br />
+      <p style="margin-top: 6px">> <span class="green">cat</span> README.md</p>
+      <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;__
+        <br />&nbsp;_______&nbsp;&nbsp;__&nbsp;_&nbsp;&nbsp;__&nbsp;_&nbsp;&nbsp;(_/&nbsp;/_&nbsp;&nbsp;
+        <br />/&nbsp;__/&nbsp;_&nbsp;\/&nbsp;&nbsp;'&nbsp;\/&nbsp;&nbsp;'&nbsp;\/&nbsp;/&nbsp;__/&nbsp;
+        <br />\__/\___/_/_/_/_/_/_/_/\__/&nbsp; <br /><br />a new venture
+        capital fund by
+        <a href="https://redriverwest.com" target="_blank" class="blue"
+          >Red River West</a
+        >
+
+        <br /><br />| “In my history, open-source has always ultimately won”<br />|
+        - Eric Schmidt (former Google CEO)<br />
+        <br />
+        ## tl;dr
+        <br />Backing exceptional commercial open-source startups. <br />More to
+        be announced soon...<br /><br />
+        You can find us here:
+        <li>
+          <span class="yellow">x dot com</span>:
+          <a href="https://x.com/commitfund" target="_blank" class="blue"
+            >@commitfund</a
+          >
+        </li>
+
+        <li>
+          <span class="yellow">email</span>:
+          <a href="mailto:hey@commit.fund" target="_blank" class="blue"
+            >hey@commit.fund</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="https://redriverwest.us4.list-manage.com/subscribe?u=76e3a07b6124b39ee4b15b265&id=3aacca0072"
+            target="_blank"
+            class="blue"
+            >newsletter</a
+          >
+        </li>
+      </p>
+      <br />
+      <p>
+        > <span class="green">bash</span> ./update.sh<br /><br />want to know
+        more? (y/N)<br />> y<br />
+        email:
+        <br />
+      </p>
+      <div style="display: flex; flex-direction: row">
+        >&nbsp;<input type="text" class="transparent" id="input" />
+      </div>
+      <p id="success" class="hidden"><span class="green">subscribed!</span></p>
+    </div>
+  </body>
+</html>
