@@ -18,16 +18,305 @@
       }
     </script>
     <script>
+      const animate = (items) => {
+        // check if items is a list or not
+        if (Array.isArray(items)) {
+          for (let item of items) {
+            if (item.content)
+              document.getElementById(item.id).innerHTML = item.content;
+            document.getElementById(item.id).classList = item.classes;
+          }
+        } else {
+          let item = items;
+          if (item.content)
+            document.getElementById(item.id).innerHTML = item.content;
+          document.getElementById(item.id).classList = item.classes;
+        }
+
+        if (animations.length > 0) {
+          setTimeout(() => {
+            animate(animations.shift());
+          }, Math.random() * 118 + 9);
+        }
+      };
+
+      const animations = [
+        {
+          id: "neofetch",
+          content: "n",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "ne",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "neo",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "neof",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "neofe",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "neofet",
+          classes: "",
+        },
+        {
+          id: "neofetch",
+          content: "neofetch",
+          classes: "green",
+        },
+        [
+          {
+            id: "neofetch-data",
+            content: null,
+            classes: "neofetch-data",
+          },
+          {
+            id: "logo",
+            content: null,
+            classes: "logo",
+          },
+        ],
+        {
+          id: "cat-readme",
+          content: ">",
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: "> c",
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: "> ca",
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span>',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> R',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> RE',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> REA',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> READ',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> READM',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> README',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> README.',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> README.m',
+          classes: "",
+        },
+        {
+          id: "cat-readme",
+          content: '> <span class="green">cat</span> README.md',
+          classes: "",
+        },
+        [
+          {
+            id: "commit-readme-1",
+            content: null,
+            classes: "",
+          },
+          {
+            id: "commit-readme-2",
+            content: null,
+            classes: "",
+          },
+        ],
+        {
+          id: "prompt-email",
+          content: ">",
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: "> b",
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: "> ba",
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: "> bas",
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span>',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> .',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./p',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./pr',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./pro',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prom',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./promp',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_e',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_em',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_ema',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_emai',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email.',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email.s',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email.sh',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email.sh -',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content: '> <span class="green">bash</span> ./prompt_email.sh -y',
+          classes: "",
+        },
+        {
+          id: "prompt-email",
+          content:
+            '> <span class="green">bash</span> ./prompt_email.sh -y<br/>Enter your email:',
+          classes: "",
+        },
+        {
+          id: "input-container",
+          content: null,
+          classes: "",
+        },
+      ];
+
       document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          animate(animations.shift());
+        }, 1250 * Math.random() + 237);
+
         setInterval(() => {
           document.getElementById("input").focus();
         }, 3 * 1000);
 
-        document.getElementById("input").addEventListener("keyup", (event) => {
-          if (event.key === "Enter") {
-            subscribe();
-          }
-        });
+        document
+          .getElementById("input")
+          .addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              subscribe();
+            }
+
+            document.getElementById("input").style.width =
+              document.getElementById("input").value.length + 1 + "ch";
+          });
       });
 
       const subscribe = async () => {
@@ -44,9 +333,14 @@
         const data = await response.json();
         if (data?.ok) {
           document.getElementById("input").disabled = true;
-          document.getElementById("success").classList.remove("hidden");
+          document.getElementById("email-result").innerText = "subscribed!";
+          document.getElementById("email-result").className = "green";
         } else {
           document.getElementById("input").value = "";
+          document.getElementById("email-result").innerText =
+            "an error occured please try again: " + data?.error;
+          document.getElementById("email-result").className = "red";
+          document.getElementById("input").focus();
         }
       };
     </script>
@@ -109,7 +403,7 @@
       }
 
       .hidden {
-        display: none;
+        display: none !important;
       }
 
       * {
@@ -130,6 +424,7 @@
 
       .yellow {
         color: #e0c997;
+        caret-color: #e0c997;
       }
 
       .logo {
@@ -165,14 +460,19 @@
       input.transparent {
         background-color: transparent;
         border: none;
-        color: #c8d0f2;
         font-size: 16px;
         min-width: 90vw;
         caret-color: #c8d0f2;
+        color: #c8d0f2;
       }
 
       input.transparent:focus {
         outline: none;
+      }
+
+      #commit-readme-1 {
+        transform: translateY(-10%);
+        margin-bottom: -30px;
       }
 
       @media screen and (max-width: 600px) {
@@ -184,16 +484,21 @@
           margin-left: 0;
           margin-top: 6px;
         }
+
+        #commit-readme-1 {
+          transform: scale(0.5) translateX(-50%) translateY(-40%);
+          margin-bottom: -70px;
+        }
       }
     </style>
   </head>
 
   <body>
     <div class="container">
-      <p>> <span class="green">neofetch</span></p>
+      <p>> <span class="" id="neofetch"></span></p>
 
       <div class="neofetch-container">
-        <div class="logo">
+        <div class="logo hidden" id="logo">
           <p>
             <span class="red"
               >c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::</span
@@ -290,74 +595,70 @@
             ><br />
           </p>
         </div>
-        <div class="neofetch-data">
+        <div class="neofetch-data hidden" id="neofetch-data">
           <p>
             <span class="green">commit@redriverwest</span><br />
             -------------------<br />
             <span class="yellow">Activity</span>: Venture Capital<br />
             <span class="yellow">Location</span>: Paris, France 🇫🇷<br />
             <br />
-            <span class="yellow">Focus</span>: Open-source & Community-driven
-            software <br />
+            <span class="yellow">Focus</span>: Open-source, Devtools &
+            Community-driven software <br />
             <span class="yellow">Stage</span>: Seed, Series A<br />
             <span class="yellow">Area</span>: Worldwide 🌍 (European focus
-            🇪🇺)<br />
+            🇪🇺)<br /><br />
+            <span class="yellow">𝕏</span>:
+            <a href="https://x.com/commitfund" target="_blank" class="blue"
+              >@commitfund</a
+            ><br />
+            <span class="yellow">Email</span>:
+            <a href="mailto:hey@commit.fund" target="_blank" class="blue"
+              >hey@commit.fund</a
+            ><br />
           </p>
         </div>
       </div>
       <br />
-      <p style="margin-top: 6px">> <span class="green">cat</span> README.md</p>
-      <p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;__
-        <br />&nbsp;_______&nbsp;&nbsp;__&nbsp;_&nbsp;&nbsp;__&nbsp;_&nbsp;&nbsp;(_/&nbsp;/_&nbsp;&nbsp;
-        <br />/&nbsp;__/&nbsp;_&nbsp;\/&nbsp;&nbsp;'&nbsp;\/&nbsp;&nbsp;'&nbsp;\/&nbsp;/&nbsp;__/&nbsp;
-        <br />\__/\___/_/_/_/_/_/_/_/\__/&nbsp; <br /><br />a new venture
-        capital fund by
+      <p style="margin-top: 6px" id="cat-readme" class="hidden">
+        > <span class="green">cat</span> README.md
+      </p>
+      <p id="commit-readme-1" class="hidden">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_
+        &nbsp;_
+        <br />&nbsp;&nbsp;___&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;(_)/&nbsp;|_
+        <br />&nbsp;/
+        __/&nbsp;_&nbsp;\|&nbsp;'_&nbsp;`&nbsp;_&nbsp;\|&nbsp;'_&nbsp;`&nbsp;_&nbsp;\|&nbsp;|&nbsp;__|
+        <br />|&nbsp;(_|&nbsp;(_)&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|_
+        <br />&nbsp;\___\___/|_|&nbsp;|_|&nbsp;|_|_|&nbsp;|_|&nbsp;|_|_|\__|
+      </p>
+      <p id="commit-readme-2" class="hidden">
+        <br /><br />a new venture capital fund by
         <a href="https://redriverwest.com" target="_blank" class="blue"
           >Red River West</a
-        >
-
-        <br /><br />| “In my history, open-source has always ultimately won”<br />|
-        - Eric Schmidt (former Google CEO)<br />
-        <br />
-        ## tl;dr
-        <br />Backing exceptional commercial open-source startups. <br />More to
-        be announced soon...<br /><br />
-        You can find us here:
-        <li>
-          <span class="yellow">x dot com</span>:
-          <a href="https://x.com/commitfund" target="_blank" class="blue"
-            >@commitfund</a
-          >
-        </li>
-
-        <li>
-          <span class="yellow">email</span>:
-          <a href="mailto:hey@commit.fund" target="_blank" class="blue"
-            >hey@commit.fund</a
-          >
-        </li>
-
-        <li>
-          <a
-            href="https://redriverwest.us4.list-manage.com/subscribe?u=76e3a07b6124b39ee4b15b265&id=3aacca0072"
-            target="_blank"
-            class="blue"
-            >newsletter</a
-          >
-        </li>
+        ><br />
+        <br />Backing exceptional projects. <br />More to be announced
+        soon...<br /><br />
+        Join our mailing list:
       </p>
       <br />
-      <p>
-        > <span class="green">bash</span> ./update.sh<br /><br />want to know
-        more? (y/N)<br />> y<br />
-        email:
+
+      <p class="" id="prompt-email">
         <br />
       </p>
-      <div style="display: flex; flex-direction: row">
+      <div
+        style="display: flex; flex-direction: row"
+        id="input-container"
+        class="hidden"
+      >
         >&nbsp;<input type="text" class="transparent" id="input" />
       </div>
-      <p id="success" class="hidden"><span class="green">subscribed!</span></p>
+      <p id="email-result" class="hidden">
+        <span class="green">subscribed!</span>
+      </p>
     </div>
   </body>
 </html>
+
+<!--<br /><br />| “In my history, open-source has always ultimately won”<br />|
+        - Eric Schmidt (former Google CEO)<br />
+        <br />-->
