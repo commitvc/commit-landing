@@ -1,0 +1,9 @@
+Our portfolio companies are building the future of open source software.
+
+Each company in our portfolio shares our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.
+
+We focus on:
+- Developer Tools
+- Open Source Infrastructure
+- Community-driven Software
+- Enterprise Solutions 
