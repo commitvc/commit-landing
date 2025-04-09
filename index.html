@@ -92,12 +92,15 @@
             }
 
             // Check if the file is a profile file
-            if (filePath.includes("abel.txt") || filePath.includes("olivier.txt")) {
-              const lines = content.split('\n');
+            if (
+              filePath.includes("abel.txt") ||
+              filePath.includes("olivier.txt")
+            ) {
+              const lines = content.split("\n");
               const profile = {};
-              lines.forEach(line => {
+              lines.forEach((line) => {
                 // Split only on the first colon to handle URLs properly
-                const colonIndex = line.indexOf(':');
+                const colonIndex = line.indexOf(":");
                 if (colonIndex !== -1) {
                   const key = line.substring(0, colonIndex).trim();
                   const value = line.substring(colonIndex + 1).trim();
@@ -106,15 +109,15 @@
                 }
               });
 
-              console.log('Parsed profile:', profile); // Debug log
+              console.log("Parsed profile:", profile); // Debug log
 
               // Function to append content with delay
               const appendWithDelay = (content, delay) => {
-                return new Promise(resolve => {
+                return new Promise((resolve) => {
                   setTimeout(() => {
                     const terminal = document.getElementById("terminal-output");
-                    const newElement = document.createElement('pre');
-                    newElement.className = 'profile-output';
+                    const newElement = document.createElement("pre");
+                    newElement.className = "profile-output";
                     newElement.innerHTML = content;
                     terminal.appendChild(newElement);
                     terminal.scrollTop = terminal.scrollHeight;
@@ -128,22 +131,28 @@
                 await appendWithDelay(`Name: ${profile.Name}`, 0);
                 await appendWithDelay(`Role: ${profile.Role}`, 300);
                 await appendWithDelay(`Location: ${profile.Location}`, 600);
-                await appendWithDelay(`Github: <a href="${profile.Github}" target="_blank" class="blue">${profile.Github}</a>`, 900);
+                await appendWithDelay(
+                  `Github: <a href="${profile.Github}" target="_blank" class="blue">${profile.Github}</a>`,
+                  900
+                );
                 await appendWithDelay(`Loading photo...`, 1200);
                 await appendWithDelay(`> curl ${profile.Avatar}`, 1500);
 
                 // Show downloading message
-                const downloadingMsg = document.createElement('p');
-                downloadingMsg.className = 'text-green-600 animate-pulse';
-                downloadingMsg.textContent = '[ downloading... ]';
-                document.getElementById("terminal-output").appendChild(downloadingMsg);
-                document.getElementById("terminal-output").scrollTop = document.getElementById("terminal-output").scrollHeight;
+                const downloadingMsg = document.createElement("p");
+                downloadingMsg.className = "text-green-600 animate-pulse";
+                downloadingMsg.textContent = "[ downloading... ]";
+                document
+                  .getElementById("terminal-output")
+                  .appendChild(downloadingMsg);
+                document.getElementById("terminal-output").scrollTop =
+                  document.getElementById("terminal-output").scrollHeight;
 
                 // Show profile card after delay
                 setTimeout(() => {
                   downloadingMsg.remove();
-                  const card = document.createElement('div');
-                  card.className = 'profile-card';
+                  const card = document.createElement("div");
+                  card.className = "profile-card";
                   card.innerHTML = `
                     <img src="${profile.Avatar}" alt="${profile.Name}'s portrait" class="profile-image">
                     <div>
@@ -152,11 +161,12 @@
                     </div>
                   `;
                   document.getElementById("terminal-output").appendChild(card);
-                  document.getElementById("terminal-output").scrollTop = document.getElementById("terminal-output").scrollHeight;
+                  document.getElementById("terminal-output").scrollTop =
+                    document.getElementById("terminal-output").scrollHeight;
                 }, 1000);
               })();
 
-              return '';
+              return "";
             }
 
             return `<pre>${content}</pre>`;
@@ -223,7 +233,7 @@
             return "The password is: opensource";
           },
           description: "A command that is not listed in the help",
-          hidden: true
+          hidden: true,
         },
 
         help: {
@@ -236,8 +246,9 @@
               }
             }
             // Command not found or no command - fallback to listing all commands
-            let helpText = "Thanks for visiting commit.fund, here are the available commands:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
-            Object.keys(commands).forEach(cmd => {
+            let helpText =
+              "Thanks for visiting commit.fund, here are the available commands:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
+            Object.keys(commands).forEach((cmd) => {
               if (!commands[cmd].hidden) {
                 helpText += `<span class="green">${cmd} &nbsp; </span>`;
               }
@@ -297,14 +308,19 @@
           var o = x.length;
           var B = 2654435769;
           var l = Math.floor(6 + 52 / o);
-          var u = x[o - 1], w = x[0];
-          var A, t, s = 0;
+          var u = x[o - 1],
+            w = x[0];
+          var A,
+            t,
+            s = 0;
           while (l-- > 0) {
             s += B;
-            t = s >>> 2 & 3;
+            t = (s >>> 2) & 3;
             for (var m = 0; m < o; m++) {
               w = x[(m + 1) % o];
-              A = (u >>> 5 ^ w << 2) + (w >>> 3 ^ u << 4) ^ (s ^ w) + (r[m & 3 ^ t] ^ u);
+              A =
+                (((u >>> 5) ^ (w << 2)) + ((w >>> 3) ^ (u << 4))) ^
+                ((s ^ w) + (r[(m & 3) ^ t] ^ u));
               u = x[m] += A;
             }
           }
@@ -315,13 +331,18 @@
           var o = x.length;
           var B = 2654435769;
           var l = Math.floor(6 + 52 / o);
-          var u = x[o - 1], w = x[0];
-          var A, t, s = l * B;
+          var u = x[o - 1],
+            w = x[0];
+          var A,
+            t,
+            s = l * B;
           while (s != 0) {
-            t = s >>> 2 & 3;
+            t = (s >>> 2) & 3;
             for (var m = o - 1; m >= 0; m--) {
               u = x[m > 0 ? m - 1 : o - 1];
-              A = (u >>> 5 ^ w << 2) + (w >>> 3 ^ u << 4) ^ (s ^ w) + (r[m & 3 ^ t] ^ u);
+              A =
+                (((u >>> 5) ^ (w << 2)) + ((w >>> 3) ^ (u << 4))) ^
+                ((s ^ w) + (r[(m & 3) ^ t] ^ u));
               w = x[m] -= A;
             }
             s -= B;
@@ -332,7 +353,11 @@
         static strToLongs(o) {
           var m = new Array(Math.ceil(o.length / 4));
           for (var n = 0; n < m.length; n++) {
-            m[n] = o.charCodeAt(n * 4) + (o.charCodeAt(n * 4 + 1) << 8) + (o.charCodeAt(n * 4 + 2) << 16) + (o.charCodeAt(n * 4 + 3) << 24);
+            m[n] =
+              o.charCodeAt(n * 4) +
+              (o.charCodeAt(n * 4 + 1) << 8) +
+              (o.charCodeAt(n * 4 + 2) << 16) +
+              (o.charCodeAt(n * 4 + 3) << 24);
           }
           return m;
         }
@@ -340,7 +365,12 @@
         static longsToStr(m) {
           var o = "";
           for (var n = 0; n < m.length; n++) {
-            o += String.fromCharCode(m[n] & 255, m[n] >>> 8 & 255, m[n] >>> 16 & 255, m[n] >>> 24 & 255);
+            o += String.fromCharCode(
+              m[n] & 255,
+              (m[n] >>> 8) & 255,
+              (m[n] >>> 16) & 255,
+              (m[n] >>> 24) & 255
+            );
           }
           return o;
         }
@@ -398,12 +428,12 @@ If you prefer a more tradional look, feel free to click on the link in the top r
             Team: {
               type: "directory",
               contents: {
-                Private:{
-                  type:"directory",
-                  contents:{
-                    "secret.txt":{
-                      type:"file",
-                      content:`gmguya91vvneVusU7dEE6kI+CPJcPILXSmgPQOtcaHXBlgiU6kdcGilAcOxUCwYDvJOz0efyJLcaCdbrtfF27ufwstuQSgTY3YbNqnmUvc10uBJRJuD8tNTLt6W//xkJv6pzDG9Jm4E=`,
+                Private: {
+                  type: "directory",
+                  contents: {
+                    "secret.txt": {
+                      type: "file",
+                      content: `gmguya91vvneVusU7dEE6kI+CPJcPILXSmgPQOtcaHXBlgiU6kdcGilAcOxUCwYDvJOz0efyJLcaCdbrtfF27ufwstuQSgTY3YbNqnmUvc10uBJRJuD8tNTLt6W//xkJv6pzDG9Jm4E=`,
                     },
                   },
                 },
@@ -442,14 +472,14 @@ We focus on:
                 },
               },
             },
-            "Admin": {
+            Admin: {
               type: "directory",
               contents: {
                 "cool.txt": {
                   type: "file",
-                  content: `There is a hidden command in this terminal called 'secret'`
-                }
-              }
+                  content: `There is a hidden command in this terminal called 'secret'`,
+                },
+              },
             },
           },
         },
@@ -643,9 +673,9 @@ We focus on:
         // Add booting messages
         const bootMessageLines = [
           "System loading...<br>",
-          (new Date()).toString() + "<br>",
+          new Date().toString() + "<br>",
           "Thanks for your interest in >commit<br>",
-          "Ready. <br> Type 'help' to get started.<br><br>"
+          "Ready. <br> Type 'help' to get started.<br><br>",
         ];
 
         // Function to display boot messages with delay
@@ -660,7 +690,9 @@ We focus on:
               terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:~></p>`;
               terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
               // Show the input container after neofetch
-              document.getElementById("input-container").classList.remove("hidden");
+              document
+                .getElementById("input-container")
+                .classList.remove("hidden");
               // Focus the input field
               document.getElementById("terminal-input").focus();
             }, 500);
@@ -827,11 +859,7 @@ We focus on:
       type="font/ttf"
       crossorigin
     />
-    <link
-      rel="icon"
-      type="image/jpeg"
-      href="favicon.jpeg"
-    />
+    <link rel="icon" type="image/jpeg" href="favicon.jpeg" />
 
     <style>
       body,
@@ -844,8 +872,13 @@ We focus on:
       }
 
       @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
       }
 
       .animate-pulse {
@@ -860,6 +893,7 @@ We focus on:
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         width: fit-content;
         margin-top: 1rem;
+        margin-bottom: 12px;
       }
 
       .profile-image {
@@ -914,7 +948,7 @@ We focus on:
       }
 
       .red {
-        color: #E63424;
+        color: #e63424;
       }
 
       .green {
@@ -1003,7 +1037,7 @@ We focus on:
 
       .command-output {
         margin-bottom: 4px;
-        padding: 0 12px;
+        padding: 0 12px 0 0px;
         max-width: calc(100% - 24px);
       }
 
@@ -1018,7 +1052,7 @@ We focus on:
 
       .command-prompt {
         margin-bottom: 8px;
-        padding: 0 12px;
+        padding: 0 12px 0 0px;
       }
 
       #terminal-input {
@@ -1032,7 +1066,7 @@ We focus on:
       }
 
       #input-container {
-        padding: 0 12px;
+        padding: 0 12px 0 0;
         width: calc(100% - 48px);
       }
 
@@ -1055,7 +1089,7 @@ We focus on:
 
       .profile-output {
         margin-bottom: 0px;
-        padding: 0 12px;
+        padding: 0 12px 0 0px;
         max-width: calc(100% - 24px);
       }
 
@@ -1067,17 +1101,29 @@ We focus on:
         padding: 0;
         line-height: 1;
       }
+
+      pre.profile-output {
+        margin-top: 0;
+      }
     </style>
   </head>
 
   <body>
     <a href="https://www.redriverwest.com" class="main-site-button">
-      <img src="ButtonMainSite.png" alt="Visit Red River West">
+      <img src="ButtonMainSite.png" alt="Visit Red River West" />
     </a>
     <div class="container">
       <div id="terminal-output"></div>
-      <div style="display: flex; flex-direction: row" id="input-container" class="hidden">
-        <span class="red">user@commit.fund</span>:><input type="text" id="terminal-input" autocomplete="off" />
+      <div
+        style="display: flex; flex-direction: row"
+        id="input-container"
+        class="hidden"
+      >
+        <span class="red">user@commit.fund</span>:><input
+          type="text"
+          id="terminal-input"
+          autocomplete="off"
+        />
       </div>
     </div>
   </body>
