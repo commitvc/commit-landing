@@ -49,7 +49,7 @@
                 </div>
                 <div class="neofetch-data">
                   <p>
-                    <span class="green">commit@redriverwest</span><br />
+                    <span class="red">commit@redriverwest</span><br />
                     -------------------<br />
                     <span class="yellow">Activity</span>: Venture Capital<br />
                     <span class="yellow">Location</span>: Paris, France 🇫🇷<br />
@@ -90,6 +90,75 @@
             if (content === null) {
               return `cat: ${filePath}: No such file or directory`;
             }
+
+            // Check if the file is a profile file
+            if (filePath.includes("abel.txt") || filePath.includes("olivier.txt")) {
+              const lines = content.split('\n');
+              const profile = {};
+              lines.forEach(line => {
+                // Split only on the first colon to handle URLs properly
+                const colonIndex = line.indexOf(':');
+                if (colonIndex !== -1) {
+                  const key = line.substring(0, colonIndex).trim();
+                  const value = line.substring(colonIndex + 1).trim();
+                  // Store the key exactly as it appears in the file
+                  profile[key] = value;
+                }
+              });
+
+              console.log('Parsed profile:', profile); // Debug log
+
+              // Function to append content with delay
+              const appendWithDelay = (content, delay) => {
+                return new Promise(resolve => {
+                  setTimeout(() => {
+                    const terminal = document.getElementById("terminal-output");
+                    const newElement = document.createElement('pre');
+                    newElement.className = 'profile-output';
+                    newElement.innerHTML = content;
+                    terminal.appendChild(newElement);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    resolve();
+                  }, delay);
+                });
+              };
+
+              // Display profile information sequentially
+              (async () => {
+                await appendWithDelay(`Name: ${profile.Name}`, 0);
+                await appendWithDelay(`Role: ${profile.Role}`, 300);
+                await appendWithDelay(`Location: ${profile.Location}`, 600);
+                await appendWithDelay(`Github: <a href="${profile.Github}" target="_blank" class="blue">${profile.Github}</a>`, 900);
+                await appendWithDelay(`Loading photo...`, 1200);
+                await appendWithDelay(`> curl ${profile.Avatar}`, 1500);
+
+                // Show downloading message
+                const downloadingMsg = document.createElement('p');
+                downloadingMsg.className = 'text-green-600 animate-pulse';
+                downloadingMsg.textContent = '[ downloading... ]';
+                document.getElementById("terminal-output").appendChild(downloadingMsg);
+                document.getElementById("terminal-output").scrollTop = document.getElementById("terminal-output").scrollHeight;
+
+                // Show profile card after delay
+                setTimeout(() => {
+                  downloadingMsg.remove();
+                  const card = document.createElement('div');
+                  card.className = 'profile-card';
+                  card.innerHTML = `
+                    <img src="${profile.Avatar}" alt="${profile.Name}'s portrait" class="profile-image">
+                    <div>
+                      <p class="profile-name">${profile.Name}</p>
+                      <p class="profile-role">${profile.Role}</p>
+                    </div>
+                  `;
+                  document.getElementById("terminal-output").appendChild(card);
+                  document.getElementById("terminal-output").scrollTop = document.getElementById("terminal-output").scrollHeight;
+                }, 1000);
+              })();
+
+              return '';
+            }
+
             return `<pre>${content}</pre>`;
           },
           description: "Display file contents",
@@ -119,16 +188,61 @@
               </div>`;
           },
           description: "Subscribe to our mailing list",
-          isInteractive: true,
+          isInteractiveEmail: true,
         },
-        help: {
+
+        github: {
           execute: () => {
             return `
-              <p>Available commands:</p>
-              <p><span class="green">neofetch</span> - ${commands.neofetch.description}</p>
-              <p><span class="green">email</span> - ${commands.email.description}</p>
-              <p><span class="green">help</span> - Show this help message</p>
-              <p><span class="green">clear</span> - Clear the terminal</p>`;
+              <div id="github-prompt">
+                <p>Do you want to go to our Github page ? (Y/N)</p>
+                <p id="github-result" class="hidden"></p>
+              </div>`;
+          },
+          description: "Go to our Github repository",
+          isInteractiveGithub: true,
+        },
+
+        decrypt: {
+          execute: (args) => {
+            if (args.length !== 2) {
+              return "Usage: decrypt <encoded_text> <password>";
+            }
+            try {
+              const decrypted = Tea.decrypt(args[0], args[1]);
+              return `<pre>${decrypted}</pre>`;
+            } catch (error) {
+              return "Error: Invalid ciphertext or password";
+            }
+          },
+          description: "Decrypt text using a password",
+        },
+
+        secret: {
+          execute: () => {
+            return "The password is: opensource";
+          },
+          description: "A command that is not listed in the help",
+          hidden: true
+        },
+
+        help: {
+          execute: (args) => {
+            if (args.length === 1) {
+              // One argument - show specific command help
+              const cmd = args[0].toLowerCase();
+              if (commands[cmd]) {
+                return `<p><span class="green">${cmd}</span> - ${commands[cmd].description}</p>`;
+              }
+            }
+            // Command not found or no command - fallback to listing all commands
+            let helpText = "Thanks for visiting commit.fund, here are the available commands:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
+            Object.keys(commands).forEach(cmd => {
+              if (!commands[cmd].hidden) {
+                helpText += `<span class="green">${cmd} &nbsp; </span>`;
+              }
+            });
+            return helpText;
           },
           description: "Show help message",
         },
@@ -144,36 +258,177 @@
       let commandHistory = [];
       let historyIndex = -1;
       let isWaitingForEmail = false;
+      let isWaitingForGithub = false;
       let currentDirectory = "/";
+
+      class Tea {
+        static encrypt(r, o) {
+          r = String(r);
+          o = String(o);
+          if (r.length == 0) {
+            return "";
+          }
+          var n = Tea.strToLongs(Tea.utf8Encode(r));
+          var m = Tea.strToLongs(Tea.utf8Encode(o).slice(0, 16));
+          var q = Tea.encode(n, m);
+          var l = Tea.longsToStr(q);
+          var p = Tea.base64Encode(l);
+          return p;
+        }
+
+        static decrypt(l, p) {
+          l = String(l);
+          p = String(p);
+          if (l.length == 0) {
+            return "";
+          }
+          var o = Tea.strToLongs(Tea.base64Decode(l));
+          var n = Tea.strToLongs(Tea.utf8Encode(p).slice(0, 16));
+          var q = Tea.decode(o, n);
+          var r = Tea.longsToStr(q);
+          var m = Tea.utf8Decode(r.replace(/\0+$/, ""));
+          return m;
+        }
+
+        static encode(x, r) {
+          if (x.length < 2) {
+            x[1] = 0;
+          }
+          var o = x.length;
+          var B = 2654435769;
+          var l = Math.floor(6 + 52 / o);
+          var u = x[o - 1], w = x[0];
+          var A, t, s = 0;
+          while (l-- > 0) {
+            s += B;
+            t = s >>> 2 & 3;
+            for (var m = 0; m < o; m++) {
+              w = x[(m + 1) % o];
+              A = (u >>> 5 ^ w << 2) + (w >>> 3 ^ u << 4) ^ (s ^ w) + (r[m & 3 ^ t] ^ u);
+              u = x[m] += A;
+            }
+          }
+          return x;
+        }
+
+        static decode(x, r) {
+          var o = x.length;
+          var B = 2654435769;
+          var l = Math.floor(6 + 52 / o);
+          var u = x[o - 1], w = x[0];
+          var A, t, s = l * B;
+          while (s != 0) {
+            t = s >>> 2 & 3;
+            for (var m = o - 1; m >= 0; m--) {
+              u = x[m > 0 ? m - 1 : o - 1];
+              A = (u >>> 5 ^ w << 2) + (w >>> 3 ^ u << 4) ^ (s ^ w) + (r[m & 3 ^ t] ^ u);
+              w = x[m] -= A;
+            }
+            s -= B;
+          }
+          return x;
+        }
+
+        static strToLongs(o) {
+          var m = new Array(Math.ceil(o.length / 4));
+          for (var n = 0; n < m.length; n++) {
+            m[n] = o.charCodeAt(n * 4) + (o.charCodeAt(n * 4 + 1) << 8) + (o.charCodeAt(n * 4 + 2) << 16) + (o.charCodeAt(n * 4 + 3) << 24);
+          }
+          return m;
+        }
+
+        static longsToStr(m) {
+          var o = "";
+          for (var n = 0; n < m.length; n++) {
+            o += String.fromCharCode(m[n] & 255, m[n] >>> 8 & 255, m[n] >>> 16 & 255, m[n] >>> 24 & 255);
+          }
+          return o;
+        }
+
+        static utf8Encode(l) {
+          return unescape(encodeURIComponent(l));
+        }
+
+        static utf8Decode(l) {
+          try {
+            return decodeURIComponent(escape(l));
+          } catch (m) {
+            return l;
+          }
+        }
+
+        static base64Encode(l) {
+          if (typeof btoa != "undefined") {
+            return btoa(l);
+          }
+          if (typeof Buffer != "undefined") {
+            return new Buffer(l, "binary").toString("base64");
+          }
+          throw new Error("No Base64 Encode");
+        }
+
+        static base64Decode(l) {
+          if (typeof atob == "undefined" && typeof Buffer == "undefined") {
+            throw new Error("No base64 decode");
+          }
+          try {
+            if (typeof atob != "undefined") {
+              return atob(l);
+            }
+            if (typeof Buffer != "undefined") {
+              return new Buffer(l, "base64").toString("binary");
+            }
+          } catch (m) {
+            throw new Error("Invalid ciphertext");
+          }
+        }
+      }
 
       // File system structure
       const fileSystem = {
         "/": {
           type: "directory",
           contents: {
-            team: {
+            "readme.md": {
+              type: "file",
+              content: `Welcome to >commit! 
+This is the "terminal" version of the commit.fund website. 
+If you prefer a more tradional look, feel free to click on the link in the top rigth corner.`,
+            },
+            Team: {
               type: "directory",
               contents: {
+                Private:{
+                  type:"directory",
+                  contents:{
+                    "secret.txt":{
+                      type:"file",
+                      content:`gmguya91vvneVusU7dEE6kI+CPJcPILXSmgPQOtcaHXBlgiU6kdcGilAcOxUCwYDvJOz0efyJLcaCdbrtfF27ufwstuQSgTY3YbNqnmUvc10uBJRJuD8tNTLt6W//xkJv6pzDG9Jm4E=`,
+                    },
+                  },
+                },
                 "abel.txt": {
                   type: "file",
-                  content: `Name: Abel
-Role: General Partner
+                  content: `Name: Abel Samot
+Role: Partner
 Location: Paris, France
-Expertise: Open Source, Developer Tools, Community Building`,
+Github: https://github.com/abelsamot
+Avatar: https://cdn.prod.website-files.com/6470cb59c2a4c33048ef5e50/64ef10f57513babb5e5dce46_Abel_NewBranding.jpg`,
                 },
                 "olivier.txt": {
                   type: "file",
-                  content: `Name: Olivier
-Role: General Partner
-Location: Paris, France
-Expertise: Open Source, Developer Tools, Community Building`,
+                  content: `Name: Olivier Huez
+Role: Partner
+Location: Geneva, Switzerland
+Github: https://github.com/olivierhuez
+Avatar: https://cdn.prod.website-files.com/6470cb59c2a4c33048ef5e50/64ef106696e00eaf5ca6a291_Olivier_WebSite_NewBranding%20copy-p-500.jpg`,
                 },
               },
             },
-            portfolio: {
+            Portfolio: {
               type: "directory",
               contents: {
-                "company.txt": {
+                "company1.txt": {
                   type: "file",
                   content: `Our portfolio companies are building the future of open source software.
 
@@ -186,6 +441,15 @@ We focus on:
 - Enterprise Solutions`,
                 },
               },
+            },
+            "Admin": {
+              type: "directory",
+              contents: {
+                "cool.txt": {
+                  type: "file",
+                  content: `There is a hidden command in this terminal called 'secret'`
+                }
+              }
             },
           },
         },
@@ -299,7 +563,7 @@ We focus on:
       }
 
       function formatPrompt(path) {
-        return path === "/" ? "~" : path;
+        return path === "/" ? ">" : path + ">";
       }
 
       function getAutocompleteSuggestions(input) {
@@ -367,14 +631,44 @@ We focus on:
         input.focus();
 
         function updatePrompt() {
-          const prompt = `<span class="green">user@commit.fund</span>:${formatPrompt(
+          const prompt = `<span class="red">user@commit.fund</span>:${formatPrompt(
             currentDirectory
-          )}$ `;
+          )} `;
           inputContainer.innerHTML =
             prompt +
             `<input type="text" id="terminal-input" autocomplete="off" />`;
           document.getElementById("terminal-input").focus();
         }
+
+        // Add booting messages
+        const bootMessageLines = [
+          "System loading...<br>",
+          (new Date()).toString() + "<br>",
+          "Thanks for your interest in >commit<br>",
+          "Ready. <br> Type 'help' to get started.<br><br>"
+        ];
+
+        // Function to display boot messages with delay
+        function displayBootMessages(index = 0) {
+          if (index < bootMessageLines.length) {
+            terminal.innerHTML += bootMessageLines[index];
+            terminal.scrollTop = terminal.scrollHeight;
+            setTimeout(() => displayBootMessages(index + 1), 500);
+          } else {
+            // After boot messages, show neofetch
+            setTimeout(() => {
+              terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:~></p>`;
+              terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
+              // Show the input container after neofetch
+              document.getElementById("input-container").classList.remove("hidden");
+              // Focus the input field
+              document.getElementById("terminal-input").focus();
+            }, 500);
+          }
+        }
+
+        // Start displaying boot messages
+        displayBootMessages();
 
         // Handle input
         inputContainer.addEventListener("keydown", async (event) => {
@@ -432,15 +726,26 @@ We focus on:
                   resultElement.className = "red";
                   return;
                 }
+              } else if (isWaitingForGithub) {
+                const resultElement = document.getElementById("github-result");
+                if (command.toUpperCase() === "Y") {
+                  window.open("https://github.com/redriverwest", "_blank");
+                }
+                isWaitingForGithub = false;
+                // Hide the prompt after handling response
+                document.getElementById("github-prompt").style.display = "none";
+                input.value = "";
+                input.focus();
+                return;
               } else {
                 // Handle normal commands
                 commandHistory.push(input.value);
                 historyIndex = commandHistory.length;
 
                 // Add command to output
-                terminal.innerHTML += `<p class="command-prompt"><span class="green">user@commit.fund</span>:${formatPrompt(
+                terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
                   currentDirectory
-                )}$ ${input.value}</p>`;
+                )} ${input.value}</p>`;
 
                 // Execute command
                 if (commands[command]) {
@@ -448,8 +753,11 @@ We focus on:
                   if (output) {
                     terminal.innerHTML += `<div class="command-output">${output}</div>`;
                   }
-                  if (commands[command].isInteractive) {
+                  if (commands[command].isInteractiveEmail) {
                     isWaitingForEmail = true;
+                  }
+                  if (commands[command].isInteractiveGithub) {
+                    isWaitingForGithub = true;
                   }
                 } else {
                   terminal.innerHTML += `<div class="command-output">${commands.help.execute()}</div>`;
@@ -480,12 +788,6 @@ We focus on:
             }
           }
         });
-
-        // Auto-run neofetch on startup
-        setTimeout(() => {
-          terminal.innerHTML += `<p class="command-prompt"><span class="green">user@commit.fund</span>:~$ neofetch</p>`;
-          terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
-        }, 500);
       });
     </script>
 
@@ -528,7 +830,7 @@ We focus on:
     <link
       rel="icon"
       type="image/jpeg"
-      href="https://commit.fund/favicon.jpeg"
+      href="favicon.jpeg"
     />
 
     <style>
@@ -539,6 +841,63 @@ We focus on:
         min-height: 100vh;
         background-color: #313445;
         color: #c8d0f2;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .profile-card {
+        background-color: #0f0f0f;
+        padding: 1rem;
+        border: 1px solid red;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        width: fit-content;
+        margin-top: 1rem;
+      }
+
+      .profile-image {
+        width: 12rem;
+        height: 12rem;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 1px solid red;
+        margin-bottom: 0.5rem;
+      }
+
+      .profile-name {
+        color: white;
+        margin: 0;
+      }
+
+      .profile-role {
+        color: white;
+        font-size: 0.875rem;
+        margin: 0;
+      }
+
+      .main-site-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .main-site-button:hover {
+        transform: scale(1.05);
+      }
+
+      .main-site-button img {
+        width: 220px;
+        height: auto;
       }
 
       @font-face {
@@ -555,7 +914,7 @@ We focus on:
       }
 
       .red {
-        color: #d98786;
+        color: #E63424;
       }
 
       .green {
@@ -643,7 +1002,7 @@ We focus on:
       }
 
       .command-output {
-        margin-bottom: 16px;
+        margin-bottom: 4px;
         padding: 0 12px;
         max-width: calc(100% - 24px);
       }
@@ -652,6 +1011,9 @@ We focus on:
         white-space: pre-wrap;
         word-wrap: break-word;
         max-width: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
       }
 
       .command-prompt {
@@ -690,14 +1052,32 @@ We focus on:
       #email-input:focus {
         outline: none;
       }
+
+      .profile-output {
+        margin-bottom: 0px;
+        padding: 0 12px;
+        max-width: calc(100% - 24px);
+      }
+
+      .profile-output pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+      }
     </style>
   </head>
 
   <body>
+    <a href="https://www.redriverwest.com" class="main-site-button">
+      <img src="ButtonMainSite.png" alt="Visit Red River West">
+    </a>
     <div class="container">
       <div id="terminal-output"></div>
-      <div style="display: flex; flex-direction: row" id="input-container">
-        >&nbsp;<input type="text" id="terminal-input" autocomplete="off" />
+      <div style="display: flex; flex-direction: row" id="input-container" class="hidden">
+        <span class="red">user@commit.fund</span>:><input type="text" id="terminal-input" autocomplete="off" />
       </div>
     </div>
   </body>
