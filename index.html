@@ -749,6 +749,7 @@ We focus on:
                       "an error occurred please try again: " + data?.error;
                     resultElement.className = "red";
                     input.value = "";
+                    isWaitingForEmail = false;
                     input.focus();
                     return;
                   }
@@ -756,6 +757,9 @@ We focus on:
                   resultElement.innerText =
                     "an error occurred please try again";
                   resultElement.className = "red";
+                  input.value = "";
+                  isWaitingForEmail = false;
+                  input.focus();
                   return;
                 }
               } else if (isWaitingForGithub) {
