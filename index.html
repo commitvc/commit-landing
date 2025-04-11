@@ -192,9 +192,9 @@
         email: {
           execute: () => {
             return `
-              <div id="email-prompt">
+              <div id="email-prompt-${Date.now()}">
                 <p>Enter your email to subscribe to our mailing list:</p>
-                <p id="email-result" class="hidden"></p>
+                <p id="email-result-${Date.now()}" class="hidden"></p>
               </div>`;
           },
           description: "Subscribe to our mailing list",
@@ -726,7 +726,18 @@ We focus on:
             if (command) {
               if (isWaitingForEmail) {
                 // Handle email submission
-                const resultElement = document.getElementById("email-result");
+                const currentPrompt = document.querySelector(
+                  "#email-prompt-" +
+                    Array.from(
+                      document.querySelectorAll('[id^="email-prompt-"]')
+                    )
+                      .pop()
+                      .id.split("-")
+                      .pop()
+                );
+                const resultElement = currentPrompt.querySelector(
+                  '[id^="email-result-"]'
+                );
                 try {
                   const response = await fetch(
                     "https://commit-api.rrw.ovh/email",
@@ -749,6 +760,7 @@ We focus on:
                       "an error occurred please try again: " + data?.error;
                     resultElement.className = "red";
                     input.value = "";
+                    isWaitingForEmail = false;
                     input.focus();
                     return;
                   }
@@ -756,6 +768,9 @@ We focus on:
                   resultElement.innerText =
                     "an error occurred please try again";
                   resultElement.className = "red";
+                  input.value = "";
+                  isWaitingForEmail = false;
+                  input.focus();
                   return;
                 }
               } else if (isWaitingForGithub) {
