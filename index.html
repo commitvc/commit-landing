@@ -23,8 +23,10 @@
           execute: () => {
             const neofetchContent = `
               <div class="neofetch-container">
+                <div class="logo-container">
                 <div class="logo">
                   <p>
+                    <!--
                     <span class="red">c:::::::::::::::::::::::::::::::::::::::</span><br/>
                     <span class="red">c:::::::::::::::::::::::::::::::::::::::</span><br/>
                     <span class="red">c:::::::::::::::::::::::::::::::::::::::</span><br/>
@@ -45,25 +47,32 @@
                     <span class="red">ck</span>MMMMWWNXKK<span class="red">0Okxxdollc::::::::ccloddxko:</span><br/>
                     <span class="red">cd</span>XXXXXXXXXXXXXXXXXXXX<span class="red">K00Okxddolcc::::::</span><br/>
                     <span class="red">cccccccccccccccccccccccccccccccccccccccc</span><br/>
+                    -->
+
+                    <span class="red">
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;_&nbsp;&nbsp;&nbsp;<br>
+                      &nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;___&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;(_)&nbsp;|_&nbsp;<br>
+                      &nbsp;&nbsp;&bsol;&nbsp;&bsol;&#47;&nbsp;__&#47;&nbsp;_&nbsp;&bsol;|&nbsp;'_&nbsp;&nbsp;_&nbsp;&bsol;|&nbsp;'_&nbsp;&#96;&nbsp;_&nbsp;&bsol;|&nbsp;|&nbsp;__|<br>
+                      &nbsp;&nbsp;&#47;&nbsp;&#47;&nbsp;(_|&nbsp;(_)&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|_&nbsp;<br>
+                      &nbsp;&#47;_&#47;&nbsp;&bsol;___&bsol;___&#47;|_|&nbsp;|_|&nbsp;|_|_|&nbsp;|_|&nbsp;|_|_|&bsol;__|<br>
+
+                    </span>
                   </p>
+                </div>
                 </div>
                 <div class="neofetch-data">
                   <p>
-                    <span class="red">commit@redriverwest</span><br />
-                    -------------------<br />
+                    -----------------------------------------------------------<br />
                     <span class="yellow">Activity</span>: Venture Capital<br />
-                    <span class="yellow">Location</span>: Paris, France 🇫🇷<br />
                     <br />
                     <span class="yellow">Focus</span>: Open-source, Devtools &
                     Community-driven software <br />
                     <span class="yellow">Stage</span>: Seed<br />
-                    <span class="yellow">Area</span>: European focus
-                    🇪🇺<br /><br />
-                    <span class="yellow">𝕏</span>:
-                    <a href="https://x.com/commitfund" target="_blank" class="blue">@commitfund</a>
-                      &nbsp;&nbsp;
-                    <span class="yellow">Email</span>:
-                    <a href="mailto:hey@commit.fund" target="_blank" class="blue">hey@commit.fund</a>
+                    <span class="yellow">Geo</span>: European entrepreneurs 🇪🇺<br /><br />
+                    <span class="yellow">Github</span>: <a href="https://github.com/redriverwest" target="_blank" class="blue">github.com/redriverwest</a><br />
+                    <span class="yellow">𝕏</span>: <a href="https://x.com/commitfund" target="_blank" class="blue">@commitfund</a><br />
+                    <span class="yellow">Email</span>: <a href="mailto:hey@commit.fund" target="_blank" class="blue">hey@commit.fund</a> <br/>
+                    -----------------------------------------------------------<br />
                   </p>
                 </div>
               </div>`;
@@ -71,6 +80,44 @@
           },
           description: "Display system information",
         },
+
+        profile: {
+          execute: (filePath) => {
+            const content = getFileContent(filePath);
+            if (content === null) {
+              return `profile: ${filePath}: No such file`;
+            }
+            const lines = content.split("\n");
+            const teamprofile = {};
+            lines.forEach((line) => {
+              const colonIndex = line.indexOf(":");
+              if (colonIndex !== -1) {
+                const key = line.substring(0, colonIndex).trim();
+                const value = line.substring(colonIndex + 1).trim();
+                teamprofile[key] = value;
+              }
+            });
+            const ProfileContent = 
+              `<div class="profile-card2-container">
+                <div class="image-container"> 
+                  <img src="${teamprofile.Avatar}" alt="${teamprofile.Name}'s portrait" class="profile-image">
+                </div>
+                <div class="profile-card2-data">
+<p>------------------------------------------<br>
+<span class="yellow">${teamprofile.Name}</span><br>
+<span class="yellow">${teamprofile.Role}</span><br>
+<span class="yellow">${teamprofile.Location}</span><br>
+<span class="yellow"><a href="${teamprofile.Github}" target="_blank" class="blue">${teamprofile.Github}</a></span><br>
+------------------------------------------
+</p>
+                </div>
+              </div>`;
+            return ProfileContent;
+          },
+          description: "Display Profile card",
+          hidden: true,
+        },
+
         ls: {
           execute: (args) => {
             const currentPath = getCurrentPath();
@@ -83,20 +130,21 @@
         cat: {
           execute: (args) => {
             if (!args[0]) {
-              return "Usage: cat <file>";
+              return "Usage: cat &lt;file&gt;";
             }
             const filePath = args[0];
-            const content = getFileContent(filePath);
+            let content = getFileContent(filePath);
             if (content === null) {
               return `cat: ${filePath}: No such file or directory`;
             }
 
-            // Check if the file is a profile file
+            // Check if the file is a profile file (could be improved with a file type check so that we don't have to list the file names here)
             if (
               filePath.includes("abel.txt") ||
-              filePath.includes("olivier.txt")
+              filePath.includes("olivier.txt") || filePath.includes("alessandro.txt")
             ) {
-              const lines = content.split("\n");
+              content = commands.profile.execute(filePath);
+              /**const lines = content.split("\n");
               const profile = {};
               lines.forEach((line) => {
                 // Split only on the first colon to handle URLs properly
@@ -166,7 +214,7 @@
                 }, 1000);
               })();
 
-              return "";
+              return "";*/
             }
 
             return `<pre>${content}</pre>`;
@@ -201,22 +249,12 @@
           isInteractiveEmail: true,
         },
 
-        github: {
-          execute: () => {
-            return `
-              <div id="github-prompt">
-                <p>Do you want to go to our Github page ? (Y/N)</p>
-                <p id="github-result" class="hidden"></p>
-              </div>`;
-          },
-          description: "Go to our Github repository",
-          isInteractiveGithub: true,
-        },
+
 
         decrypt: {
           execute: (args) => {
             if (args.length !== 2) {
-              return "Usage: decrypt <encoded_text> <password>";
+              return "Usage: decrypt &lt;encoded_text&gt; &lt;password&gt;";
             }
             try {
               const decrypted = Tea.decrypt(args[0], args[1]);
@@ -247,7 +285,7 @@
             }
             // Command not found or no command - fallback to listing all commands
             let helpText =
-              "Thanks for visiting commit.fund, here are the available commands:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
+              "Here are the available commands on this terminal:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
             Object.keys(commands).forEach((cmd) => {
               if (!commands[cmd].hidden) {
                 helpText += `<span class="green">${cmd} &nbsp; </span>`;
@@ -422,8 +460,8 @@
             "readme.md": {
               type: "file",
               content: `Welcome to >commit! 
-This is the "terminal" version of the commit.fund website. 
-If you prefer a more tradional look, feel free to click on the link in the top rigth corner.`,
+                This is the "terminal" version of the commit.fund website. 
+                We're working on a more traditional look to complement the terminal experience, stay tuned!`,
             },
             team: {
               type: "directory",
@@ -440,35 +478,48 @@ If you prefer a more tradional look, feel free to click on the link in the top r
                 "abel.txt": {
                   type: "file",
                   content: `Name: Abel Samot
-Role: Partner
-Location: Paris, France
-Github: https://github.com/abelsamot
-Avatar: https://cdn.prod.website-files.com/6470cb59c2a4c33048ef5e50/64ef10f57513babb5e5dce46_Abel_NewBranding.jpg`,
+                            Role: Partner
+                            Location: Paris, France 🇫🇷
+                            Github: https://github.com/abelsamot
+                            Avatar: team/Abel_Commit.png`,
                 },
                 "olivier.txt": {
                   type: "file",
                   content: `Name: Olivier Huez
-Role: Partner
-Location: Geneva, Switzerland
-Github: https://github.com/olivierhuez
-Avatar: https://cdn.prod.website-files.com/6470cb59c2a4c33048ef5e50/64ef106696e00eaf5ca6a291_Olivier_WebSite_NewBranding%20copy-p-500.jpg`,
+                            Role: Partner
+                            Location: Geneva, Switzerland 🇨🇭
+                            Github: https://github.com/olivierhuez
+                            Avatar: team/Olivier_Commit.png`,
+                },
+                "alessandro.txt": {
+                  type: "file",
+                  content: `Name: Alessandro Ciffo
+                            Role: Tech Lead
+                            Location: Paris, France 🇫🇷
+                            Github: https://github.com/alessandro-ciffo
+                            Avatar: team/Alessandro_Commit.png`,
+                },
+                "advisors.txt": {
+                  type: "file",
+                  content: `>commit is supported by a team of advisors who are passionate about open source.<br>they're all founders or executives from top open source or devtools companies.<br>Examples include: Datadog, Sentry, Cesium, Hugging Face, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others`,
                 },
               },
             },
             portfolio: {
               type: "directory",
               contents: {
-                "company1.txt": {
+                "comingsoon.txt": {
                   type: "file",
-                  content: `Our portfolio companies are building the future of open source software.
+                  content: `Our portfolio companies are building the future of open source software.<br>
 
 Each company in our portfolio shares our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.
 
 We focus on:
-- Developer Tools
-- Open Source Infrastructure
-- Community-driven Software
-- Enterprise Solutions`,
+- Developer Tools, data platforms, and open source infrastructure
+- Artificial Intelligence and Machine Learning
+- Cybersecurity and SysAdmin tools
+- OS applications and low/no code
+- Industry specifc open source solutions<br>`,
                 },
               },
             },
@@ -675,8 +726,9 @@ We focus on:
           "System loading...<br>",
           new Date().toString() + "<br>",
           "Thanks for your interest in >commit<br>",
-          "Ready. <br> Type 'help' to get started.<br><br>",
+          "Ready. <br><br>",
         ];
+
 
         // Function to display boot messages with delay
         function displayBootMessages(index = 0) {
@@ -687,8 +739,10 @@ We focus on:
           } else {
             // After boot messages, show neofetch
             setTimeout(() => {
-              terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:~></p>`;
+              terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:> neofetch</p>`;
               terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
+              terminal.innerHTML += `<br> Type 'help' to get started or 'email' to subscribe to our newsletter<br><br>`;
+
               // Show the input container after neofetch
               document
                 .getElementById("input-container")
@@ -755,6 +809,8 @@ We focus on:
                     resultElement.innerText = "subscribed!";
                     resultElement.className = "green";
                     isWaitingForEmail = false;
+                    // Add auto-scroll for success message
+                    resultElement.scrollIntoView({ behavior: "smooth" });
                   } else {
                     resultElement.innerText =
                       "an error occurred please try again: " + data?.error;
@@ -762,6 +818,8 @@ We focus on:
                     input.value = "";
                     isWaitingForEmail = false;
                     input.focus();
+                    // Add auto-scroll for error message
+                    resultElement.scrollIntoView({ behavior: "smooth" });
                     return;
                   }
                 } catch (error) {
@@ -771,6 +829,8 @@ We focus on:
                   input.value = "";
                   isWaitingForEmail = false;
                   input.focus();
+                  // Add auto-scroll for error message
+                  resultElement.scrollIntoView({ behavior: "smooth" });
                   return;
                 }
               } else if (isWaitingForGithub) {
@@ -786,16 +846,16 @@ We focus on:
                 return;
               } else {
                 // Handle normal commands
-                commandHistory.push(input.value);
-                historyIndex = commandHistory.length;
-
-                // Add command to output
-                terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
-                  currentDirectory
-                )} ${input.value}</p>`;
-
-                // Execute command
                 if (commands[command]) {
+                  // Add valid command to history
+                  commandHistory.push(input.value);
+                  historyIndex = commandHistory.length;
+
+                  // Show the command in terminal
+                  terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
+                    currentDirectory
+                  )} ${input.value}</p>`;
+
                   const output = commands[command].execute(args);
                   if (output) {
                     terminal.innerHTML += `<div class="command-output">${output}</div>`;
@@ -807,7 +867,12 @@ We focus on:
                     isWaitingForGithub = true;
                   }
                 } else {
-                  terminal.innerHTML += `<div class="command-output">${commands.help.execute()}</div>`;
+                  // For unknown commands, show error and help
+                  terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
+                    currentDirectory
+                  )} ${input.value}</p>`;
+                  terminal.innerHTML += `<div class="command-output">Command '${command}' not found.<br><br>`;
+                  terminal.innerHTML += `${commands.help.execute([])}</div>`;
                 }
               }
 
@@ -912,12 +977,12 @@ We focus on:
       }
 
       .profile-image {
-        width: 12rem;
-        height: 12rem;
+        width: 10rem;
+        height: 10rem;
         object-fit: cover;
-        border-radius: 0.5rem;
-        border: 1px solid red;
-        margin-bottom: 0.5rem;
+        border: 0.5px solid red;
+        margin-top: 6px;
+/**        margin-bottom: 0.5rem;**/
       }
 
       .profile-name {
@@ -980,7 +1045,7 @@ We focus on:
       }
 
       .logo {
-        font-size: 9px;
+        font-size: 14px;
       }
 
       .container {
@@ -993,15 +1058,47 @@ We focus on:
         padding: 12px;
       }
 
-      .neofetch-container {
+      .profile-card2-container {
         display: flex;
         flex-direction: row;
+        align-items: flex-start;
+        margin-top: 1rem;
+        justify-content: flex-start;  /* Ensure content starts from the left */
+      }
+
+      .image-container {
+        display: flex;
+        justify-content: start;
+        align-items: start;
+      }
+
+      .profile-card2-data {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: left;
+        margin-left: 6px;
+      }
+
+
+      .neofetch-container {
+        display: flex;
+        flex-direction: column;
         justify-content: start;
         align-items: start;
         margin-top: 6px;
       }
 
+      .logo-container {
+        display: flex;
+        justify-content: start;
+        width: 100%;
+        align-items: start;
+        margin-top: 12px;
+      }
+
       .neofetch-data {
+        margin-top: 24px;
         margin-left: 12px;
       }
 
