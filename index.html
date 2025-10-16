@@ -20,6 +20,9 @@
       const commands = {
         neofetch: {
           execute: () => {
+            /* i took out the geo <span class="yellow">Geo</span>: European entrepreneurs 🇪🇺<br /><br />
+            <span class="yellow">Focus</span>: Open-source, Devtools &
+                    Community-driven software <br />*/
             const neofetchContent = `
               <div class="neofetch-container">
                 <div class="logo-container">
@@ -64,10 +67,8 @@
                     -----------------------------------------------------------<br />
                     <span class="yellow">Activity</span>: Venture Capital<br />
                     <br />
-                    <span class="yellow">Focus</span>: Open-source, Devtools &
-                    Community-driven software <br />
-                    <span class="yellow">Stage</span>: Seed<br />
-                    <span class="yellow">Geo</span>: European entrepreneurs 🇪🇺<br /><br />
+                    <span class="yellow">Focus</span>: Open-Source, Infra & Devtools <br />
+                    <span class="yellow">Stage</span>: Pre-Seed & Seed<br /><br />
                     <span class="yellow">Github</span>: <a href="https://github.com/redriverwest" target="_blank" class="blue">github.com/redriverwest</a><br />
                     <span class="yellow">Email</span>: <a href="mailto:hey@commit.fund" target="_blank" class="blue">hey@commit.fund</a> <br/>
                     -----------------------------------------------------------<br />
@@ -139,7 +140,9 @@
             // Check if the file is a profile file (could be improved with a file type check so that we don't have to list the file names here)
             if (
               filePath.includes("abel.txt") ||
-              filePath.includes("olivier.txt") || filePath.includes("alessandro.txt")
+              filePath.includes("max.txt") ||
+              filePath.includes("olivier.txt") ||
+              filePath.includes("alessandro.txt")
             ) {
               content = commands.profile.execute(filePath);
               /**const lines = content.split("\n");
@@ -278,17 +281,18 @@
               // One argument - show specific command help
               const cmd = args[0].toLowerCase();
               if (commands[cmd]) {
-                return `<p><span class="green">${cmd}</span> - ${commands[cmd].description}</p>`;
+                return `<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="command">${cmd}</span> - ${commands[cmd].description}</p>`;
               }
             }
             // Command not found or no command - fallback to listing all commands
             let helpText =
-              "Here are the available commands on this terminal:<br> if you want to see the help for a specific command, type 'help' and the command name<br>";
-            Object.keys(commands).forEach((cmd) => {
-              if (!commands[cmd].hidden) {
-                helpText += `<span class="green">${cmd} &nbsp; </span>`;
-              }
-            });
+              "If you want to see the help for a specific command, type 'help' and the command name<br>Here are the available commands on this terminal:<br>";
+            Object.keys(commands)
+              .filter(cmd => !commands[cmd].hidden)
+              .sort()
+              .forEach((cmd) => {
+                helpText += `&nbsp;&nbsp;&nbsp;&nbsp;<span class="command">${cmd}</span><br>`;
+              });
             return helpText;
           },
           description: "Show help message",
@@ -455,11 +459,9 @@
         "/": {
           type: "directory",
           contents: {
-            "readme.md": {
+            "readme.txt": {
               type: "file",
-              content: `Welcome to >commit! 
-                This is the "terminal" version of the commit.fund website. 
-                We're working on a more traditional look to complement the terminal experience, stay tuned!`,
+              content: `Welcome to >commit!<br>TUI v0.1.0 // GUI coming soon™`,
             },
             team: {
               type: "directory",
@@ -470,6 +472,15 @@
                     "secret.txt": {
                       type: "file",
                       content: `gmguya91vvneVusU7dEE6kI+CPJcPILXSmgPQOtcaHXBlgiU6kdcGilAcOxUCwYDvJOz0efyJLcaCdbrtfF27ufwstuQSgTY3YbNqnmUvc10uBJRJuD8tNTLt6W//xkJv6pzDG9Jm4E=`,
+                    },
+                  },
+                },
+                advisors: {
+                  type: "directory",
+                  contents: {
+                    "advisors.txt": {
+                      type: "file",
+                      content: `>commit is supported by a team of advisors who are passionate about open source.<br>they're all founders or executives from top open source or devtools companies.<br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others`,
                     },
                   },
                 },
@@ -489,6 +500,14 @@
                             Github: https://github.com/olivierhuez
                             Avatar: team/Olivier_Commit.png`,
                 },
+                "max.txt": {
+                  type: "file",
+                  content: `Name: Max Corbani
+                            Role: Partner
+                            Location: Paris, France 🇫🇷
+                            Github: https://github.com/mxcrbn
+                            Avatar: team/max_commit.png`,
+                },
                 "alessandro.txt": {
                   type: "file",
                   content: `Name: Alessandro Ciffo
@@ -496,11 +515,11 @@
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/alessandro-ciffo
                             Avatar: team/Alessandro_Commit.png`,
-                },
+                },/*
                 "advisors.txt": {
                   type: "file",
                   content: `>commit is supported by a team of advisors who are passionate about open source.<br>they're all founders or executives from top open source or devtools companies.<br>Examples include: Datadog, Sentry, Cesium, Hugging Face, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others`,
-                },
+                },*/
               },
             },
             portfolio: {
@@ -599,14 +618,23 @@ We focus on:
           return null;
         }
 
-        return Object.keys(current.contents)
-          .map((name) => {
-            const item = current.contents[name];
-            return `<span class="${
-              item.type === "directory" ? "blue" : "green"
-            }">${name}</span>`;
-          })
-          .join("  ");
+        // Get all entries and separate directories from files
+        const entries = Object.entries(current.contents);
+        const directories = entries
+          .filter(([_, item]) => item.type === "directory")
+          .map(([name]) => name)
+          .sort();
+        const files = entries
+          .filter(([_, item]) => item.type === "file")
+          .map(([name]) => name)
+          .sort();
+        
+        // Combine directories first, then files
+        return [...directories.map(name => 
+          `&nbsp;&nbsp;&nbsp;&nbsp;<span class="blue">${name}</span><br>`
+        ), ...files.map(name => 
+          `&nbsp;&nbsp;&nbsp;&nbsp;<span class="green">${name}</span><br>`
+        )].join("");
       }
 
       function getFileContent(path) {
@@ -1041,6 +1069,10 @@ We focus on:
       .yellow {
         color: #e0c997;
         caret-color: #e0c997;
+      }
+
+      .command {
+        color: #E0C0E4;
       }
 
       .logo {
