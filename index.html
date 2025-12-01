@@ -46,7 +46,7 @@
                     <br />
                     <span class="yellow">Focus</span>: Commercial Open Source & Community-driven software<br />
                     <span class="yellow">Stage</span>: Pre-Seed & Seed<br /><br />
-                    <span class="yellow">Github</span>: <a href="https://github.com/redriverwest" target="_blank" class="blue">github.com/redriverwest</a><br />
+                    <span class="yellow">Github</span>: <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a><br />
                     <span class="yellow">Email</span>: <a href="mailto:hey@commit.fund" target="_blank" class="blue">hey@commit.fund</a> <br/>
                     -----------------------------------------------------------<br />
                   </p>
@@ -94,6 +94,43 @@
           hidden: true,
         },
 
+        portfolioProfile: {
+          execute: (filePath) => {
+            const content = getFileContent(filePath);
+            if (content === null) {
+              return `portfolio-profile: ${filePath}: No such file`;
+            }
+            const lines = content.split("\n");
+            const companyprofile = {};
+            lines.forEach((line) => {
+              const colonIndex = line.indexOf(":");
+              if (colonIndex !== -1) {
+                const key = line.substring(0, colonIndex).trim();
+                const value = line.substring(colonIndex + 1).trim();
+                companyprofile[key] = value;
+              }
+            });
+            const ProfileContent = 
+              `<div class="profile-card2-container">
+                <div class="image-container"> 
+                  <img src="${companyprofile.Avatar}" alt="${companyprofile.Company}'s logo" class="portfolio-profile-image">
+                </div>
+                <div class="profile-card2-data">
+<p>------------------------------------------<br>
+<span class="yellow">${companyprofile.Company}</span><br>
+<span class="yellow">${companyprofile['One-Liner']}</span><br>
+<span class="yellow"><a href="${companyprofile.Website}" target="_blank" class="blue">${companyprofile.Website}</a></span><br>
+<span class="yellow"><a href="${companyprofile.Github}" target="_blank" class="blue">${companyprofile.Github}</a></span><br>
+------------------------------------------
+                  </p>
+                </div>
+              </div>`;
+            return ProfileContent;
+          },
+          description: "Display Portfolio Profile card",
+          hidden: true,
+        },
+
         ls: {
           execute: (args) => {
             const currentPath = getCurrentPath();
@@ -114,7 +151,7 @@
               return `cat: ${filePath}: No such file or directory`;
             }
 
-            // Check if the file is a profile file (could be improved with a file type check so that we don't have to list the file names here)
+            // Check if the file is a team profile file
             if (
               filePath.includes("abel.txt") ||
               filePath.includes("max.txt") ||
@@ -122,6 +159,10 @@
               filePath.includes("alessandro.txt")
             ) {
               content = commands.profile.execute(filePath);
+            }
+            // Check if the file is a portfolio profile file
+            else if (filePath.includes("uma.txt")) {
+              content = commands.portfolioProfile.execute(filePath);
             }
 
             return `<pre>${content}</pre>`;
@@ -366,7 +407,7 @@
           contents: {
             "readme.txt": {
               type: "file",
-              content: `Welcome to >commit!<br>TUI v0.1.0 // GUI coming soon™`,
+              content: `Welcome to >commit!<br><br>We invest in commercial open source startups that share our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.<br><br>We focus on:<br>- Infrastructure and Developer Tools<br>- Artificial Intelligence and Machine Learning<br>- Data Platforms<br>- Cybersecurity and SysAdmin tools<br>- OS applications and low/no code<br>- Industry specific open source solutions<br><br>TUI v0.1.0 // GUI coming soon™`,
             },
             team: {
               type: "directory",
@@ -385,7 +426,7 @@
                   contents: {
                     "advisors.txt": {
                       type: "file",
-                      content: `>commit is supported by a team of advisors who are passionate about open source.<br>they're all founders or executives from top open source or devtools companies.<br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others`,
+                      content: `>commit is supported by a team of advisors who are passionate about open source.<br>They're all founders or executives from top open source or devtools companies.<br><br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.`,
                     },
                   },
                 },
@@ -395,7 +436,7 @@
                             Role: Partner
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/abelsamot
-                            Avatar: team/Abel_Commit.png`,
+                            Avatar: team/abel.png`,
                 },
                 "olivier.txt": {
                   type: "file",
@@ -403,7 +444,7 @@
                             Role: Partner
                             Location: Geneva, Switzerland 🇨🇭
                             Github: https://github.com/olivierhuez
-                            Avatar: team/Olivier_Commit.png`,
+                            Avatar: team/olivier.png`,
                 },
                 "max.txt": {
                   type: "file",
@@ -411,7 +452,7 @@
                             Role: Partner
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/mxcrbn
-                            Avatar: team/max_commit.png`,
+                            Avatar: team/max.png`,
                 },
                 "alessandro.txt": {
                   type: "file",
@@ -419,14 +460,14 @@
                             Role: Tech Lead
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/alessandro-ciffo
-                            Avatar: team/Alessandro_Commit.png`,
+                            Avatar: team/alessandro.png`,
                 },
               },
             },
             portfolio: {
               type: "directory",
               contents: {
-                "comingsoon.txt": {
+                /*"comingsoon.txt": {
                   type: "file",
                   content: `Our portfolio companies are building the future of open source software.
                   
@@ -439,6 +480,14 @@
                   - Cybersecurity and SysAdmin tools
                   - OS applications and low/no code
                   - Industry specifc open source solutions<br>`,
+                },*/
+                "uma.txt": {
+                  type: "file",
+                  content: `Company: UMA
+                            One-Liner: Intelligent robots that enhance quality of life for everyone
+                            Website: https://uma.bot
+                            Github: https://github.com/uma-robots
+                            Avatar: portfolio/uma.png`,
                 },
               },
             },
@@ -911,6 +960,14 @@
         border: 0.5px solid red;
         margin-top: 6px;
 /**        margin-bottom: 0.5rem;**/
+      }
+
+      .portfolio-profile-image {
+        width: 10rem;
+        height: 10rem;
+        object-fit: cover;
+        border: 0.5px solid #000;
+        margin-top: 6px;
       }
 
       .profile-name {
