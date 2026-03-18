@@ -55,6 +55,7 @@
             return neofetchContent;
           },
           description: "Display system information",
+          hidden: true,
         },
 
         profile: {
@@ -110,17 +111,26 @@
                 companyprofile[key] = value;
               }
             });
-            const ProfileContent = 
+            const isPlaceholder = (val) => val && val.startsWith('$');
+            const gray = (val) => `<span style="color: rgba(200, 208, 242, 0.35); cursor: not-allowed;">${val}</span>`;
+            const companyHtml = isPlaceholder(companyprofile.Company) ? gray(companyprofile.Company) : `<span class="yellow">${companyprofile.Company}</span>`;
+            const websiteHtml = isPlaceholder(companyprofile.Website)
+              ? gray(companyprofile.Website)
+              : `<span class="yellow"><a href="${companyprofile.Website}" target="_blank" class="blue">${companyprofile.Website}</a></span>`;
+            const githubHtml = isPlaceholder(companyprofile.Github)
+              ? gray(companyprofile.Github)
+              : `<span class="yellow"><a href="${companyprofile.Github}" target="_blank" class="blue">${companyprofile.Github}</a></span>`;
+            const ProfileContent =
               `<div class="profile-card2-container">
-                <div class="image-container"> 
+                <div class="image-container">
                   <img src="${companyprofile.Avatar}" alt="${companyprofile.Company}'s logo" class="portfolio-profile-image">
                 </div>
                 <div class="profile-card2-data">
 <p>------------------------------------------<br>
-<span class="yellow">${companyprofile.Company}</span><br>
+${companyHtml}<br>
 <span class="yellow">${companyprofile['One-Liner']}</span><br>
-<span class="yellow"><a href="${companyprofile.Website}" target="_blank" class="blue">${companyprofile.Website}</a></span><br>
-<span class="yellow"><a href="${companyprofile.Github}" target="_blank" class="blue">${companyprofile.Github}</a></span><br>
+${websiteHtml}<br>
+${githubHtml}<br>
 ------------------------------------------
                   </p>
                 </div>
@@ -146,6 +156,7 @@
               return "Usage: cat &lt;file&gt;";
             }
             const filePath = args[0];
+            const resolvedFilePath = resolvePath(currentDirectory, filePath);
             let content = getFileContent(filePath);
             if (content === null) {
               return `cat: ${filePath}: No such file or directory`;
@@ -153,15 +164,15 @@
 
             // Check if the file is a team profile file
             if (
-              filePath.includes("abel.txt") ||
-              filePath.includes("max.txt") ||
-              filePath.includes("olivier.txt") ||
-              filePath.includes("alessandro.txt")
+              resolvedFilePath.includes("abel.txt") ||
+              resolvedFilePath.includes("max.txt") ||
+              resolvedFilePath.includes("olivier.txt") ||
+              resolvedFilePath.includes("alessandro.txt")
             ) {
               content = commands.profile.execute(filePath);
             }
             // Check if the file is a portfolio profile file
-            else if (filePath.includes("uma.txt")) {
+            else if (resolvedFilePath.includes("uma.txt") || resolvedFilePath.includes("stealth.txt") || (resolvedFilePath.includes("roots/") && !resolvedFilePath.includes("about.txt"))) {
               content = commands.portfolioProfile.execute(filePath);
             }
 
@@ -245,7 +256,8 @@
         },
         clear: {
           execute: () => {
-            document.getElementById("terminal-output").innerHTML = "";
+            currentDirectory = "/";
+            renderWelcome();
             return "";
           },
           description: "Clear the terminal",
@@ -257,6 +269,8 @@
       let isWaitingForEmail = false;
       let isWaitingForGithub = false;
       let currentDirectory = "/";
+      let currentMode = "cli"; // 'cli' or 'fs'
+      let fileTreeState = {}; // tracks expanded directories by path
 
       class Tea {
         static encrypt(r, o) {
@@ -407,7 +421,7 @@
           contents: {
             "readme.txt": {
               type: "file",
-              content: `Welcome to >commit!<br><br>We invest in commercial open source startups that share our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.<br><br>We focus on:<br>- Infrastructure and Developer Tools<br>- Artificial Intelligence and Machine Learning<br>- Data Platforms<br>- Cybersecurity and SysAdmin tools<br>- OS applications and low/no code<br>- Industry specific open source solutions<br><br>TUI v0.1.0 // GUI coming soon™`,
+              content: `>commit invests in commercial open source startups that share our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.<br><br>We focus on:<br>- Infrastructure and Developer Tools<br>- Artificial Intelligence and Machine Learning<br>- Data Platforms<br>- Cybersecurity and SysAdmin tools<br>- OS applications and low/no code<br>- Industry specific open source solutions<br><br>v0.2.0`,
             },
             team: {
               type: "directory",
@@ -481,6 +495,103 @@
                   - OS applications and low/no code
                   - Industry specifc open source solutions<br>`,
                 },*/
+                roots: {
+                  type: "directory",
+                  contents: {
+                    "about.txt": {
+                      type: "file",
+                      content: `Before >commit, the team spent years backing open source founders as investors and angels.<br><br>Our conviction grew alongside the movement and the companies we backed. They showed us that commercial open source builds the most enduring software.<br><br>That became >commit's thesis.<br><br>We are grateful to these founders for that.`,
+                    },
+                    "graphcore.txt": {
+                      type: "file",
+                      content: `Company: Graphcore
+                            One-Liner: AI hardware and software for accelerating machine intelligence
+                            Website: https://www.graphcore.ai
+                            Github: https://github.com/graphcore
+                            Avatar: portfolio/roots/graphcore.png`,
+                    },
+                    "mastra.txt": {
+                      type: "file",
+                      content: `Company: Mastra
+                            One-Liner: TypeScript AI framework for building agents and workflows
+                            Website: https://mastra.ai
+                            Github: https://github.com/mastra-ai
+                            Avatar: portfolio/roots/mastra.png`,
+                    },
+                    "twenty.txt": {
+                      type: "file",
+                      content: `Company: Twenty
+                            One-Liner: Open-source alternative to Salesforce
+                            Website: https://twenty.com
+                            Github: https://github.com/twentyhq
+                            Avatar: portfolio/roots/twenty.png`,
+                    },
+                    "pangolin.txt": {
+                      type: "file",
+                      content: `Company: Pangolin
+                            One-Liner: Zero trust remote access to your apps and infrastructure
+                            Website: https://pangolin.net
+                            Github: https://github.com/fosrl
+                            Avatar: portfolio/roots/pangolin.png`,
+                    },
+                    "better-auth.txt": {
+                      type: "file",
+                      content: `Company: Better Auth
+                            One-Liner: Better authentication
+                            Website: https://better-auth.com
+                            Github: https://github.com/better-auth
+                            Avatar: portfolio/roots/better-auth.png`,
+                    },
+                    "keep.txt": {
+                      type: "file",
+                      content: `Company: Keep
+                            One-Liner: AIOps platform for alert management and automation
+                            Website: https://keephq.dev
+                            Github: https://github.com/keephq
+                            Avatar: portfolio/roots/keep.png`,
+                    },
+                    "pandasai.txt": {
+                      type: "file",
+                      content: `Company: PandasAI
+                            One-Liner: AI for data analysis
+                            Website: https://pandas-ai.com
+                            Github: https://github.com/sinaptik-ai
+                            Avatar: portfolio/roots/pandasAI.png`,
+                    },
+                    "pyannote.txt": {
+                      type: "file",
+                      content: `Company: pyannote
+                            One-Liner: Speaker diarization and intelligence for audio
+                            Website: https://pyannote.ai
+                            Github: https://github.com/pyannote
+                            Avatar: portfolio/roots/pyannote.png`,
+                    },
+                    "sourcebot.txt": {
+                      type: "file",
+                      content: `Company: Sourcebot
+                            One-Liner: Self-hosted code search and understanding for AI agents
+                            Website: https://sourcebot.dev
+                            Github: https://github.com/sourcebot-dev
+                            Avatar: portfolio/roots/sourcebot.png`,
+                    },
+                    "whitecircle.txt": {
+                      type: "file",
+                      content: `Company: White Circle
+                            One-Liner: AI safety platform for testing, guardrailing and observability
+                            Website: https://whitecircle.ai
+                            Github: https://github.com/whitecircle-ai
+                            Avatar: portfolio/roots/whitecircle.png`,
+                    },
+                  },
+                },
+                "stealth.txt": {
+                  type: "file",
+                  content: `Company: Stealth
+                            One-Liner: AI inference stack
+                            Website: $website
+                            Github: $github
+                            Avatar: portfolio/$img.png`,
+                },
                 "uma.txt": {
                   type: "file",
                   content: `Company: UMA
@@ -496,7 +607,7 @@
               contents: {
                 "cool.txt": {
                   type: "file",
-                  content: `There is a hidden command in this terminal called 'secret'`,
+                  content: `There is a hidden command in the CLI called 'secret'`,
                 },
               },
             },
@@ -624,6 +735,145 @@
         return path === "/" ? ">" : path + ">";
       }
 
+      // ── FileSystem GUI mode ──
+
+      function buildFileTree(node, path, prefix, isLast) {
+        let html = "";
+        const entries = Object.entries(node.contents);
+        const dirs = entries.filter(([_, v]) => v.type === "directory").sort((a, b) => a[0].localeCompare(b[0]));
+        const files = entries.filter(([_, v]) => v.type === "file").sort((a, b) => a[0].localeCompare(b[0]));
+        const sorted = [...dirs, ...files];
+
+        sorted.forEach(([name, item], i) => {
+          const isLastItem = i === sorted.length - 1;
+          const fullPath = path === "/" ? `/${name}` : `${path}/${name}`;
+          const connector = isLastItem ? "└── " : "├── ";
+          const childPrefix = prefix + (isLastItem ? "    " : "│   ");
+
+          if (item.type === "directory") {
+            const isExpanded = fileTreeState[fullPath] === true;
+            const toggle = isExpanded ? "−" : "+";
+            html += `<div class="tree-item" onclick="toggleDir('${fullPath}')"><span class="tree-prefix">${prefix}${connector}</span><span class="tree-toggle">${toggle}</span> <span class="tree-dir">${name}/</span></div>`;
+            if (isExpanded) {
+              html += buildFileTree(item, fullPath, childPrefix, isLastItem);
+            }
+          } else {
+            html += `<div class="tree-item" onclick="viewFile('${fullPath}')"><span class="tree-prefix">${prefix}${connector}</span><span class="tree-file">${name}</span></div>`;
+          }
+        });
+        return html;
+      }
+
+      function toggleDir(path) {
+        fileTreeState[path] = !fileTreeState[path];
+        renderFileTree();
+      }
+
+      function viewFile(path) {
+        const content = getFileContent(path);
+        if (content === null) return;
+
+        let rendered;
+        if (path.includes("abel.txt") || path.includes("max.txt") || path.includes("olivier.txt") || path.includes("alessandro.txt")) {
+          rendered = `<pre>${commands.profile.execute(path)}</pre>`;
+        } else if (path.includes("uma.txt") || path.includes("stealth.txt") || (path.includes("roots/") && !path.includes("about.txt"))) {
+          rendered = `<pre>${commands.portfolioProfile.execute(path)}</pre>`;
+        } else {
+          rendered = `<div class="file-content">${content}</div>`;
+        }
+
+        const viewer = document.getElementById("file-viewer");
+        if (viewer) {
+          viewer.innerHTML = `<div class="file-viewer-header">── ${path} ──</div>${rendered}`;
+          viewer.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+
+      function renderFileTree() {
+        const container = document.getElementById("file-tree-container");
+        if (!container) return;
+
+        // Ensure root is expanded
+        if (fileTreeState["/"] === undefined) {
+          fileTreeState["/"] = true;
+        }
+
+        let treeHtml = '<div class="file-tree">';
+        treeHtml += `<div class="tree-item" onclick="toggleDir('/')"><span class="tree-toggle">${fileTreeState["/"] ? "−" : "+"}</span> <span class="tree-dir">/</span></div>`;
+        if (fileTreeState["/"]) {
+          treeHtml += buildFileTree(fileSystem["/"], "/", "", true);
+        }
+        treeHtml += '</div>';
+        treeHtml += '<div id="file-viewer" class="file-viewer"></div>';
+
+        container.innerHTML = treeHtml;
+      }
+
+      function switchMode(mode) {
+        currentMode = mode;
+        const inputContainer = document.getElementById("input-container");
+        let treeContainer = document.getElementById("file-tree-container");
+        const cliBtn = document.getElementById("mode-btn-cli");
+        const fsBtn = document.getElementById("mode-btn-fs");
+
+        // Update button states
+        if (cliBtn && fsBtn) {
+          cliBtn.className = mode === "cli" ? "mode-btn active" : "mode-btn";
+          fsBtn.className = mode === "fs" ? "mode-btn active" : "mode-btn";
+        }
+
+        const cliHint = document.getElementById("cli-hint");
+        const cliOutput = document.getElementById("cli-output");
+
+        if (mode === "cli") {
+          if (treeContainer) treeContainer.style.display = "none";
+          if (cliHint) cliHint.style.display = "block";
+          if (cliOutput) cliOutput.style.display = "block";
+          inputContainer.classList.remove("hidden");
+          document.getElementById("terminal-input").focus();
+        } else {
+          if (cliHint) cliHint.style.display = "none";
+          if (cliOutput) cliOutput.style.display = "none";
+          inputContainer.classList.add("hidden");
+          if (!treeContainer) {
+            treeContainer = document.createElement("div");
+            treeContainer.id = "file-tree-container";
+            treeContainer.className = "file-tree-container";
+            document.getElementById("terminal-output").appendChild(treeContainer);
+          }
+          treeContainer.style.display = "block";
+          renderFileTree();
+        }
+      }
+
+      function renderWelcome() {
+        const terminal = document.getElementById("terminal-output");
+        terminal.innerHTML = "";
+        terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:> neofetch</p>`;
+        terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
+        terminal.innerHTML += `
+          <div class="mode-switcher-container">
+            <br>Welcome to &gt;commit<br><br>
+            Choose your navigation style below:<br>
+            <span style="color: rgba(200, 208, 242, 0.3); font-size: 14px;">// not a terminal person? try File System</span>
+            <div class="mode-switcher">
+              <button id="mode-btn-cli" class="mode-btn active" onclick="switchMode('cli')">[ CLI ]</button>
+              <span class="mode-separator">|</span>
+              <button id="mode-btn-fs" class="mode-btn" onclick="switchMode('fs')">[ File System ]</button>
+            </div>
+          </div>
+          <div id="cli-hint"><br>Type 'help' to get started or 'email' to subscribe to our newsletter<br><br></div>
+          <div id="cli-output"></div>`;
+
+        // Re-apply current mode
+        if (currentMode === "fs") {
+          switchMode("fs");
+        } else {
+          document.getElementById("input-container").classList.remove("hidden");
+          document.getElementById("terminal-input").focus();
+        }
+      }
+
       function getAutocompleteSuggestions(input) {
         const parts = input.split(" ");
         const command = parts[0];
@@ -687,6 +937,23 @@
 
         // Auto-focus input
         input.focus();
+        input.addEventListener("input", () => resizeInput(input));
+        input.addEventListener("keyup", () => updateCursorPosition(input));
+        input.addEventListener("click", () => updateCursorPosition(input));
+
+        function resizeInput(el) {
+          el.style.width = el.value.length + "ch";
+          updateCursorPosition(el);
+        }
+
+        function updateCursorPosition(el) {
+          const cursor = document.getElementById("cursor");
+          if (!cursor) return;
+          const pos = el.selectionStart || 0;
+          const len = el.value.length;
+          // Position underscore: offset from end of input by (len - pos) characters
+          cursor.style.marginLeft = -(len - pos) + "ch";
+        }
 
         function updatePrompt() {
           const prompt = `<span class="red">user@commit.fund</span>:${formatPrompt(
@@ -694,8 +961,12 @@
           )} `;
           inputContainer.innerHTML =
             prompt +
-            `<input type="text" id="terminal-input" autocomplete="off" />`;
-          document.getElementById("terminal-input").focus();
+            `<input type="text" id="terminal-input" autocomplete="off" /><span class="cursor-blink" id="cursor">_</span>`;
+          const newInput = document.getElementById("terminal-input");
+          newInput.addEventListener("input", () => resizeInput(newInput));
+          newInput.addEventListener("keyup", () => updateCursorPosition(newInput));
+          newInput.addEventListener("click", () => updateCursorPosition(newInput));
+          newInput.focus();
         }
 
         // Add booting messages
@@ -714,18 +985,9 @@
             terminal.scrollTop = terminal.scrollHeight;
             setTimeout(() => displayBootMessages(index + 1), 500);
           } else {
-            // After boot messages, show neofetch
+            // After boot messages, show neofetch + mode switcher
             setTimeout(() => {
-              terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:> neofetch</p>`;
-              terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
-              terminal.innerHTML += `<br> Type 'help' to get started or 'email' to subscribe to our newsletter<br><br>`;
-
-              // Show the input container after neofetch
-              document
-                .getElementById("input-container")
-                .classList.remove("hidden");
-              // Focus the input field
-              document.getElementById("terminal-input").focus();
+              renderWelcome();
             }, 500);
           }
         }
@@ -828,14 +1090,15 @@
                   commandHistory.push(input.value);
                   historyIndex = commandHistory.length;
 
-                  // Show the command in terminal
-                  terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
+                  // Show the command in cli-output
+                  const cliOutput = document.getElementById("cli-output");
+                  cliOutput.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
                     currentDirectory
-                  )} ${input.value}</p>`;
+                  )}${input.value}</p>`;
 
                   const output = commands[command].execute(args);
                   if (output) {
-                    terminal.innerHTML += `<div class="command-output">${output}</div>`;
+                    cliOutput.innerHTML += `<div class="command-output">${output}</div>`;
                   }
                   if (commands[command].isInteractiveEmail) {
                     isWaitingForEmail = true;
@@ -845,11 +1108,12 @@
                   }
                 } else {
                   // For unknown commands, show error and help
-                  terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
+                  const cliOutputErr = document.getElementById("cli-output");
+                  cliOutputErr.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
                     currentDirectory
-                  )} ${input.value}</p>`;
-                  terminal.innerHTML += `<div class="command-output">Command '${command}' not found.<br><br>`;
-                  terminal.innerHTML += `${commands.help.execute([])}</div>`;
+                  )}${input.value}</p>`;
+                  cliOutputErr.innerHTML += `<div class="command-output">Command '${command}' not found.<br><br>`;
+                  cliOutputErr.innerHTML += `${commands.help.execute([])}</div>`;
                 }
               }
 
@@ -865,15 +1129,18 @@
             if (historyIndex > 0) {
               historyIndex--;
               input.value = commandHistory[historyIndex];
+              resizeInput(input);
             }
           } else if (event.key === "ArrowDown") {
             event.preventDefault();
             if (historyIndex < commandHistory.length - 1) {
               historyIndex++;
               input.value = commandHistory[historyIndex];
+              resizeInput(input);
             } else {
               historyIndex = commandHistory.length;
               input.value = "";
+              resizeInput(input);
             }
           }
         });
@@ -926,6 +1193,7 @@
         min-height: 100vh;
         background-color: #313445;
         color: #c8d0f2;
+        overflow-x: hidden;
       }
 
       @keyframes pulse {
@@ -957,7 +1225,7 @@
         width: 10rem;
         height: 10rem;
         object-fit: cover;
-        border: 0.5px solid red;
+        border: 0.5px solid #000;
         margin-top: 6px;
 /**        margin-bottom: 0.5rem;**/
       }
@@ -1044,8 +1312,10 @@
         justify-content: start;
         align-items: start;
         margin: auto;
-
         padding: 12px;
+        max-width: 100vw;
+        overflow-x: hidden;
+        box-sizing: border-box;
       }
 
       .profile-card2-container {
@@ -1053,7 +1323,8 @@
         flex-direction: row;
         align-items: flex-start;
         margin-top: 1rem;
-        justify-content: flex-start;  /* Ensure content starts from the left */
+        justify-content: flex-start;
+        line-height: 1;
       }
 
       .image-container {
@@ -1068,6 +1339,7 @@
         justify-content: flex-start;
         text-align: left;
         margin-left: 6px;
+        line-height: 1;
       }
 
 
@@ -1090,6 +1362,9 @@
       .neofetch-data {
         margin-top: 24px;
         margin-left: 12px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: calc(100vw - 36px);
       }
 
       p {
@@ -1133,8 +1408,12 @@
       #terminal-output {
         max-height: calc(100vh - 50px);
         overflow-y: auto;
+        overflow-x: hidden;
         width: 100%;
         padding: 12px 0px 0px 0px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       .command-output {
@@ -1155,6 +1434,8 @@
       .command-prompt {
         margin-bottom: 8px;
         padding: 0 12px 0 0px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       #terminal-input {
@@ -1162,9 +1443,21 @@
         border: none;
         color: #c8d0f2;
         font-size: 16px;
-        width: calc(100% - 48px);
-        margin-left: 6px;
-        caret-color: #c8d0f2;
+        width: 0;
+        min-width: 0;
+        padding: 0;
+        margin: 0;
+        caret-color: transparent;
+      }
+
+      .cursor-blink {
+        animation: blink-cursor 1s step-end infinite;
+        color: #c8d0f2;
+      }
+
+      @keyframes blink-cursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
       }
 
       #input-container {
@@ -1207,6 +1500,120 @@
       pre.profile-output {
         margin-top: 0;
       }
+
+      /* Mode switcher */
+      .mode-switcher-container {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+
+      .mode-switcher {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .mode-btn {
+        font-family: "MesloLGS NF", monospace;
+        font-size: 16px;
+        background: none;
+        border: none;
+        color: rgba(200, 208, 242, 0.5);
+        padding: 4px 8px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+
+      .mode-btn:hover {
+        color: rgba(200, 208, 242, 0.8);
+      }
+
+      .mode-btn.active {
+        color: #e63424;
+      }
+
+      .mode-btn.active:hover {
+        color: #e63424;
+      }
+
+      .mode-separator {
+        color: rgba(200, 208, 242, 0.3);
+      }
+
+      /* File tree */
+      .file-tree-container {
+        margin-top: 12px;
+        width: 100%;
+      }
+
+      .file-tree {
+        line-height: 1.8;
+        user-select: none;
+      }
+
+      .tree-item {
+        cursor: pointer;
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+
+      .tree-item:hover {
+        background: rgba(200, 208, 242, 0.05);
+      }
+
+      .tree-prefix {
+        color: rgba(200, 208, 242, 0.3);
+      }
+
+      .tree-dir {
+        color: #92a9e9;
+      }
+
+      .tree-file {
+        color: #afd090;
+      }
+
+      .tree-item:hover .tree-file {
+        text-decoration: underline;
+      }
+
+      .tree-toggle {
+        display: inline-block;
+        width: 1.2em;
+        text-align: center;
+        color: rgba(200, 208, 242, 0.5);
+      }
+
+      .file-viewer {
+        margin-top: 16px;
+        padding-top: 8px;
+        width: 100%;
+      }
+
+      .file-viewer:not(:empty) {
+        border-top: 1px dashed rgba(200, 208, 242, 0.15);
+      }
+
+      .file-viewer-header {
+        color: rgba(200, 208, 242, 0.5);
+        margin-bottom: 8px;
+      }
+
+      .file-content {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .file-viewer pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+      }
     </style>
   </head>
 
@@ -1225,7 +1632,7 @@
           type="text"
           id="terminal-input"
           autocomplete="off"
-        />
+        /><span class="cursor-blink" id="cursor">_</span>
       </div>
     </div>
   </body>
