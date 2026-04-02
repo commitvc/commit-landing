@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
 <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -204,6 +205,7 @@ ${githubHtml}<br>
           },
           description: "Subscribe to our mailing list",
           isInteractiveEmail: true,
+          hidden: true,
         },
 
 
@@ -266,7 +268,6 @@ ${githubHtml}<br>
       let commandHistory = [];
       let historyIndex = -1;
       let isWaitingForEmail = false;
-      let isWaitingForGithub = false;
       let currentDirectory = "/";
       let currentTab = "cli"; // 'cli', 'portfolio', 'team', 'about'
       let fileTreeState = {}; // tracks expanded directories by path in tab trees
@@ -423,7 +424,7 @@ ${githubHtml}<br>
               contents: {
                 "readme.txt": {
                   type: "file",
-                  content: `We back commercial open source companies at pre-seed and seed, with checks up to $1.5M.\n\nWe invest at the intersection of great software and the communities that grow around it, because the community is the moat. When the developers who use a project become its internal champions, adoption becomes organic, contracts follow, and the flywheel compounds.\n\n\nTwo unfair advantages\n\n- A proprietary data platform purpose-built for open source, aggregating signals from GitHub, package managers, container registries, Discord servers, and more. It gives a 360° view of projects, teams, and ecosystems. We use it to source earlier, qualify faster, and once we've invested, to support portfolio companies with community health monitoring, identifying the high-intent ICs worth activating in a sales motion (without creating friction in the community), hiring pipelines, competitive intelligence, etc.\n\n- A network of 100+ open source operators including successful founders of companies like Supabase, Mozilla, Nginx, and more, alongside Heads of Community, VPs of Sales, Marketing, Corporate Development from companies like Grafana, MongoDB, Hugging Face, and others, plus CTOs at major enterprises across banking, energy, telcos, and entertainment both in the US and Europe. These are the people who've built and scaled open source businesses and the buyers who write the checks.\n\n\nWhere we focus\n\n- Infrastructure and developer tools\n- AI and machine learning\n- Data platforms\n- Cybersecurity and sysadmin tooling\n- Business applications\n- Industry-specific open source solutions\n\nInterested? Reach out at hey@commit.fund`,
+                  content: `We back commercial open source companies at pre-seed and seed, with checks up to $1.5M.\n\nWe invest at the intersection of great software and the communities that grow around it, because the community is the moat. When the developers who use a project become its internal champions, adoption becomes organic, contracts follow, and the flywheel compounds.\n\n\nTwo unfair advantages\n\n- A proprietary data platform purpose-built for open source, aggregating signals from GitHub, package managers, container registries, Discord servers, and more. It gives a 360° view of projects, teams, and ecosystems. We use it to source earlier, qualify faster, and once we've invested, to support portfolio companies with community health monitoring, identifying the high-intent ICs worth activating in a sales motion (without creating friction in the community), hiring pipelines, competitive intelligence, etc.\n\n- A network of 100+ open source operators including successful founders of companies like Supabase, Mozilla, Nginx, and more, alongside Heads of Community, VPs of Sales, Marketing, Corporate Development from companies like Grafana, MongoDB, Hugging Face, and others, plus CTOs at major enterprises across banking, energy, telcos, and entertainment both in the US and Europe. These are the people who've built and scaled open source businesses and the buyers who write the checks.\n\n\nWhere we focus\n\n- Infrastructure and developer tools\n- AI and machine learning\n- Data platforms\n- Cybersecurity and sysadmin tooling\n- Business applications\n- Industry-specific open source solutions\n\nInterested? Reach out at <a href="mailto:hey@commit.fund" class="blue">hey@commit.fund</a>`,
                 },
                 "projects.txt": {
                   type: "file",
@@ -452,7 +453,7 @@ ${githubHtml}<br>
                   contents: {
                     "advisors.txt": {
                       type: "file",
-                      content: `>commit is supported by a team of advisors who are passionate about open source.<br>They're all founders or executives from top open source or devtools companies.<br><br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.`,
+                      content: `>commit is supported by a team of advisors who are passionate about open source.<br>They're all founders or executives who built and scaled commercial open source companies, or CTOs and technical leaders at Global 2000 enterprises.<br><br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.`,
                     },
                   },
                 },
@@ -493,20 +494,6 @@ ${githubHtml}<br>
             portfolio: {
               type: "directory",
               contents: {
-                /*"comingsoon.txt": {
-                  type: "file",
-                  content: `Our portfolio companies are building the future of open source software.
-                  
-                  Each company in our portfolio shares our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.
-                  
-                  We focus on:
-                  - Infrastructure and Developer Tools
-                  - Artificial Intelligence and Machine Learning
-                  - Data Platforms
-                  - Cybersecurity and SysAdmin tools
-                  - OS applications and low/no code
-                  - Industry specifc open source solutions<br>`,
-                },*/
                 roots: {
                   type: "directory",
                   contents: {
@@ -753,6 +740,10 @@ ${githubHtml}<br>
 
       function formatPrompt(path) {
         return path === "/" ? ">" : path + ">";
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
       }
 
       // ── FileSystem GUI mode ──
@@ -1114,17 +1105,6 @@ ${githubHtml}<br>
                   resultElement.scrollIntoView({ behavior: "smooth" });
                   return;
                 }
-              } else if (isWaitingForGithub) {
-                const resultElement = document.getElementById("github-result");
-                if (command.toUpperCase() === "Y") {
-                  window.open("https://github.com/redriverwest", "_blank");
-                }
-                isWaitingForGithub = false;
-                // Hide the prompt after handling response
-                document.getElementById("github-prompt").style.display = "none";
-                input.value = "";
-                input.focus();
-                return;
               } else {
                 // Handle normal commands
                 if (commands[command]) {
@@ -1136,7 +1116,7 @@ ${githubHtml}<br>
                   const cliOutput = document.getElementById("cli-output");
                   cliOutput.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
                     currentDirectory
-                  )}${input.value}</p>`;
+                  )}${escapeHtml(input.value)}</p>`;
 
                   const output = commands[command].execute(args);
                   if (output) {
@@ -1145,16 +1125,13 @@ ${githubHtml}<br>
                   if (commands[command].isInteractiveEmail) {
                     isWaitingForEmail = true;
                   }
-                  if (commands[command].isInteractiveGithub) {
-                    isWaitingForGithub = true;
-                  }
                 } else {
                   // For unknown commands, show error and help
                   const cliOutputErr = document.getElementById("cli-output");
                   cliOutputErr.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
                     currentDirectory
-                  )}${input.value}</p>`;
-                  cliOutputErr.innerHTML += `<div class="command-output">Command '${command}' not found.<br><br>`;
+                  )}${escapeHtml(input.value)}</p>`;
+                  cliOutputErr.innerHTML += `<div class="command-output">Command '${escapeHtml(command)}' not found.<br><br>`;
                   cliOutputErr.innerHTML += `${commands.help.execute([])}</div>`;
                 }
               }
@@ -1189,7 +1166,6 @@ ${githubHtml}<br>
       });
     </script>
 
-    <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -1248,28 +1224,12 @@ ${githubHtml}<br>
         }
       }
 
-      .animate-pulse {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      .profile-card {
-        background-color: #0f0f0f;
-        padding: 1rem;
-        border: 1px solid red;
-        border-radius: 1rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        width: fit-content;
-        margin-top: 1rem;
-        margin-bottom: 12px;
-      }
-
       .profile-image {
         width: 10rem;
         height: 10rem;
         object-fit: cover;
         border: 0.5px solid #000;
         margin-top: 6px;
-/**        margin-bottom: 0.5rem;**/
       }
 
       .portfolio-profile-image {
@@ -1278,17 +1238,6 @@ ${githubHtml}<br>
         object-fit: cover;
         border: 0.5px solid #000;
         margin-top: 6px;
-      }
-
-      .profile-name {
-        color: white;
-        margin: 0;
-      }
-
-      .profile-role {
-        color: white;
-        font-size: 0.875rem;
-        margin: 0;
       }
 
       .main-site-button {
@@ -1413,24 +1362,6 @@ ${githubHtml}<br>
         margin: 0;
       }
 
-      input.transparent {
-        background-color: transparent;
-        border: none;
-        font-size: 16px;
-        min-width: 90vw;
-        caret-color: #c8d0f2;
-        color: #c8d0f2;
-      }
-
-      input.transparent:focus {
-        outline: none;
-      }
-
-      #commit-readme-1 {
-        transform: translateY(-10%);
-        margin-bottom: -30px;
-      }
-
       @media screen and (max-width: 600px) {
         .neofetch-container {
           flex-direction: column;
@@ -1441,10 +1372,6 @@ ${githubHtml}<br>
           margin-top: 6px;
         }
 
-        #commit-readme-1 {
-          transform: scale(0.5) translateX(-50%) translateY(-40%);
-          margin-bottom: -70px;
-        }
       }
 
       #terminal-output {
@@ -1515,38 +1442,6 @@ ${githubHtml}<br>
         outline: none;
       }
 
-      #email-input {
-        background-color: transparent;
-        border: none;
-        color: #c8d0f2;
-        font-size: 16px;
-        width: calc(100% - 20px);
-        caret-color: #c8d0f2;
-      }
-
-      #email-input:focus {
-        outline: none;
-      }
-
-      .profile-output {
-        margin-bottom: 0px;
-        padding: 0 12px 0 0px;
-        max-width: calc(100% - 24px);
-      }
-
-      .profile-output pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-        line-height: 1;
-      }
-
-      pre.profile-output {
-        margin-top: 0;
-      }
-
       /* Tab navigation */
       .tab-nav-container {
         margin-top: 16px;
@@ -1579,7 +1474,7 @@ ${githubHtml}<br>
         display: inline;
       }
 
-.neofetch-rule {
+      .neofetch-rule {
         display: block;
         color: rgba(200, 208, 242, 0.4);
         white-space: nowrap;
@@ -1641,13 +1536,7 @@ ${githubHtml}<br>
         margin-bottom: 8px;
       }
 
-      .file-content {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-      }
-
-
-.file-viewer pre {
+      .file-viewer pre {
         white-space: pre-wrap;
         word-wrap: break-word;
         max-width: 100%;
