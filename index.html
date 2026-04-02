@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="application/ld+json">
+<script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -40,15 +40,14 @@
                 </div>
                 </div>
                 <div class="neofetch-data">
-                  <p>
-                    -----------------------------------------------------------<br />
-                    <span class="yellow">Activity</span>: Venture Capital<br />
-                    <br />
-                    <span class="yellow">Focus</span>: Commercial Open Source & Community-driven software<br />
-                    <span class="yellow">Stage</span>: Pre-Seed & Seed<br /><br />
-                    <span class="yellow">Github</span>: <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a><br />
-                    <span class="yellow">Email</span>: <a href="mailto:hey@commit.fund" target="_blank" class="blue">hey@commit.fund</a> <br/>
-                    -----------------------------------------------------------<br />
+                  <p style="margin-left: 0; padding-left: 0;">
+<span class="neofetch-rule">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="yellow">Activity</span>: Venture Capital<br />
+<br />
+<span class="yellow">Focus</span>: Commercial Open Source & Community-driven software<br />
+<span class="yellow">Stage</span>: Pre-Seed & Seed<br /><br />
+<span class="yellow">Github</span>: <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a><br />
+<span class="neofetch-rule">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span><br />
                   </p>
                 </div>
               </div>`;
@@ -172,10 +171,9 @@ ${githubHtml}<br>
               content = commands.profile.execute(filePath);
             }
             // Check if the file is a portfolio profile file
-            else if (resolvedFilePath.includes("uma.txt") || resolvedFilePath.includes("stealth.txt") || (resolvedFilePath.includes("roots/") && !resolvedFilePath.includes("about.txt"))) {
+            else if (resolvedFilePath.includes("uma.txt") || resolvedFilePath.includes("stealth-") || (resolvedFilePath.includes("roots/") && !resolvedFilePath.includes("about.txt"))) {
               content = commands.portfolioProfile.execute(filePath);
             }
-
             return `<pre>${content}</pre>`;
           },
           description: "Display file contents",
@@ -257,6 +255,7 @@ ${githubHtml}<br>
         clear: {
           execute: () => {
             currentDirectory = "/";
+            document.getElementById("terminal-output").innerHTML = "";
             renderWelcome();
             return "";
           },
@@ -269,8 +268,8 @@ ${githubHtml}<br>
       let isWaitingForEmail = false;
       let isWaitingForGithub = false;
       let currentDirectory = "/";
-      let currentMode = "cli"; // 'cli' or 'fs'
-      let fileTreeState = {}; // tracks expanded directories by path
+      let currentTab = "cli"; // 'cli', 'portfolio', 'team', 'about'
+      let fileTreeState = {}; // tracks expanded directories by path in tab trees
 
       class Tea {
         static encrypt(r, o) {
@@ -419,9 +418,22 @@ ${githubHtml}<br>
         "/": {
           type: "directory",
           contents: {
-            "readme.txt": {
-              type: "file",
-              content: `>commit invests in commercial open source startups that share our vision of creating sustainable, community-driven software that solves real problems for developers and businesses.<br><br>We focus on:<br>- Infrastructure and Developer Tools<br>- Artificial Intelligence and Machine Learning<br>- Data Platforms<br>- Cybersecurity and SysAdmin tools<br>- OS applications and low/no code<br>- Industry specific open source solutions<br><br>v0.2.0`,
+            about: {
+              type: "directory",
+              contents: {
+                "readme.txt": {
+                  type: "file",
+                  content: `We back commercial open source companies at pre-seed and seed, with checks up to $1.5M.\n\nWe invest at the intersection of great software and the communities that grow around it, because the community is the moat. When the developers who use a project become its internal champions, adoption becomes organic, contracts follow, and the flywheel compounds.\n\n\nTwo unfair advantages\n\n- A proprietary data platform purpose-built for open source, aggregating signals from GitHub, package managers, container registries, Discord servers, and more. It gives a 360° view of projects, teams, and ecosystems. We use it to source earlier, qualify faster, and once we've invested, to support portfolio companies with community health monitoring, identifying the high-intent ICs worth activating in a sales motion (without creating friction in the community), hiring pipelines, competitive intelligence, etc.\n\n- A network of 100+ open source operators including successful founders of companies like Supabase, Mozilla, Nginx, and more, alongside Heads of Community, VPs of Sales, Marketing, Corporate Development from companies like Grafana, MongoDB, Hugging Face, and others, plus CTOs at major enterprises across banking, energy, telcos, and entertainment both in the US and Europe. These are the people who've built and scaled open source businesses and the buyers who write the checks.\n\n\nWhere we focus\n\n- Infrastructure and developer tools\n- AI and machine learning\n- Data platforms\n- Cybersecurity and sysadmin tooling\n- Business applications\n- Industry-specific open source solutions\n\nInterested? Reach out at hey@commit.fund`,
+                },
+                "projects.txt": {
+                  type: "file",
+                  content: `Supabase — OSSCAR\n\nOSSCAR stands for Open Source Supabase Commit Analytical Ranking. It is an open source index that ranks GitHub organizations by growth velocity.\n\nEach quarter, it ranks open source organizations on GitHub through their growth rates on different dimensions (GitHub, package managers, etc). The result surfaces the fastest-growing open source projects regardless of their current scale, split across two tiers: Emerging (&lt;1,000 stars) and Scaling (1,000+ stars). We use it to create awareness about open source as well as internally to source earlier and qualify faster.\n\n<a href="https://osscar.dev" target="_blank" class="blue">osscar.dev</a>\n\n\nRAISE Summit — Open Source Track\n\nRAISE Summit is Europe's leading global AI event, held annually at the Louvre in Paris (~10k attendees, 80% C-levels). We organize the Open Source track in partnership with the RAISE team, curating panels and exclusive side events that bring together the founders and executives who built the commercial open source category.\n\nThe 2025 edition featured the founders and CEOs of RedHat, HuggingFace, Mistral, Supabase, ClickHouse, and others, alongside Eric Schmidt. The 2026 edition has already confirmed 10+ CEOs of great open source companies including Mozilla, Vercel, MongoDB, Supabase, TogetherAI, JetBrains, Mistral, and HuggingFace, alongside 50+ CIOs from Global 2000 companies.\n\n<a href="https://raisesummit.com" target="_blank" class="blue">raisesummit.com</a>`,
+                },
+                "contact.txt": {
+                  type: "file",
+                  content: `Email    <a href="mailto:hey@commit.fund" class="blue">hey@commit.fund</a>\nX        <a href="https://x.com/commitvc" target="_blank" class="blue">x.com/commitvc</a>\nGitHub   <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a>`,
+                },
+              },
             },
             team: {
               type: "directory",
@@ -584,10 +596,18 @@ ${githubHtml}<br>
                     },
                   },
                 },
-                "stealth.txt": {
+                "stealth-inference.txt": {
                   type: "file",
                   content: `Company: Stealth
                             One-Liner: AI inference stack
+                            Website: $website
+                            Github: $github
+                            Avatar: portfolio/$img.png`,
+                },
+                "stealth-specs.txt": {
+                  type: "file",
+                  content: `Company: Stealth
+                            One-Liner: Specifications framework
                             Website: $website
                             Github: $github
                             Avatar: portfolio/$img.png`,
@@ -740,7 +760,7 @@ ${githubHtml}<br>
       function buildFileTree(node, path, prefix, isLast) {
         let html = "";
         const entries = Object.entries(node.contents);
-        const dirs = entries.filter(([_, v]) => v.type === "directory").sort((a, b) => a[0].localeCompare(b[0]));
+        const dirs = entries.filter(([name, v]) => v.type === "directory" && name !== "private").sort((a, b) => a[0].localeCompare(b[0]));
         const files = entries.filter(([_, v]) => v.type === "file").sort((a, b) => a[0].localeCompare(b[0]));
         const sorted = [...dirs, ...files];
 
@@ -766,7 +786,9 @@ ${githubHtml}<br>
 
       function toggleDir(path) {
         fileTreeState[path] = !fileTreeState[path];
-        renderFileTree();
+        if (currentTab === "portfolio") renderPortfolio();
+        else if (currentTab === "team") renderTeam();
+        else if (currentTab === "about") renderAbout();
       }
 
       function viewFile(path) {
@@ -776,10 +798,10 @@ ${githubHtml}<br>
         let rendered;
         if (path.includes("abel.txt") || path.includes("max.txt") || path.includes("olivier.txt") || path.includes("alessandro.txt")) {
           rendered = `<pre>${commands.profile.execute(path)}</pre>`;
-        } else if (path.includes("uma.txt") || path.includes("stealth.txt") || (path.includes("roots/") && !path.includes("about.txt"))) {
+        } else if (path.includes("uma.txt") || path.includes("stealth-") || (path.includes("roots/") && !path.includes("about.txt"))) {
           rendered = `<pre>${commands.portfolioProfile.execute(path)}</pre>`;
         } else {
-          rendered = `<div class="file-content">${content}</div>`;
+          rendered = `<pre>${content}</pre>`;
         }
 
         const viewer = document.getElementById("file-viewer");
@@ -789,89 +811,97 @@ ${githubHtml}<br>
         }
       }
 
-      function renderFileTree() {
-        const container = document.getElementById("file-tree-container");
-        if (!container) return;
+      function switchTab(tab) {
+        if (tab === currentTab && document.getElementById("tab-cli")) return;
+        currentTab = tab;
 
-        // Ensure root is expanded
-        if (fileTreeState["/"] === undefined) {
-          fileTreeState["/"] = true;
-        }
-
-        let treeHtml = '<div class="file-tree">';
-        treeHtml += `<div class="tree-item" onclick="toggleDir('/')"><span class="tree-toggle">${fileTreeState["/"] ? "−" : "+"}</span> <span class="tree-dir">/</span></div>`;
-        if (fileTreeState["/"]) {
-          treeHtml += buildFileTree(fileSystem["/"], "/", "", true);
-        }
-        treeHtml += '</div>';
-        treeHtml += '<div id="file-viewer" class="file-viewer"></div>';
-
-        container.innerHTML = treeHtml;
-      }
-
-      function switchMode(mode) {
-        currentMode = mode;
-        const inputContainer = document.getElementById("input-container");
-        let treeContainer = document.getElementById("file-tree-container");
-        const cliBtn = document.getElementById("mode-btn-cli");
-        const fsBtn = document.getElementById("mode-btn-fs");
-
-        // Update button states
-        if (cliBtn && fsBtn) {
-          cliBtn.className = mode === "cli" ? "mode-btn active" : "mode-btn";
-          fsBtn.className = mode === "fs" ? "mode-btn active" : "mode-btn";
-        }
+        const tabs = ["cli", "portfolio", "team", "about"];
+        tabs.forEach(t => {
+          const el = document.getElementById(`tab-${t}`);
+          const prefix = document.getElementById(`tab-prefix-${t}`);
+          if (!el || !prefix) return;
+          if (t === tab) {
+            el.classList.add("tab-active");
+            prefix.innerHTML = "&gt;&nbsp;";
+            prefix.className = "tab-prefix red";
+          } else {
+            el.classList.remove("tab-active");
+            prefix.innerHTML = "&nbsp;&nbsp;";
+            prefix.className = "tab-prefix";
+          }
+        });
 
         const cliHint = document.getElementById("cli-hint");
         const cliOutput = document.getElementById("cli-output");
+        const tabContent = document.getElementById("tab-content");
+        const inputContainer = document.getElementById("input-container");
 
-        if (mode === "cli") {
-          if (treeContainer) treeContainer.style.display = "none";
+        if (tab === "cli") {
           if (cliHint) cliHint.style.display = "block";
           if (cliOutput) cliOutput.style.display = "block";
+          if (tabContent) tabContent.style.display = "none";
           inputContainer.classList.remove("hidden");
-          document.getElementById("terminal-input").focus();
+          const ti = document.getElementById("terminal-input");
+          if (ti) ti.focus();
         } else {
-          if (cliHint) cliHint.style.display = "none";
+          if (cliHint) cliHint.style.display = "block";
           if (cliOutput) cliOutput.style.display = "none";
-          inputContainer.classList.add("hidden");
-          if (!treeContainer) {
-            treeContainer = document.createElement("div");
-            treeContainer.id = "file-tree-container";
-            treeContainer.className = "file-tree-container";
-            document.getElementById("terminal-output").appendChild(treeContainer);
+          if (tabContent) {
+            tabContent.style.display = "block";
+            tabContent.innerHTML = "";
+            fileTreeState = {};
+            if (tab === "portfolio") renderPortfolio();
+            else if (tab === "team") renderTeam();
+            else if (tab === "about") renderAbout();
           }
-          treeContainer.style.display = "block";
-          renderFileTree();
+          inputContainer.classList.add("hidden");
         }
       }
 
+      function renderTabTree(rootPath) {
+        const tabContent = document.getElementById("tab-content");
+        if (!tabContent) return;
+
+        let node = fileSystem["/"];
+        const basePath = rootPath ? `/${rootPath}` : "/";
+        if (rootPath) {
+          const parts = rootPath.split("/").filter(Boolean);
+          for (const part of parts) {
+            if (!node.contents || !node.contents[part]) return;
+            node = node.contents[part];
+          }
+        }
+
+        let html = '<div class="file-tree">';
+        html += buildFileTree(node, basePath, "", true);
+        html += '</div>';
+        html += '<div id="file-viewer" class="file-viewer"></div>';
+        tabContent.innerHTML = html;
+      }
+
+      function renderPortfolio() { renderTabTree("portfolio"); }
+      function renderTeam() { renderTabTree("team"); }
+      function renderAbout() { renderTabTree("about"); }
+
       function renderWelcome() {
         const terminal = document.getElementById("terminal-output");
-        terminal.innerHTML = "";
         terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:> neofetch</p>`;
         terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
         terminal.innerHTML += `
-          <div class="mode-switcher-container">
-            <br>Welcome to &gt;commit<br><br>
-            Choose your navigation style below:<br>
-            <span style="color: rgba(200, 208, 242, 0.3); font-size: 14px;">// not a terminal person? try File System</span>
-            <div class="mode-switcher">
-              <button id="mode-btn-cli" class="mode-btn active" onclick="switchMode('cli')">[ CLI ]</button>
-              <span class="mode-separator">|</span>
-              <button id="mode-btn-fs" class="mode-btn" onclick="switchMode('fs')">[ File System ]</button>
+          <div id="cli-hint"><br>Type 'help' to get started, or click a tab below - we won't judge<br><br></div>
+          <div class="tab-nav-container">
+            <div class="tab-nav">
+              <span class="tab-item" id="tab-cli" onclick="switchTab('cli')"><span class="tab-prefix" id="tab-prefix-cli"></span>CLI</span>
+              <span class="tab-item" id="tab-portfolio" onclick="switchTab('portfolio')"><span class="tab-prefix" id="tab-prefix-portfolio"></span>Companies</span>
+              <span class="tab-item" id="tab-team" onclick="switchTab('team')"><span class="tab-prefix" id="tab-prefix-team"></span>Team</span>
+              <span class="tab-item" id="tab-about" onclick="switchTab('about')"><span class="tab-prefix" id="tab-prefix-about"></span>About</span>
             </div>
           </div>
-          <div id="cli-hint"><br>Type 'help' to get started or 'email' to subscribe to our newsletter<br><br></div>
-          <div id="cli-output"></div>`;
+          <div id="cli-output"></div>
+          <div id="tab-content" style="display:none;"></div>`;
 
-        // Re-apply current mode
-        if (currentMode === "fs") {
-          switchMode("fs");
-        } else {
-          document.getElementById("input-container").classList.remove("hidden");
-          document.getElementById("terminal-input").focus();
-        }
+        currentTab = ""; // force switchTab to re-render
+        switchTab("cli");
       }
 
       function getAutocompleteSuggestions(input) {
@@ -940,6 +970,16 @@ ${githubHtml}<br>
         input.addEventListener("input", () => resizeInput(input));
         input.addEventListener("keyup", () => updateCursorPosition(input));
         input.addEventListener("click", () => updateCursorPosition(input));
+        input.addEventListener("focus", () => { const c = document.getElementById("cursor"); if (c) c.classList.remove("cursor-hidden"); });
+        input.addEventListener("blur", () => { const c = document.getElementById("cursor"); if (c) c.classList.add("cursor-hidden"); });
+
+        // Re-focus terminal input when clicking anywhere in the terminal
+        terminal.addEventListener("click", (e) => {
+          if (e.target.tagName !== "A" && e.target.tagName !== "INPUT") {
+            const inp = document.getElementById("terminal-input");
+            if (inp) inp.focus();
+          }
+        });
 
         function resizeInput(el) {
           el.style.width = el.value.length + "ch";
@@ -966,6 +1006,8 @@ ${githubHtml}<br>
           newInput.addEventListener("input", () => resizeInput(newInput));
           newInput.addEventListener("keyup", () => updateCursorPosition(newInput));
           newInput.addEventListener("click", () => updateCursorPosition(newInput));
+          newInput.addEventListener("focus", () => { const c = document.getElementById("cursor"); if (c) c.classList.remove("cursor-hidden"); });
+          newInput.addEventListener("blur", () => { const c = document.getElementById("cursor"); if (c) c.classList.add("cursor-hidden"); });
           newInput.focus();
         }
 
@@ -1361,7 +1403,7 @@ ${githubHtml}<br>
 
       .neofetch-data {
         margin-top: 24px;
-        margin-left: 12px;
+        margin-left: 0;
         word-wrap: break-word;
         overflow-wrap: break-word;
         max-width: calc(100vw - 36px);
@@ -1454,6 +1496,10 @@ ${githubHtml}<br>
         animation: blink-cursor 1s step-end infinite;
         color: #c8d0f2;
       }
+      .cursor-blink.cursor-hidden {
+        visibility: hidden;
+        animation: none;
+      }
 
       @keyframes blink-cursor {
         0%, 100% { opacity: 1; }
@@ -1501,53 +1547,47 @@ ${githubHtml}<br>
         margin-top: 0;
       }
 
-      /* Mode switcher */
-      .mode-switcher-container {
-        margin-top: 12px;
-        margin-bottom: 12px;
+      /* Tab navigation */
+      .tab-nav-container {
+        margin-top: 16px;
+        margin-bottom: 20px;
       }
 
-      .mode-switcher {
-        display: flex;
+      .tab-nav {
+        display: inline-flex;
         flex-direction: row;
+        gap: 52px;
         align-items: center;
-        gap: 8px;
-        margin-top: 8px;
+        border-bottom: 1px dashed rgba(200, 208, 242, 0.2);
+        padding-bottom: 8px;
+        padding-right: 2ch;
       }
 
-      .mode-btn {
-        font-family: "MesloLGS NF", monospace;
-        font-size: 16px;
-        background: none;
-        border: none;
-        color: rgba(200, 208, 242, 0.5);
-        padding: 4px 8px;
+      .tab-item {
         cursor: pointer;
-        transition: color 0.2s ease;
+        opacity: 0.3;
+        transition: opacity 0.15s ease;
+        user-select: none;
       }
 
-      .mode-btn:hover {
-        color: rgba(200, 208, 242, 0.8);
+      .tab-item:hover,
+      .tab-item.tab-active {
+        opacity: 1;
       }
 
-      .mode-btn.active {
-        color: #e63424;
+      .tab-prefix {
+        display: inline;
       }
 
-      .mode-btn.active:hover {
-        color: #e63424;
-      }
-
-      .mode-separator {
-        color: rgba(200, 208, 242, 0.3);
+.neofetch-rule {
+        display: block;
+        color: rgba(200, 208, 242, 0.4);
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 6px 0;
       }
 
       /* File tree */
-      .file-tree-container {
-        margin-top: 12px;
-        width: 100%;
-      }
-
       .file-tree {
         line-height: 1.8;
         user-select: none;
@@ -1606,7 +1646,8 @@ ${githubHtml}<br>
         overflow-wrap: break-word;
       }
 
-      .file-viewer pre {
+
+.file-viewer pre {
         white-space: pre-wrap;
         word-wrap: break-word;
         max-width: 100%;
