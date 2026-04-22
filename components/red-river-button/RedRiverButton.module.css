@@ -16,7 +16,7 @@
 
 .button img {
   width: 220px;
-  height: auto;
+  height: auto !important;
   display: block;
 }
 
