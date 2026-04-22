@@ -13,7 +13,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
-  height: 3px;
+  height: 2px;
   color: var(--fg-muted);
   background-image: var(--dash-pattern);
   background-attachment: fixed;
@@ -48,8 +48,8 @@
 
 .indicator {
   position: absolute;
-  bottom: -1px;
-  height: 5px;
+  bottom: 0;
+  height: 2px;
   color: var(--fg);
   background-image: var(--dash-pattern);
   background-attachment: fixed;
