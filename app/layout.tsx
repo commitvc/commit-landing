@@ -1,5 +1,3 @@
-import { AsciiLogo } from '@/components/ascii-logo/AsciiLogo';
-import { NavBar } from '@/components/nav-bar/NavBar';
 import { PostHogProvider } from '@/components/posthog-provider';
 import { RedRiverButton } from '@/components/red-river-button/RedRiverButton';
 import type { Metadata } from 'next';
@@ -51,11 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <PostHogProvider>
           <RedRiverButton />
-          <div className="container">
-            <AsciiLogo />
-            <NavBar />
-            {children}
-          </div>
+          <div className="container">{children}</div>
         </PostHogProvider>
       </body>
     </html>

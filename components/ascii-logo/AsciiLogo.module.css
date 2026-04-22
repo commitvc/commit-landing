@@ -1,6 +1,6 @@
 .logo {
   display: inline-block;
-  font-family: monospace;
+  font-family: inherit;
   line-height: 1.2;
   white-space: pre;
   color: var(--red);

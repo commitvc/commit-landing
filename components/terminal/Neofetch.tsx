@@ -5,7 +5,7 @@ export function Neofetch() {
   return (
     <div className={styles.neofetch}>
       <div className={styles.neofetchLogo}>
-        <AsciiLogo />
+        <AsciiLogo href="" />
       </div>
       <div className={styles.neofetchData}>
         <span className={styles.neofetchRule} />

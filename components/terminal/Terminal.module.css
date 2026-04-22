@@ -97,25 +97,11 @@
 }
 
 .boot {
-  margin-bottom: 1rem;
   color: var(--fg);
   line-height: 1.6;
+  margin-bottom: 1rem;
 }
 
-.bootContainer {
-  overflow: hidden;
-  transition: max-height 0.6s ease, opacity 0.4s ease;
-  max-height: 400px;
-  opacity: 1;
-}
-
-.bootContainerCollapsed {
-  max-height: 0;
-  opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bootContainer {
-    transition: none;
-  }
+.tagline {
+  margin: 1rem 0;
 }

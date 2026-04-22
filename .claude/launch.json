@@ -3,16 +3,10 @@
   "configurations": [
     {
       "name": "landing",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8000"],
-      "port": 8000
-    },
-    {
-      "name": "next",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
-      "port": 3000,
-      "autoPort": true
+      "runtimeArgs": ["dev", "--port", "8000"],
+      "port": 8000,
+      "autoPort": false
     }
   ]
 }
