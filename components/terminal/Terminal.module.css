@@ -1,0 +1,97 @@
+.terminal {
+  line-height: 1.5;
+}
+
+.output {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.line {
+  margin: 0;
+  padding: 0;
+}
+
+.promptLine {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin: 0.25rem 0;
+}
+
+.prompt {
+  color: var(--red);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.promptSeparator {
+  color: var(--fg);
+  padding: 0 0.25ch;
+}
+
+.input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font: inherit;
+  padding: 0;
+  margin: 0;
+  min-width: 1ch;
+}
+
+.cursor {
+  color: var(--fg);
+  animation: blink 1s steps(1, end) infinite;
+  margin-left: 0;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+.neofetch {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  max-width: 720px;
+}
+
+.neofetchLogo {
+  flex-shrink: 0;
+}
+
+.neofetchData {
+  flex: 1;
+}
+
+.neofetchRule {
+  display: block;
+  color: var(--fg-muted);
+}
+
+.neofetchRule::before {
+  content: "────────────────────────────────────────";
+}
+
+.command {
+  color: var(--green);
+}

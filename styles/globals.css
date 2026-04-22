@@ -66,3 +66,81 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* Terminal command output — global because command renderers use plain class
+   names rather than CSS Module classes. */
+.terminal-profile {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin: 0.5rem 0;
+  max-width: 640px;
+}
+
+.terminal-profile-image {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(200, 208, 242, 0.05);
+}
+
+.terminal-profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.terminal-portfolio-image {
+  background: transparent;
+}
+
+.terminal-portfolio-image img {
+  object-fit: contain;
+  padding: 6px;
+}
+
+.terminal-profile-data {
+  flex: 1;
+}
+
+.terminal-rule {
+  display: block;
+  color: var(--fg-muted);
+}
+
+.terminal-rule::before {
+  content: "────────────────────────────────────────";
+}
+
+.terminal-story {
+  margin: 0 0 1rem 0;
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+.terminal-blog-card {
+  max-width: 640px;
+}
+
+.placeholder {
+  color: var(--fg-muted);
+  cursor: not-allowed;
+}
+
+.ls-output {
+  font-family: inherit;
+  white-space: pre;
+  color: var(--fg);
+}
+
+.command-output {
+  max-width: 640px;
+}
+
+.command {
+  color: var(--green);
+}
