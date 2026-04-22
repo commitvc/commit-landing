@@ -1,0 +1,101 @@
+.article {
+  line-height: 1.6;
+  max-width: 720px;
+}
+
+.article h1 {
+  color: var(--red);
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.article h2 {
+  color: var(--yellow);
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.article h3 {
+  color: var(--yellow);
+  font-size: 1rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.85;
+}
+
+.article p {
+  margin: 0.75rem 0;
+}
+
+.article ul,
+.article ol {
+  padding-left: 1.5rem;
+}
+
+.article li {
+  margin: 0.4rem 0;
+}
+
+.article strong {
+  color: var(--fg);
+}
+
+.article em {
+  color: var(--fg-muted-hover);
+}
+
+.article a {
+  color: var(--blue);
+}
+
+.articleMeta {
+  color: var(--fg-muted-hover);
+  margin-bottom: 2rem;
+}
+
+.originalLink {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--fg-muted);
+  font-size: 0.9em;
+  color: var(--fg-muted);
+}
+
+.indexList {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.indexCard {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--fg-muted);
+}
+
+.indexCard:hover .indexTitle {
+  text-decoration: underline;
+}
+
+.indexTitle {
+  color: var(--yellow);
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.indexMeta {
+  color: var(--fg-muted-hover);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9em;
+}
+
+.indexDescription {
+  margin: 0;
+  line-height: 1.6;
+}
