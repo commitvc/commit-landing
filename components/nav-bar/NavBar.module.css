@@ -3,6 +3,9 @@
   margin-bottom: 2rem;
   padding-bottom: 0;
   position: relative;
+  /* Parent is flex-column with align-items: flex-start — stretch explicitly
+     so the separator can span from viewport edge to viewport edge. */
+  align-self: stretch;
   --dash-pattern: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
 }
 
@@ -10,9 +13,10 @@
   content: "";
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  /* The page-level .container has padding: 20px 12px. Counter that so the
+     separator runs from viewport edge to viewport edge regardless of width. */
+  left: -12px;
+  right: -12px;
   height: 2px;
   color: var(--fg-muted);
   background-image: var(--dash-pattern);

@@ -50,7 +50,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
   margin: auto;
   /* padding-top = RRW button's top offset (20px) so the first line of
      content aligns with the top of the button. */
