@@ -1,0 +1,14 @@
+.logo {
+  display: inline-block;
+  font-family: monospace;
+  line-height: 1.2;
+  white-space: pre;
+  color: var(--red);
+  font-size: 14px;
+  margin: 0;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+}

@@ -1,5 +1,10 @@
+import { AsciiLogo } from '@/components/ascii-logo/AsciiLogo';
+import { NavBar } from '@/components/nav-bar/NavBar';
+import { PostHogProvider } from '@/components/posthog-provider';
+import { RedRiverButton } from '@/components/red-river-button/RedRiverButton';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { meslo } from './fonts';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -35,16 +40,24 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={meslo.variable}>
       <head>
-        <link rel="preload" href="/font.ttf" as="font" type="font/ttf" crossOrigin="" />
         <script
           type="application/ld+json"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be raw JSON.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <PostHogProvider>
+          <RedRiverButton />
+          <div className="container">
+            <AsciiLogo />
+            <NavBar />
+            {children}
+          </div>
+        </PostHogProvider>
+      </body>
     </html>
   );
 }

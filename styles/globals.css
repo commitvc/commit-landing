@@ -1,11 +1,3 @@
-@font-face {
-  font-family: "MesloLGS NF";
-  src: url("/font.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --bg: #313445;
   --fg: #c8d0f2;
@@ -20,7 +12,7 @@
 }
 
 * {
-  font-family: "MesloLGS NF", monospace;
+  font-family: var(--font-meslo), "MesloLGS NF", Menlo, Consolas, monospace;
   box-sizing: border-box;
 }
 

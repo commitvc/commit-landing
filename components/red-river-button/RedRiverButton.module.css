@@ -1,0 +1,30 @@
+.button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: block;
+  line-height: 0;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+.button img {
+  width: 220px;
+  height: auto;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+  .button:hover {
+    transform: none;
+  }
+}
