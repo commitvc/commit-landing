@@ -19,7 +19,7 @@
     </script>
     <script>
       !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-      posthog.init('phc_6zm1cQmQGoiFa2KDgmiYvlPg6oIoXcJ3ENALNOGvMfn',{api_host:'https://eu.i.posthog.com', defaults:'2025-05-24'})
+      posthog.init('phc_rMfZzmKbhz3A85WNWbTNF3bPw3vM6bB4wX2PDHUDQwLc',{api_host:'https://eu.i.posthog.com', defaults:'2025-05-24'})
     </script>
     <script>
       const commands = {
@@ -27,7 +27,7 @@
           execute: () => {
             const neofetchContent = `
               <div class="neofetch-container">
-                <div class="logo-container">
+                <div class="logo-container" onclick="if(neofetchCollapsed) window.location.href='/'">
                 <div class="logo">
                   <p>
                     <span class="red" style="display: inline-block; font-family: monospace; line-height: 1.2;">
@@ -40,16 +40,15 @@
                   </p>  
                 </div>
                 </div>
-                <div class="neofetch-data">
-                  <p style="margin-left: 0; padding-left: 0;">
-<span class="neofetch-rule">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="yellow">Activity</span>: Venture Capital<br />
-<br />
-<span class="yellow">Focus</span>: Commercial Open Source & Community-driven software<br />
-<span class="yellow">Stage</span>: Pre-Seed & Seed<br /><br />
-<span class="yellow">Github</span>: <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a><br />
-<span class="neofetch-rule">----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span><br />
-                  </p>
+                <div class="neofetch-data collapsible">
+<div class="neofetch-highlights">
+<span class="neofetch-rule"></span>
+<span class="yellow">Activity:</span>  Venture Capital<br>
+<br><span class="yellow">Focus:</span>     Commercial Open Source & Community-driven software<br>
+<br><span class="yellow">Stage:</span>     Pre-Seed & Seed<br>
+<br><span class="yellow">Github:</span>    <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a><br>
+<span class="neofetch-rule"></span>
+</div>
                 </div>
               </div>`;
             return neofetchContent;
@@ -80,13 +79,12 @@
                   <img src="${teamprofile.Avatar}" alt="${teamprofile.Name}'s portrait" class="profile-image">
                 </div>
                 <div class="profile-card2-data">
-<p>------------------------------------------<br>
-<span class="yellow">${teamprofile.Name}</span><br>
-<span class="yellow">${teamprofile.Role}</span><br>
-<span class="yellow">${teamprofile.Location}</span><br>
-<span class="yellow"><a href="${teamprofile.Github}" target="_blank" class="blue">${teamprofile.Github}</a></span><br>
-------------------------------------------
-                  </p>
+<span class="neofetch-rule"></span>
+<span class="yellow">${teamprofile.Name}, ${teamprofile.Role}</span><br><br>
+<span class="yellow">${teamprofile.Location}</span><br><br><br>
+<span class="yellow"><a href="${teamprofile.Github}" target="_blank" class="blue">${teamprofile.Github}</a></span><br><br>
+${teamprofile.LinkedIn ? `<span class="yellow"><a href="${teamprofile.LinkedIn}" target="_blank" class="blue">${teamprofile.LinkedIn}</a></span><br>` : ''}
+<span class="neofetch-rule"></span>
                 </div>
               </div>`;
             return ProfileContent;
@@ -103,12 +101,16 @@
             }
             const lines = content.split("\n");
             const companyprofile = {};
+            let lastKey = null;
             lines.forEach((line) => {
               const colonIndex = line.indexOf(":");
               if (colonIndex !== -1) {
                 const key = line.substring(0, colonIndex).trim();
                 const value = line.substring(colonIndex + 1).trim();
                 companyprofile[key] = value;
+                lastKey = key;
+              } else if (lastKey && line.trim()) {
+                companyprofile[lastKey] += "\n" + line.trim();
               }
             });
             const isPlaceholder = (val) => val && val.startsWith('$');
@@ -120,24 +122,81 @@
             const githubHtml = isPlaceholder(companyprofile.Github)
               ? gray(companyprofile.Github)
               : `<span class="yellow"><a href="${companyprofile.Github}" target="_blank" class="blue">${companyprofile.Github}</a></span>`;
+            const storyHtml = companyprofile.Story
+              ? companyprofile.Story.split("\n").map(p => `<p class="story-text">${p}</p>`).join("")
+              : "";
+            const metricsId = 'gh-metrics-' + (companyprofile.Github || '').replace(/[^a-z0-9]/gi, '-');
+            const pkgAttr = companyprofile.Package ? ` data-pkg="${companyprofile.Package}"` : '';
+            const metricsHtml = !isPlaceholder(companyprofile.Github)
+              ? `<div id="${metricsId}" data-gh-fetch="${companyprofile.Github}"${pkgAttr} style="margin-top:12px; font-size:0.9em;"><span style="opacity:0.4">⋯</span></div>`
+              : '';
             const ProfileContent =
-              `<div class="profile-card2-container">
+              `${storyHtml}<div class="profile-card2-container">
                 <div class="image-container">
                   <img src="${companyprofile.Avatar}" alt="${companyprofile.Company}'s logo" class="portfolio-profile-image">
                 </div>
                 <div class="profile-card2-data">
-<p>------------------------------------------<br>
-${companyHtml}<br>
-<span class="yellow">${companyprofile['One-Liner']}</span><br>
-${websiteHtml}<br>
+<span class="neofetch-rule"></span>
+${companyHtml}<br><br>
+<span class="yellow">${companyprofile['One-Liner']}</span><br><br><br>
+${websiteHtml}<br><br>
 ${githubHtml}<br>
-------------------------------------------
-                  </p>
+<span class="neofetch-rule"></span>
                 </div>
-              </div>`;
+              </div>${metricsHtml}`;
             return ProfileContent;
           },
           description: "Display Portfolio Profile card",
+          hidden: true,
+        },
+
+        blogPost: {
+          execute: (filePath) => {
+            const content = getFileContent(filePath);
+            if (content === null) return `blog: ${filePath}: No such file`;
+            const parts = content.split("\n\n");
+            const headerLines = parts[0].split("\n");
+            const title = headerLines[0] || '';
+            const byline = headerLines[1] || '';
+            const description = parts.slice(1).join("\\n\\n").trim();
+            const slug = filePath.split("/").pop().replace(".txt", "");
+            const url = `/blog/${slug}/`;
+            let html = '<div class="blog-post-card">';
+            html += `<p><span class="yellow">${title}</span></p>`;
+            html += `<p style="color: rgba(200, 208, 242, 0.5);">${byline}</p><br>`;
+            html += `<p>${description}</p><br>`;
+            html += `<p><a href="${url}" target="_blank" class="blue">Open in full page →</a></p>`;
+            html += '</div>';
+            return html;
+          },
+          description: "Display blog post card",
+          hidden: true,
+        },
+
+        legalNotice: {
+          execute: (filePath) => {
+            const content = getFileContent(filePath);
+            if (content === null) return `legal: ${filePath}: No such file`;
+            const lines = content.split("\\n");
+            let html = '<div class="legal-notice">';
+            lines.forEach((line) => {
+              const trimmed = line.trim();
+              if (!trimmed) {
+                html += '<br>';
+              } else if (trimmed.includes(":") && trimmed.split(":")[0].length < 30 && !trimmed.startsWith("Topics")) {
+                const colonIdx = trimmed.indexOf(":");
+                const key = trimmed.substring(0, colonIdx);
+                const val = trimmed.substring(colonIdx + 1).trim();
+                html += `<p><span class="yellow">${key}</span>: ${val}</p>`;
+              } else {
+                html += `<p>${trimmed}</p>`;
+              }
+            });
+            html += '<br><p><a href="/about/legal/" target="_blank" class="blue">Open full legal notice →</a></p>';
+            html += '</div>';
+            return html;
+          },
+          description: "Display legal notice",
           hidden: true,
         },
 
@@ -169,11 +228,19 @@ ${githubHtml}<br>
               resolvedFilePath.includes("olivier.txt") ||
               resolvedFilePath.includes("alessandro.txt")
             ) {
-              content = commands.profile.execute(filePath);
+              return commands.profile.execute(filePath);
             }
             // Check if the file is a portfolio profile file
-            else if (resolvedFilePath.includes("uma.txt") || resolvedFilePath.includes("stealth-") || (resolvedFilePath.includes("roots/") && !resolvedFilePath.includes("about.txt"))) {
-              content = commands.portfolioProfile.execute(filePath);
+            if (resolvedFilePath.includes("uma.txt") || resolvedFilePath.includes("stealth-") || resolvedFilePath.includes("pre-commit/")) {
+              return commands.portfolioProfile.execute(filePath);
+            }
+            // Check if the file is the legal notice
+            if (resolvedFilePath.includes("legal.txt")) {
+              return commands.legalNotice.execute(filePath);
+            }
+            // Check if the file is a blog post
+            if (resolvedFilePath.includes("/blog/") && resolvedFilePath.endsWith(".txt")) {
+              return commands.blogPost.execute(filePath);
             }
             return `<pre>${content}</pre>`;
           },
@@ -232,6 +299,17 @@ ${githubHtml}<br>
           hidden: true,
         },
 
+        whois: {
+          execute: (args) => {
+            if (!args[0] || args[0] !== "commit.fund") {
+              return `whois: try 'whois commit.fund'`;
+            }
+            return `<div class="command-output"><span class="yellow">Domain:</span>          commit.fund<br><span class="yellow">Vehicle:</span>         >commit (Fonds Professionnel de Capital Investissement)<br><span class="yellow">Manager:</span>         Red River West SAS<br>                 9 rue des Colonnes du Trône, 75012 Paris, France<br>                 AMF Ref: GP-24000012<br><span class="yellow">Focus:</span>           Pre-seed and seed commercial open source startups<br><span class="yellow">Contact:</span>         hey@commit.fund</div>`;
+          },
+          description: "Query registration information",
+          hidden: true,
+        },
+
         help: {
           execute: (args) => {
             if (args.length === 1) {
@@ -270,6 +348,7 @@ ${githubHtml}<br>
       let isWaitingForEmail = false;
       let currentDirectory = "/";
       let currentTab = "cli"; // 'cli', 'portfolio', 'team', 'about'
+      let neofetchCollapsed = false;
       let fileTreeState = {}; // tracks expanded directories by path in tab trees
 
       class Tea {
@@ -424,7 +503,7 @@ ${githubHtml}<br>
               contents: {
                 "readme.txt": {
                   type: "file",
-                  content: `We back commercial open source companies at pre-seed and seed, with checks up to $1.5M.\n\nWe invest at the intersection of great software and the communities that grow around it, because the community is the moat. When the developers who use a project become its internal champions, adoption becomes organic, contracts follow, and the flywheel compounds.\n\n\nTwo unfair advantages\n\n- A proprietary data platform purpose-built for open source, aggregating signals from GitHub, package managers, container registries, Discord servers, and more. It gives a 360° view of projects, teams, and ecosystems. We use it to source earlier, qualify faster, and once we've invested, to support portfolio companies with community health monitoring, identifying the high-intent ICs worth activating in a sales motion (without creating friction in the community), hiring pipelines, competitive intelligence, etc.\n\n- A network of 100+ open source operators including successful founders of companies like Supabase, Mozilla, Nginx, and more, alongside Heads of Community, VPs of Sales, Marketing, Corporate Development from companies like Grafana, MongoDB, Hugging Face, and others, plus CTOs at major enterprises across banking, energy, telcos, and entertainment both in the US and Europe. These are the people who've built and scaled open source businesses and the buyers who write the checks.\n\n\nWhere we focus\n\n- Infrastructure and developer tools\n- AI and machine learning\n- Data platforms\n- Cybersecurity and sysadmin tooling\n- Business applications\n- Industry-specific open source solutions\n\nInterested? Reach out at <a href="mailto:hey@commit.fund" class="blue">hey@commit.fund</a>`,
+                  content: `>commit is part of the Red River West family and is the early-stage investment vehicle focused on commercial open source startups. We back commercial open source companies at pre-seed and seed, with checks up to $1.5M.\n\nWe invest at the intersection of great software and the communities that grow around it, because the community is the moat. When the developers who use a project become its internal champions, adoption becomes organic, contracts follow, and the flywheel compounds.\n\n\nTwo unfair advantages\n\n- A proprietary data platform purpose-built for open source, aggregating signals from GitHub, package managers, container registries, Discord servers, and more. It gives a 360° view of projects, teams, and ecosystems. We use it to source earlier, qualify faster, and once we've invested, to support portfolio companies with community health monitoring, identifying the high-intent ICs worth activating in a sales motion (without creating friction in the community), hiring pipelines, competitive intelligence, etc.\n\n- A network of 100+ open source operators including successful founders of companies like Supabase, Mozilla, Nginx, and more, alongside Heads of Community, VPs of Sales, Marketing, Corporate Development from companies like Grafana, MongoDB, Hugging Face, and others, plus CTOs at major enterprises across banking, energy, telcos, and entertainment both in the US and Europe. These are the people who've built and scaled open source businesses and the buyers who write the checks.\n\n\nWhere we focus\n\n- Infrastructure and developer tools\n- AI and machine learning\n- Data platforms\n- Cybersecurity and sysadmin tooling\n- Business applications\n- Industry-specific open source solutions\n\nInterested? Reach out at <a href="mailto:hey@commit.fund" class="blue">hey@commit.fund</a>`,
                 },
                 "projects.txt": {
                   type: "file",
@@ -433,6 +512,10 @@ ${githubHtml}<br>
                 "contact.txt": {
                   type: "file",
                   content: `Email    <a href="mailto:hey@commit.fund" class="blue">hey@commit.fund</a>\nX        <a href="https://x.com/commitvc" target="_blank" class="blue">x.com/commitvc</a>\nGitHub   <a href="https://github.com/commitvc" target="_blank" class="blue">github.com/commitvc</a>`,
+                },
+                "legal.txt": {
+                  type: "file",
+                  content: `This file contains all legal information related to this website, >commit, and its management company RRW SAS.`,
                 },
               },
             },
@@ -463,6 +546,7 @@ ${githubHtml}<br>
                             Role: Partner
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/abelsamot
+                            LinkedIn: https://www.linkedin.com/in/abel-samot/
                             Avatar: team/abel.png`,
                 },
                 "olivier.txt": {
@@ -471,6 +555,7 @@ ${githubHtml}<br>
                             Role: Partner
                             Location: Geneva, Switzerland 🇨🇭
                             Github: https://github.com/olivierhuez
+                            LinkedIn: https://www.linkedin.com/in/olivierhuez/
                             Avatar: team/olivier.png`,
                 },
                 "max.txt": {
@@ -479,6 +564,7 @@ ${githubHtml}<br>
                             Role: Partner
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/mxcrbn
+                            LinkedIn: https://www.linkedin.com/in/mxcrbn/
                             Avatar: team/max.png`,
                 },
                 "alessandro.txt": {
@@ -487,6 +573,7 @@ ${githubHtml}<br>
                             Role: Tech Lead
                             Location: Paris, France 🇫🇷
                             Github: https://github.com/alessandro-ciffo
+                            LinkedIn: https://www.linkedin.com/in/alessandro-ciffo-4b7710191/
                             Avatar: team/alessandro.png`,
                 },
               },
@@ -494,92 +581,112 @@ ${githubHtml}<br>
             portfolio: {
               type: "directory",
               contents: {
-                roots: {
+                "pre-commit": {
                   type: "directory",
                   contents: {
-                    "about.txt": {
-                      type: "file",
-                      content: `Before >commit, the team spent years backing open source founders as investors and angels.<br><br>Our conviction grew alongside the movement and the companies we backed. They showed us that commercial open source builds the most enduring software.<br><br>That became >commit's thesis.<br><br>We are grateful to these founders for that.`,
-                    },
-                    "graphcore.txt": {
-                      type: "file",
-                      content: `Company: Graphcore
-                            One-Liner: AI hardware and software for accelerating machine intelligence
-                            Website: https://www.graphcore.ai
-                            Github: https://github.com/graphcore
-                            Avatar: portfolio/roots/graphcore.png`,
-                    },
-                    "mastra.txt": {
-                      type: "file",
-                      content: `Company: Mastra
-                            One-Liner: TypeScript AI framework for building agents and workflows
-                            Website: https://mastra.ai
-                            Github: https://github.com/mastra-ai
-                            Avatar: portfolio/roots/mastra.png`,
-                    },
                     "twenty.txt": {
                       type: "file",
-                      content: `Company: Twenty
-                            One-Liner: Open-source alternative to Salesforce
-                            Website: https://twenty.com
-                            Github: https://github.com/twentyhq
-                            Avatar: portfolio/roots/twenty.png`,
-                    },
-                    "pangolin.txt": {
-                      type: "file",
-                      content: `Company: Pangolin
-                            One-Liner: Zero trust remote access to your apps and infrastructure
-                            Website: https://pangolin.net
-                            Github: https://github.com/fosrl
-                            Avatar: portfolio/roots/pangolin.png`,
-                    },
-                    "better-auth.txt": {
-                      type: "file",
-                      content: `Company: Better Auth
-                            One-Liner: Better authentication
-                            Website: https://better-auth.com
-                            Github: https://github.com/better-auth
-                            Avatar: portfolio/roots/better-auth.png`,
-                    },
-                    "keep.txt": {
-                      type: "file",
-                      content: `Company: Keep
-                            One-Liner: AIOps platform for alert management and automation
-                            Website: https://keephq.dev
-                            Github: https://github.com/keephq
-                            Avatar: portfolio/roots/keep.png`,
-                    },
-                    "pandasai.txt": {
-                      type: "file",
-                      content: `Company: PandasAI
-                            One-Liner: AI for data analysis
-                            Website: https://pandas-ai.com
-                            Github: https://github.com/sinaptik-ai
-                            Avatar: portfolio/roots/pandasAI.png`,
-                    },
-                    "pyannote.txt": {
-                      type: "file",
-                      content: `Company: pyannote
-                            One-Liner: Speaker diarization and intelligence for audio
-                            Website: https://pyannote.ai
-                            Github: https://github.com/pyannote
-                            Avatar: portfolio/roots/pyannote.png`,
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Twenty showed us how open source could redefine entire business application categories through community momentum and bottom-up distribution.
+Company: Twenty
+One-Liner: Open source CRM
+Website: https://twenty.com
+Github: https://github.com/twentyhq/twenty
+Avatar: portfolio/pre-commit/twenty.png`,
                     },
                     "sourcebot.txt": {
                       type: "file",
-                      content: `Company: Sourcebot
-                            One-Liner: Self-hosted code search and understanding for AI agents
-                            Website: https://sourcebot.dev
-                            Github: https://github.com/sourcebot-dev
-                            Avatar: portfolio/roots/sourcebot.png`,
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Sourcebot showed us that code search and intelligence, built openly, can become essential infrastructure for the next generation of developer platforms.
+Company: Sourcebot
+One-Liner: Open source code search and intelligence
+Website: https://sourcebot.dev
+Github: https://github.com/sourcebot-dev/sourcebot
+Avatar: portfolio/pre-commit/sourcebot.png`,
+                    },
+                    "pyannote.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+pyannote showed us that the most impactful open-source projects are often invisible to the end user, quietly powering entire ecosystems of voice and audio intelligence.
+Company: pyannote
+One-Liner: Open source speaker diarization
+Website: https://pyannote.ai
+Github: https://github.com/pyannote/pyannote-audio
+Package: pypi:pyannote.audio
+Avatar: portfolio/pre-commit/pyannote.png`,
+                    },
+                    "pangolin.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Pangolin showed us the remarkable scale of demand for open, self-hosted networking infrastructure that is privacy-first by design and not by marketing.
+Company: Pangolin
+One-Liner: Open source self-hosted tunneling
+Website: https://pangolin.network
+Github: https://github.com/fosrl/pangolin
+Avatar: portfolio/pre-commit/pangolin.png`,
                     },
                     "whitecircle.txt": {
                       type: "file",
-                      content: `Company: White Circle
-                            One-Liner: AI safety platform for testing, guardrailing and observability
-                            Website: https://whitecircle.ai
-                            Github: https://github.com/whitecircle-ai
-                            Avatar: portfolio/roots/whitecircle.png`,
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+White Circle showed us how critical it is to observe and guardrail AI systems in the age of LLMs, and that community-driven benchmarks can define standards beyond the boundaries of pure open source.
+Company: White Circle
+One-Liner: AI observability and guardrails
+Website: $website
+Github: $github
+Avatar: portfolio/pre-commit/whitecircle.png`,
+                    },
+                    "keep.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Keep showed us that even in a commoditized space, an MIT licensed and community rooted platform can monetize by solving real developer problems, and become a powerful path to acquisition.
+Company: Keep
+One-Liner: Open source alerting and observability
+Website: $website
+Github: $github
+Avatar: portfolio/pre-commit/keep.png`,
+                    },
+                    "pandasai.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+PandasAI showed us the compounding power of bringing AI capabilities to the libraries developers already live inside, turning existing ecosystems into launchpads for entirely new workflows.
+Company: PandasAI
+One-Liner: AI-powered data analysis on pandas
+Website: https://pandas-ai.com
+Github: https://github.com/Sinaptik-AI/pandas-ai
+Package: pypi:pandasai
+Avatar: portfolio/pre-commit/pandasAI.png`,
+                    },
+                    "mastra.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Mastra showed us how an opinionated open-source framework can define an entire category before it fully exists, and revealed the remarkable power of building community conviction through education and writing at scale.
+Company: Mastra
+One-Liner: TypeScript AI agent framework
+Website: https://mastra.ai
+Github: https://github.com/mastra-ai/mastra
+Package: npm:@mastra/core
+Avatar: portfolio/pre-commit/mastra.png`,
+                    },
+                    "better-auth.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Better Auth showed us how to reimagine a crowded category in a way that puts full ownership back in developers' hands. It also reminded us that open source knows no borders.
+Company: Better Auth
+One-Liner: TypeScript authentication library
+Website: https://better-auth.com
+Github: https://github.com/better-auth/better-auth
+Package: npm:better-auth
+Avatar: portfolio/pre-commit/better-auth.png`,
+                    },
+                    "graphcore.txt": {
+                      type: "file",
+                      content: `Story: Before >commit, the team spent years backing open-source founders and companies.
+Graphcore showed us that in AI infrastructure, the openness of the toolchain and the strength of the developer community matter as much as the hardware itself.
+Company: Graphcore
+One-Liner: AI hardware and open toolchain
+Website: https://graphcore.ai
+Github: https://github.com/graphcore
+Avatar: portfolio/pre-commit/graphcore.png`,
                     },
                   },
                 },
@@ -606,6 +713,43 @@ ${githubHtml}<br>
                             Website: https://uma.bot
                             Github: https://github.com/uma-robots
                             Avatar: portfolio/uma.png`,
+                },
+              },
+            },
+            blog: {
+              type: "directory",
+              contents: {
+                "next-decade.txt": {
+                  type: "file",
+                  content: `Why Does the Next Decade Belong to Open Source?\nby Abel Samot, on October 29th, 2025\n\nOpen source just turned 50. From your pocket to outer space, it's already everywhere — and the next decade will see open source companies dominate software the way cloud-native SaaS did in the 2010s.`,
+                },
+                "licenses.txt": {
+                  type: "file",
+                  content: `Open Source Software Licenses: How to choose the right one for your business?\nby Abel Samot, on March 26th, 2025\n\nA comprehensive guide for founders on selecting the right open source license. Covers permissive, copyleft, and fair-code licenses with real-world examples of companies that faced challenges through licensing decisions.`,
+                },
+                "community-value.txt": {
+                  type: "file",
+                  content: `Putting a value on Open Source communities\nby Olivier Huez, on May 7th, 2025\n\nHow to quantify the value of open source communities through a proprietary scoring model. Community size alone doesn't determine value — growth dynamics and engagement matter more.`,
+                },
+                "europe-sovereignty.txt": {
+                  type: "file",
+                  content: `Open Source: The key to achieve Europe's digital sovereignty in the AI era\nby Abel Samot, on February 13th, 2025\n\nOpen Source is Europe's strategic lever to compete in AI against the US and China. Historical precedent shows open-source approaches consistently defeat proprietary solutions, and Europe possesses unique advantages to lead an open-source AI revolution.`,
+                },
+                "browser-redefined.txt": {
+                  type: "file",
+                  content: `The Browser Redefined: How AI is Remaking the Web's Front Door\nby Olivier Huez, on December 22nd, 2025\n\nGenerative AI is fundamentally reshaping the browser market after 20 years of stagnation. New AI-powered browsers integrate agentic automation, contextual understanding, and writing tools, creating a third age of online shopping.`,
+                },
+                "projet-product-fit.txt": {
+                  type: "file",
+                  content: `Project-Product Fit\nby Max Corbani, on June 3rd, 2025\n\nCommercial open-source companies must balance a free, community-driven project with a monetizable product. This framework explores how to differentiate offerings while maintaining developer trust and community engagement.`,
+                },
+                "project-to-market.txt": {
+                  type: "file",
+                  content: `From Project to Market\nby Max Corbani, on June 30th, 2025\n\nA visual framework for transforming open-source projects into commercial products. Aligning project, community, product, and market creates a flywheel enabling users to transition between contributor and customer roles.`,
+                },
+                "french-coss.txt": {
+                  type: "file",
+                  content: `The rise of open-source startups in France\nby Max Corbani, on January 5th, 2023\n\nFrance launched as many open-source startups in 2020-2023 as during the prior five years. The growth is driven by structural ecosystem improvements and France's engineering heritage.`,
                 },
               },
             },
@@ -739,7 +883,44 @@ ${githubHtml}<br>
       }
 
       function formatPrompt(path) {
-        return path === "/" ? ">" : path + ">";
+        const host = `<span class="red">user@commit.fund</span> `;
+        return path === "/" ? `${host}>` : `${host}${path} >`;
+      }
+
+      function updatePromptShadow() {
+        const inputCont = document.getElementById("input-container");
+        const shadow = document.getElementById("prompt-shadow");
+        const cliOut = document.getElementById("cli-output");
+        const tabOut = document.getElementById("tab-content");
+        if (!inputCont) return;
+        // Cover the full prompt zone + gradient fade above it
+        if (shadow && inputCont) {
+          const bcr = inputCont.getBoundingClientRect();
+          const inputCover = Math.round(window.innerHeight - bcr.top); // solid bg height = input top → viewport bottom
+          const fadeHeight = 8; // very short fade = crisp edge
+          const totalHeight = inputCover + fadeHeight;
+          shadow.style.height = totalHeight + "px";
+          // Solid backing covers the prompt (z-index 9 < prompt 10, so hidden)
+          // Visible gradient: near-black → transparent over 14px for a sharp, intense edge
+          shadow.style.background = `linear-gradient(to top, #313445 ${inputCover}px, rgb(20, 21, 30) ${inputCover}px, transparent ${totalHeight}px)`;
+        }
+        const tabVisible = tabOut && tabOut.style.display !== "none";
+        const active = (tabVisible && tabOut.scrollHeight > tabOut.clientHeight)
+          ? tabOut
+          : (cliOut && cliOut.scrollHeight > cliOut.clientHeight) ? cliOut : null;
+        if (!active) {
+          inputCont.classList.remove("prompt-shadow");
+          if (shadow) shadow.classList.remove("active");
+          return;
+        }
+        const gap = active.scrollHeight - active.scrollTop - active.clientHeight;
+        if (gap > 5) {
+          inputCont.classList.add("prompt-shadow");
+          if (shadow) shadow.classList.add("active");
+        } else {
+          inputCont.classList.remove("prompt-shadow");
+          if (shadow) shadow.classList.remove("active");
+        }
       }
 
       function escapeHtml(str) {
@@ -780,6 +961,7 @@ ${githubHtml}<br>
         if (currentTab === "portfolio") renderPortfolio();
         else if (currentTab === "team") renderTeam();
         else if (currentTab === "about") renderAbout();
+        else if (currentTab === "blog") renderBlog();
       }
 
       function viewFile(path) {
@@ -788,9 +970,13 @@ ${githubHtml}<br>
 
         let rendered;
         if (path.includes("abel.txt") || path.includes("max.txt") || path.includes("olivier.txt") || path.includes("alessandro.txt")) {
-          rendered = `<pre>${commands.profile.execute(path)}</pre>`;
-        } else if (path.includes("uma.txt") || path.includes("stealth-") || (path.includes("roots/") && !path.includes("about.txt"))) {
-          rendered = `<pre>${commands.portfolioProfile.execute(path)}</pre>`;
+          rendered = commands.profile.execute(path);
+        } else if (path.includes("uma.txt") || path.includes("stealth-") || path.includes("pre-commit/")) {
+          rendered = commands.portfolioProfile.execute(path);
+        } else if (path.includes("legal.txt")) {
+          rendered = commands.legalNotice.execute(path);
+        } else if (path.includes("/blog/") && path.endsWith(".txt")) {
+          rendered = commands.blogPost.execute(path);
         } else {
           rendered = `<pre>${content}</pre>`;
         }
@@ -799,26 +985,73 @@ ${githubHtml}<br>
         if (viewer) {
           viewer.innerHTML = `<div class="file-viewer-header">── ${path} ──</div>${rendered}`;
           viewer.scrollIntoView({ behavior: "smooth" });
+          const metricsEl = viewer.querySelector('[data-gh-fetch]');
+          if (metricsEl) fetchGithubMetrics(metricsEl.dataset.ghFetch, metricsEl.dataset.pkg || '', metricsEl.id);
         }
       }
 
-      function switchTab(tab) {
-        if (tab === currentTab && document.getElementById("tab-cli")) return;
+      function fmtNum(n) {
+        if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return String(n);
+      }
+
+      async function fetchGithubMetrics(githubUrl, pkg, uid) {
+        const match = githubUrl.match(/github\.com\/([^/]+\/[^/?#]+)/);
+        if (!match) return;
+        const repo = match[1].replace(/\/$/, '');
+        try {
+          const fetches = [
+            fetch(`https://api.github.com/repos/${repo}`),
+            fetch(`https://api.github.com/repos/${repo}/contributors?per_page=1&anon=1`),
+          ];
+          if (pkg) {
+            const [registry, pkgName] = pkg.split(/:(.+)/);
+            if (registry === 'npm') fetches.push(fetch(`https://api.npmjs.org/downloads/point/last-month/${encodeURIComponent(pkgName)}`));
+            else if (registry === 'pypi') fetches.push(fetch(`https://pypistats.org/api/packages/${pkgName}/recent`));
+            else fetches.push(Promise.resolve(null));
+          }
+          const [repoRes, contribRes, dlRes] = await Promise.all(fetches);
+          const repoData = await repoRes.json();
+          const stars = fmtNum(repoData.stargazers_count);
+          let contributors = '–';
+          const link = contribRes.headers.get('link');
+          if (link) {
+            const m = link.match(/[?&]page=(\d+)>; rel="last"/);
+            if (m) contributors = fmtNum(parseInt(m[1]));
+          } else {
+            const arr = await contribRes.json();
+            if (Array.isArray(arr)) contributors = fmtNum(arr.length);
+          }
+          let dlHtml = '';
+          if (dlRes) {
+            try {
+              const dlData = await dlRes.json();
+              const [registry] = pkg.split(':');
+              const count = registry === 'npm' ? dlData.downloads : dlData.data?.last_month;
+              if (count) dlHtml = `&nbsp;&nbsp;<span style="opacity:0.55">↓</span> ${fmtNum(count)}/mo`;
+            } catch (_) {}
+          }
+          const el = document.getElementById(uid);
+          if (el) el.innerHTML = `<span class="yellow">Adoption</span>&nbsp;&nbsp;<span style="opacity:0.55">☆</span> ${stars}&nbsp;&nbsp;<span style="opacity:0.55">◈</span> ${contributors}${dlHtml}`;
+        } catch (_) {
+          const el = document.getElementById(uid);
+          if (el) el.textContent = '';
+        }
+      }
+
+      function switchTab(tab, replace) {
+        if (tab === currentTab && document.getElementById("tab-cli") && neofetchCollapsed) return;
         currentTab = tab;
 
-        const tabs = ["cli", "portfolio", "team", "about"];
+        const tabs = ["cli", "portfolio", "team", "about", "blog"];
         tabs.forEach(t => {
           const el = document.getElementById(`tab-${t}`);
-          const prefix = document.getElementById(`tab-prefix-${t}`);
-          if (!el || !prefix) return;
+          if (!el) return;
           if (t === tab) {
             el.classList.add("tab-active");
-            prefix.innerHTML = "&gt;&nbsp;";
-            prefix.className = "tab-prefix red";
           } else {
             el.classList.remove("tab-active");
-            prefix.innerHTML = "&nbsp;&nbsp;";
-            prefix.className = "tab-prefix";
           }
         });
 
@@ -826,16 +1059,34 @@ ${githubHtml}<br>
         const cliOutput = document.getElementById("cli-output");
         const tabContent = document.getElementById("tab-content");
         const inputContainer = document.getElementById("input-container");
+        const tabNavContainer = document.querySelector(".tab-nav-container");
+        const terminalEl = document.getElementById("terminal-output");
+        const containerEl = document.querySelector(".container");
+
+        // Collapse neofetch only on first tab switch (Option C)
+        if (!neofetchCollapsed) {
+          const collapsibles = document.querySelectorAll(".collapsible");
+          collapsibles.forEach(el => el.classList.add("collapsed"));
+          if (tabNavContainer) tabNavContainer.classList.add("tab-static");
+          if (terminalEl) terminalEl.classList.add("tab-static-mode");
+          if (containerEl) containerEl.classList.add("tab-static-mode");
+          neofetchCollapsed = true;
+          // Snap indicator after layout transition fully settles (gap + margin = 0.35s)
+          setTimeout(() => moveTabIndicator(tab, true), 380);
+        } else {
+          // Smooth slide for subsequent switches
+          moveTabIndicator(tab);
+        }
 
         if (tab === "cli") {
-          if (cliHint) cliHint.style.display = "block";
+          if (cliHint) cliHint.style.display = "none";
           if (cliOutput) cliOutput.style.display = "block";
           if (tabContent) tabContent.style.display = "none";
           inputContainer.classList.remove("hidden");
           const ti = document.getElementById("terminal-input");
           if (ti) ti.focus();
         } else {
-          if (cliHint) cliHint.style.display = "block";
+          if (cliHint) cliHint.style.display = "none";
           if (cliOutput) cliOutput.style.display = "none";
           if (tabContent) {
             tabContent.style.display = "block";
@@ -844,8 +1095,39 @@ ${githubHtml}<br>
             if (tab === "portfolio") renderPortfolio();
             else if (tab === "team") renderTeam();
             else if (tab === "about") renderAbout();
+            else if (tab === "blog") renderBlog();
           }
           inputContainer.classList.add("hidden");
+        }
+
+        // Update URL
+        const tabToSlug = { cli: "cli", portfolio: "companies", blog: "blog", team: "team", about: "about" };
+        const slug = tabToSlug[tab] || tab;
+        if (window.location.pathname !== `/${slug}`) {
+          if (replace) {
+            history.replaceState({ tab: tab }, "", `/${slug}`);
+          } else {
+            history.pushState({ tab: tab }, "", `/${slug}`);
+          }
+        }
+      }
+
+      function moveTabIndicator(tab, instant) {
+        const indicator = document.getElementById("tab-indicator");
+        const el = document.getElementById(`tab-${tab}`);
+        const container = document.querySelector(".tab-nav-container");
+        if (!indicator || !el || !container) return;
+        const containerRect = container.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+        if (instant) {
+          indicator.classList.add("no-transition");
+          indicator.offsetHeight; // flush
+        }
+        indicator.style.left = (elRect.left - containerRect.left) + "px";
+        indicator.style.width = elRect.width + "px";
+        if (instant) {
+          indicator.offsetHeight; // flush
+          indicator.classList.remove("no-transition");
         }
       }
 
@@ -873,26 +1155,70 @@ ${githubHtml}<br>
       function renderPortfolio() { renderTabTree("portfolio"); }
       function renderTeam() { renderTabTree("team"); }
       function renderAbout() { renderTabTree("about"); }
+      function renderBlog() { renderTabTree("blog"); }
 
       function renderWelcome() {
         const terminal = document.getElementById("terminal-output");
-        terminal.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:> neofetch</p>`;
+        terminal.innerHTML += `<p class="command-prompt collapsible">${formatPrompt("/")}neofetch</p>`;
         terminal.innerHTML += `<div class="command-output">${commands.neofetch.execute()}</div>`;
         terminal.innerHTML += `
-          <div id="cli-hint"><br>Type 'help' to get started, or click a tab below - we won't judge<br><br></div>
+          <div id="cli-hint" class="collapsible"><br>Type 'help' to get started, or click a tab below - we won't judge<br><br></div>
           <div class="tab-nav-container">
             <div class="tab-nav">
-              <span class="tab-item" id="tab-cli" onclick="switchTab('cli')"><span class="tab-prefix" id="tab-prefix-cli"></span>CLI</span>
-              <span class="tab-item" id="tab-portfolio" onclick="switchTab('portfolio')"><span class="tab-prefix" id="tab-prefix-portfolio"></span>Companies</span>
-              <span class="tab-item" id="tab-team" onclick="switchTab('team')"><span class="tab-prefix" id="tab-prefix-team"></span>Team</span>
-              <span class="tab-item" id="tab-about" onclick="switchTab('about')"><span class="tab-prefix" id="tab-prefix-about"></span>About</span>
+              <span class="tab-item" id="tab-cli" onclick="switchTab('cli')">CLI</span>
+              <span class="tab-item" id="tab-portfolio" onclick="switchTab('portfolio')">Companies</span>
+              <span class="tab-item" id="tab-blog" onclick="switchTab('blog')">Blog</span>
+              <span class="tab-item" id="tab-team" onclick="switchTab('team')">Team</span>
+              <span class="tab-item" id="tab-about" onclick="switchTab('about')">About</span>
             </div>
+            <div id="tab-indicator"></div>
           </div>
-          <div id="cli-output"></div>
-          <div id="tab-content" style="display:none;"></div>`;
+`;
 
-        currentTab = ""; // force switchTab to re-render
-        switchTab("cli");
+        // Create cli-output and tab-content OUTSIDE terminal-output
+        // so they're independent of boot/neofetch content
+        const containerDiv = terminal.parentElement;
+        const inputCont = document.getElementById("input-container");
+        if (!document.getElementById("cli-output")) {
+          const cliOutputDiv = document.createElement("div");
+          cliOutputDiv.id = "cli-output";
+          containerDiv.insertBefore(cliOutputDiv, inputCont);
+        }
+        // Prompt lives inside cli-output so it flows after content and sticks to bottom on scroll
+        const cliOutputEl = document.getElementById("cli-output");
+        if (inputCont.parentElement === containerDiv) {
+          cliOutputEl.appendChild(inputCont);
+        }
+        // Attach scroll listener each time (idempotent — same handler ref is deduplicated by addEventListener)
+        cliOutputEl.addEventListener("scroll", updatePromptShadow);
+        window.addEventListener("resize", updatePromptShadow);
+        // Create the fixed shadow div once (lives on body, outside any overflow clip)
+        if (!document.getElementById("prompt-shadow")) {
+          const shadowDiv = document.createElement("div");
+          shadowDiv.id = "prompt-shadow";
+          document.body.appendChild(shadowDiv);
+        }
+        if (!document.getElementById("tab-content")) {
+          const tabContentDiv = document.createElement("div");
+          tabContentDiv.id = "tab-content";
+          tabContentDiv.style.display = "none";
+          containerDiv.appendChild(tabContentDiv);
+          tabContentDiv.addEventListener("scroll", updatePromptShadow);
+        }
+
+        // Set CLI as active tab without collapsing (landing state)
+        currentTab = "cli";
+        const cliTabEl = document.getElementById("tab-cli");
+        if (cliTabEl) cliTabEl.classList.add("tab-active");
+        // Snap indicator to CLI instantly (no transition)
+        moveTabIndicator("cli", true);
+        // Show prompt + CLI output
+        const landingInput = document.getElementById("input-container");
+        if (landingInput) landingInput.classList.remove("hidden");
+        const landingCliOutput = document.getElementById("cli-output");
+        if (landingCliOutput) landingCliOutput.style.display = "block";
+        const landingTermInput = document.getElementById("terminal-input");
+        if (landingTermInput) landingTermInput.focus();
       }
 
       function getAutocompleteSuggestions(input) {
@@ -964,6 +1290,8 @@ ${githubHtml}<br>
         input.addEventListener("focus", () => { const c = document.getElementById("cursor"); if (c) c.classList.remove("cursor-hidden"); });
         input.addEventListener("blur", () => { const c = document.getElementById("cursor"); if (c) c.classList.add("cursor-hidden"); });
 
+        window.addEventListener("scroll", updatePromptShadow);
+
         // Re-focus terminal input when clicking anywhere in the terminal
         terminal.addEventListener("click", (e) => {
           if (e.target.tagName !== "A" && e.target.tagName !== "INPUT") {
@@ -987,9 +1315,7 @@ ${githubHtml}<br>
         }
 
         function updatePrompt() {
-          const prompt = `<span class="red">user@commit.fund</span>:${formatPrompt(
-            currentDirectory
-          )} `;
+          const prompt = `${formatPrompt(currentDirectory)}`;
           inputContainer.innerHTML =
             prompt +
             `<input type="text" id="terminal-input" autocomplete="off" /><span class="cursor-blink" id="cursor">_</span>`;
@@ -999,7 +1325,7 @@ ${githubHtml}<br>
           newInput.addEventListener("click", () => updateCursorPosition(newInput));
           newInput.addEventListener("focus", () => { const c = document.getElementById("cursor"); if (c) c.classList.remove("cursor-hidden"); });
           newInput.addEventListener("blur", () => { const c = document.getElementById("cursor"); if (c) c.classList.add("cursor-hidden"); });
-          newInput.focus();
+          newInput.focus({ preventScroll: true });
         }
 
         // Add booting messages
@@ -1013,8 +1339,11 @@ ${githubHtml}<br>
 
         // Function to display boot messages with delay
         function displayBootMessages(index = 0) {
+          if (index === 0) {
+            terminal.innerHTML += `<div id="boot-messages" class="collapsible">`;
+          }
           if (index < bootMessageLines.length) {
-            terminal.innerHTML += bootMessageLines[index];
+            document.getElementById("boot-messages").innerHTML += bootMessageLines[index];
             terminal.scrollTop = terminal.scrollHeight;
             setTimeout(() => displayBootMessages(index + 1), 500);
           } else {
@@ -1025,8 +1354,31 @@ ${githubHtml}<br>
           }
         }
 
-        // Start displaying boot messages
-        displayBootMessages();
+        // Handle browser back/forward
+        window.addEventListener("popstate", (e) => {
+          if (e.state && e.state.tab) {
+            switchTab(e.state.tab);
+          } else {
+            // Back to landing — reload to get the full neofetch view
+            window.location.reload();
+          }
+        });
+
+        // Check if arriving on a subpage — skip boot animation
+        const initTab = sessionStorage.getItem('initTab');
+        if (initTab) sessionStorage.removeItem('initTab');
+
+        if (initTab) {
+          // Subpage: skip boot, collapse instantly (no transition flash)
+          document.body.classList.add("no-init-transition");
+          terminal.innerHTML += `<div id="boot-messages" class="collapsible"></div>`;
+          renderWelcome();
+          switchTab(initTab, true);
+          requestAnimationFrame(() => document.body.classList.remove("no-init-transition"));
+        } else {
+          // Landing: full boot animation
+          displayBootMessages();
+        }
 
         // Handle input
         inputContainer.addEventListener("keydown", async (event) => {
@@ -1112,36 +1464,34 @@ ${githubHtml}<br>
                   commandHistory.push(input.value);
                   historyIndex = commandHistory.length;
 
-                  // Show the command in cli-output
-                  const cliOutput = document.getElementById("cli-output");
-                  cliOutput.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
-                    currentDirectory
-                  )}${escapeHtml(input.value)}</p>`;
+                  // Show the command in cli-output, inserted before the prompt
+                  const promptEl = document.getElementById("input-container");
+                  promptEl.insertAdjacentHTML('beforebegin', `<p class="command-prompt">${formatPrompt(currentDirectory)}${escapeHtml(input.value)}</p>`);
 
                   const output = commands[command].execute(args);
-                  if (output) {
-                    cliOutput.innerHTML += `<div class="command-output">${output}</div>`;
-                  }
+                  promptEl.insertAdjacentHTML('beforebegin', `<div class="command-output">${output || ''}</div>`);
                   if (commands[command].isInteractiveEmail) {
                     isWaitingForEmail = true;
                   }
                 } else {
                   // For unknown commands, show error and help
-                  const cliOutputErr = document.getElementById("cli-output");
-                  cliOutputErr.innerHTML += `<p class="command-prompt"><span class="red">user@commit.fund</span>:${formatPrompt(
-                    currentDirectory
-                  )}${escapeHtml(input.value)}</p>`;
-                  cliOutputErr.innerHTML += `<div class="command-output">Command '${escapeHtml(command)}' not found.<br><br>`;
-                  cliOutputErr.innerHTML += `${commands.help.execute([])}</div>`;
+                  const promptEl = document.getElementById("input-container");
+                  promptEl.insertAdjacentHTML('beforebegin', `<p class="command-prompt">${formatPrompt(currentDirectory)}${escapeHtml(input.value)}</p>`);
+                  promptEl.insertAdjacentHTML('beforebegin', `<div class="command-output">Command '${escapeHtml(command)}' not found.<br><br>${commands.help.execute([])}</div>`);
                 }
               }
 
               // Reset input
               input.value = "";
-              updatePrompt();
 
-              // Scroll to bottom
+              // Scroll to bottom BEFORE updatePrompt so focus() inside it doesn't
+              // trigger a scroll-into-view on a stale layout (the source of the jump glitch)
+              const cliScrollEl = document.getElementById("cli-output");
+              if (cliScrollEl) cliScrollEl.scrollTop = cliScrollEl.scrollHeight;
               terminal.scrollTop = terminal.scrollHeight;
+
+              updatePrompt();
+              window.scrollTo({ top: document.body.scrollHeight });
             }
           } else if (event.key === "ArrowUp") {
             event.preventDefault();
@@ -1214,21 +1564,13 @@ ${githubHtml}<br>
         overflow-x: hidden;
       }
 
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
+
 
       .profile-image {
         width: 10rem;
         height: 10rem;
         object-fit: cover;
-        border: 0.5px solid #000;
+        object-position: top;
         margin-top: 6px;
       }
 
@@ -1301,36 +1643,56 @@ ${githubHtml}<br>
         display: flex;
         flex-direction: column;
         justify-content: start;
-        align-items: start;
+        align-items: stretch;
         margin: auto;
-        padding: 12px;
+        padding: 12px 12px 0 12px;
         max-width: 100vw;
-        overflow-x: hidden;
+        height: 100vh;
         box-sizing: border-box;
+        transition: padding-top 0.35s ease;
+      }
+
+      .container.tab-static-mode {
+        padding-top: 3px;
       }
 
       .profile-card2-container {
         display: flex;
         flex-direction: row;
-        align-items: flex-start;
-        margin-top: 1rem;
+        align-items: center;
         justify-content: flex-start;
+        gap: 1rem;
+        margin-top: 1rem;
         line-height: 1;
       }
 
       .image-container {
-        display: flex;
-        justify-content: start;
-        align-items: start;
+        flex-shrink: 0;
+      }
+
+      .story-text {
+        color: #c8d0f2;
+        margin: 0 0 0.5rem 0;
+        line-height: 1.5;
+      }
+
+      .blog-post-card {
+        line-height: 1.5;
+      }
+
+      .legal-notice {
+        line-height: 1.5;
+      }
+
+      .legal-notice p {
+        margin: 0.5rem 0;
       }
 
       .profile-card2-data {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
         text-align: left;
-        margin-left: 6px;
         line-height: 1;
+        min-width: 0;
+        overflow: hidden;
       }
 
 
@@ -1340,6 +1702,31 @@ ${githubHtml}<br>
         justify-content: start;
         align-items: start;
         margin-top: 6px;
+        transition: margin 0.35s ease;
+      }
+
+      .tab-static-mode .neofetch-container {
+        margin-top: 0;
+      }
+
+      .no-init-transition * {
+        transition: none !important;
+      }
+
+      .collapsible {
+        overflow: hidden;
+        max-height: 500px;
+        opacity: 1;
+        transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.35s ease, padding 0.35s ease;
+      }
+
+      .collapsible.collapsed {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
       }
 
       .logo-container {
@@ -1348,6 +1735,22 @@ ${githubHtml}<br>
         width: 100%;
         align-items: start;
         margin-top: 12px;
+        transition: margin 0.35s ease;
+      }
+
+      .tab-static-mode .logo-container {
+        margin-top: 0;
+        cursor: pointer;
+      }
+
+      .tab-static-mode .logo-container .logo p {
+        margin: 0;
+        padding: 0;
+        line-height: 0;
+      }
+
+      .neofetch-highlights {
+        line-height: 1.6;
       }
 
       .neofetch-data {
@@ -1357,6 +1760,7 @@ ${githubHtml}<br>
         overflow-wrap: break-word;
         max-width: calc(100vw - 36px);
       }
+
 
       p {
         margin: 0;
@@ -1375,20 +1779,48 @@ ${githubHtml}<br>
       }
 
       #terminal-output {
-        max-height: calc(100vh - 50px);
-        overflow-y: auto;
-        overflow-x: hidden;
+        flex: 0 0 auto;
+        overflow: visible;
+        position: relative;
+        z-index: 5;
         width: 100%;
         padding: 12px 0px 0px 0px;
         box-sizing: border-box;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        background-color: #313445;
+        transition: padding 0.35s ease;
+      }
+
+      #terminal-output.tab-static-mode {
+        padding-top: 0;
+        margin-top: 0;
+      }
+
+      #cli-output {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 100%;
+        padding-top: 20px;
       }
 
       .command-output {
-        margin-bottom: 4px;
+        margin-bottom: 1.5rem;
         padding: 0 12px 0 0px;
         max-width: calc(100% - 24px);
+        /* No transition here — animating margin on new CLI outputs causes sticky prompt drift */
+      }
+
+      /* Transition only for the neofetch banner area where collapse animation is needed */
+      #terminal-output .command-output {
+        transition: margin 0.35s ease, padding 0.35s ease;
+      }
+
+      #terminal-output.tab-static-mode > .command-output {
+        margin-bottom: 0;
+        padding: 0;
       }
 
       .command-output pre {
@@ -1434,8 +1866,27 @@ ${githubHtml}<br>
       }
 
       #input-container {
-        padding: 0 12px 0 0;
+        padding: 1rem 12px 1rem 0;
         width: calc(100% - 48px);
+        background-color: #313445;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+      }
+
+      #prompt-shadow {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 9;
+      }
+
+      #prompt-shadow.active {
+        opacity: 1;
       }
 
       #terminal-input:focus {
@@ -1445,7 +1896,27 @@ ${githubHtml}<br>
       /* Tab navigation */
       .tab-nav-container {
         margin-top: 16px;
-        margin-bottom: 20px;
+        position: relative;
+        transition: margin 0.35s ease;
+      }
+
+      .tab-nav-container::after {
+        content: '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+        position: absolute;
+        bottom: 0;
+        left: -12px;
+        right: -12px;
+        width: calc(100vw + 24px);
+        height: 1em;
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        color: rgba(200, 208, 242, 0.3);
+        pointer-events: none;
+      }
+
+      .tab-nav-container.tab-static {
+        margin-top: 1.5rem;
       }
 
       .tab-nav {
@@ -1453,33 +1924,78 @@ ${githubHtml}<br>
         flex-direction: row;
         gap: 52px;
         align-items: center;
-        border-bottom: 1px dashed rgba(200, 208, 242, 0.2);
-        padding-bottom: 8px;
+        padding-bottom: 16px;
+        padding-left: 18px;
         padding-right: 2ch;
+        transition: gap 0.35s ease;
+      }
+
+      .tab-nav-container.tab-static .tab-nav {
+        gap: 2rem;
       }
 
       .tab-item {
         cursor: pointer;
-        opacity: 0.3;
-        transition: opacity 0.15s ease;
+        color: rgba(200, 208, 242, 0.3);
+        transition: color 0.25s ease;
         user-select: none;
       }
 
-      .tab-item:hover,
-      .tab-item.tab-active {
-        opacity: 1;
+      .tab-nav-container.tab-static .tab-item {
+        color: rgba(200, 208, 242, 0.35);
       }
 
-      .tab-prefix {
-        display: inline;
+      .tab-item:hover {
+        color: rgba(200, 208, 242, 0.6);
+      }
+
+      .tab-item.tab-active,
+      .tab-nav-container.tab-static .tab-item.tab-active {
+        color: #c8d0f2;
+      }
+
+      #tab-indicator {
+        position: absolute;
+        bottom: 0;
+        height: 1em;
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        color: #c8d0f2;
+        font-size: inherit;
+        font-family: inherit;
+        pointer-events: none;
+        transition: left 0.3s ease, width 0.3s ease;
+        z-index: 1;
+      }
+
+      #tab-indicator::after {
+        content: '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      #tab-indicator.no-transition {
+        transition: none !important;
       }
 
       .neofetch-rule {
         display: block;
-        color: rgba(200, 208, 242, 0.4);
-        white-space: nowrap;
-        overflow: hidden;
         margin: 6px 0;
+        height: 1em;
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        color: rgba(200, 208, 242, 0.4);
+        position: relative;
+      }
+
+      .neofetch-rule::after {
+        content: '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+        position: absolute;
+        left: 0;
+        top: 0;
       }
 
       /* File tree */
@@ -1521,6 +2037,16 @@ ${githubHtml}<br>
         color: rgba(200, 208, 242, 0.5);
       }
 
+      #tab-content {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 100%;
+        min-width: 0;
+        padding-top: 20px;
+      }
+
       .file-viewer {
         margin-top: 16px;
         padding-top: 8px;
@@ -1558,7 +2084,7 @@ ${githubHtml}<br>
         id="input-container"
         class="hidden"
       >
-        <span class="red">user@commit.fund</span>:><input
+        <span class="red">user@commit.fund</span>&nbsp;><input
           type="text"
           id="terminal-input"
           autocomplete="off"

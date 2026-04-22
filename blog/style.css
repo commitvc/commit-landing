@@ -1,0 +1,114 @@
+@font-face {
+  font-family: "MesloLGS NF";
+  src: url("/font.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "MesloLGS NF", monospace;
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #313445;
+  color: #c8d0f2;
+  overflow-x: hidden;
+}
+
+a {
+  color: #92a9e9;
+}
+
+.page-wrapper {
+  padding: 12px;
+  max-width: 100vw;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.site-header a {
+  text-decoration: none;
+}
+
+.header-logo {
+  font-size: 14px;
+  line-height: 1.2;
+  color: #e63424;
+  white-space: pre;
+  margin: 0;
+  padding: 0;
+}
+
+.header-button img {
+  width: 220px;
+  height: auto;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(200, 208, 242, 0.2);
+}
+
+.tab-bar a {
+  color: rgba(200, 208, 242, 0.5);
+  text-decoration: none;
+}
+
+.tab-bar a:hover {
+  color: #c8d0f2;
+}
+
+.tab-bar .tab-active {
+  color: #c8d0f2;
+  font-weight: bold;
+}
+
+.tab-bar .tab-active::before {
+  content: "> ";
+  color: #e63424;
+}
+
+/* Article content */
+article {
+  line-height: 1.6;
+}
+
+article h1 {
+  color: #e63424;
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+article h2 {
+  color: #e0c997;
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+article p {
+  margin: 0.75rem 0;
+}
+
+article ul {
+  padding-left: 1.5rem;
+}
+
+article li {
+  margin: 0.4rem 0;
+}

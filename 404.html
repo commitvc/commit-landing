@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 | commit</title>
+  <link rel="icon" type="image/jpeg" href="/favicon.jpeg" />
+  <link rel="preload" href="/font.ttf" as="font" type="font/ttf" crossorigin />
+  <script>
+    // Redirect known routes
+    var s = { cli:"cli", companies:"portfolio", blog:"blog", team:"team", about:"about" };
+    var p = window.location.pathname.replace(/^\/|\/$/g, "");
+    var tab = s[p];
+    if (tab) {
+      sessionStorage.setItem('initTab', tab);
+      window.location.replace("/");
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: "MesloLGS NF";
+      src: url("/font.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      font-family: "MesloLGS NF", monospace;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-color: #313445;
+      color: #c8d0f2;
+      overflow-x: hidden;
+    }
+
+    a { color: #92a9e9; text-decoration: none; }
+    a:hover { color: #c8d0f2; }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: start;
+      margin: auto;
+      padding: 3px 12px 1.5rem 12px;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .main-site-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .main-site-button:hover { transform: scale(1.05); }
+    .main-site-button img { width: 220px; height: auto; }
+
+    .logo { font-size: 14px; }
+    .logo p { margin: 0; padding: 0; line-height: 0; }
+    .logo a { display: block; }
+
+    .red { color: #e63424; }
+
+    .tab-bar {
+      display: flex;
+      gap: 2rem;
+      margin: 1.5rem 0 2rem 0;
+      padding-bottom: 0.5rem;
+      border: none;
+      position: relative;
+    }
+    .tab-bar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -12px;
+      width: 100vw;
+      border-bottom: 1px dashed rgba(200, 208, 242, 0.2);
+    }
+    .tab-bar a {
+      color: rgba(200, 208, 242, 0.5);
+    }
+    .tab-bar a:hover { color: #c8d0f2; }
+
+    .error-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 4rem;
+    }
+
+    .ascii-404 {
+      color: #e63424;
+      font-size: 14px;
+      line-height: 1.3;
+      white-space: pre;
+      margin-bottom: 2rem;
+    }
+
+    .error-message {
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .error-message .dim {
+      color: rgba(200, 208, 242, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <a href="https://www.redriverwest.com" class="main-site-button">
+    <img src="/ButtonWebSitev2.png" alt="Part of Red River West" />
+  </a>
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <p>
+          <span class="red" style="display: inline-block; font-family: monospace; line-height: 1.2;">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;_&nbsp;&nbsp;<br>
+            &nbsp;__&nbsp;&nbsp;___&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;&nbsp;_&nbsp;__&nbsp;___&nbsp;&#40;_&#41;&nbsp;&#124;_&nbsp;<br>
+            &nbsp;&#92;&nbsp;&#92;&#47;&nbsp;__&#47;&nbsp;_&nbsp;&#92;&#124;&nbsp;&#39;_&nbsp;&#96;&nbsp;_&nbsp;&#92;&#124;&nbsp;&#39;_&nbsp;&#96;&nbsp;_&nbsp;&#92;&#124;&nbsp;&#124;&nbsp;&nbsp;_&#124;<br>
+            &nbsp;&#47;&nbsp;&#47;&nbsp;&#40;_&#124;&nbsp;&#40;_&#41;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;&nbsp;&#124;_&nbsp;<br>
+            &#47;_&#47;&nbsp;&#92;___&#92;___&#47;&#124;_&#124;&nbsp;&#124;_&#124;&nbsp;&#124;_&#124;_&#124;&nbsp;&#124;_&#124;&nbsp;&#124;_&#124;_&#124;&#92;__&#124;
+          </span>
+        </p>
+      </a>
+    </div>
+
+    <nav class="tab-bar">
+      <a href="/cli">CLI</a>
+      <a href="/companies">Companies</a>
+      <a href="/blog">Blog</a>
+      <a href="/team">Team</a>
+      <a href="/about">About</a>
+    </nav>
+
+    <div class="error-content">
+      <pre class="ascii-404">  _  _    ___  _  _
+ | || |  / _ \| || |
+ | || |_| | | | || |_
+ |__   _| | | |__   _|
+    | | | |_| |  | |
+    |_|  \___/   |_|  </pre>
+
+      <div class="error-message">
+        <p>This page hasn't been committed yet.</p>
+        <p class="dim">Maybe it's still in stealth mode, or someone force-pushed it out of existence.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
