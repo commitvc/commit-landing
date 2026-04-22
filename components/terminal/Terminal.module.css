@@ -1,5 +1,35 @@
 .terminal {
+  /* Two-zone layout: a non-scrollable header (boot, neofetch, tagline, nav)
+     and a scrollable command area below the tab dash line. Fixed to the
+     viewport so only the command area scrolls — never the header. */
+  position: fixed;
+  top: 20px;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
   line-height: 1.5;
+}
+
+.header {
+  flex: 0 0 auto;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.scrollable {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.5rem;
 }
 
 .output {

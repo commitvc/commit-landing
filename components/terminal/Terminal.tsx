@@ -3,14 +3,14 @@
 import { NavBar } from '@/components/nav-bar/NavBar';
 import { type CommandContext, autocomplete, findCommand, tokenize } from '@/lib/commands';
 import type { FsDir } from '@/lib/filesystem';
-import type { ReactNode } from 'react';
+import { type CSSProperties, Fragment, type ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BootAnimation } from './BootAnimation';
 import { Neofetch } from './Neofetch';
 import { PromptBar } from './PromptBar';
 import styles from './Terminal.module.css';
 
-type OutputEntry = { id: string; node: ReactNode };
+type OutputEntry = { id: string; node: ReactNode; bare?: boolean };
 
 type TerminalProps = { fs: FsDir };
 
@@ -32,12 +32,18 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isWelcome(id: string): boolean {
+  return id.startsWith('welcome-');
+}
+
 export function Terminal({ fs }: TerminalProps) {
   const [output, setOutput] = useState<OutputEntry[]>([]);
   const [cwd, setCwd] = useState('/');
   const [phase, setPhase] = useState<Phase>('boot');
+  const [scrolled, setScrolled] = useState(false);
   const runIdRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const nextId = useCallback((label: string) => {
     runIdRef.current += 1;
@@ -45,14 +51,14 @@ export function Terminal({ fs }: TerminalProps) {
   }, []);
 
   const append = useCallback(
-    (label: string, node: ReactNode) => {
-      setOutput((prev) => [...prev, { id: nextId(label), node }]);
+    (label: string, node: ReactNode, opts?: { bare?: boolean }) => {
+      setOutput((prev) => [...prev, { id: nextId(label), node, bare: opts?.bare }]);
     },
     [nextId],
   );
 
   const clear = useCallback(() => {
-    setOutput([]);
+    setOutput((prev) => prev.filter((e) => isWelcome(e.id)));
   }, []);
 
   const ctx = useMemo<CommandContext>(() => ({ fs, cwd, setCwd, clear }), [fs, cwd, clear]);
@@ -79,13 +85,32 @@ export function Terminal({ fs }: TerminalProps) {
       );
       timers.push(setTimeout(() => setPhase('welcome-nav'), gap));
     } else if (phase === 'welcome-nav') {
-      append('welcome-nav', <NavBar />);
+      append('welcome-nav', <NavBar />, { bare: true });
       timers.push(setTimeout(() => setPhase('ready'), Math.max(200, gap - 200)));
     }
     return () => {
       for (const t of timers) clearTimeout(t);
     };
   }, [phase, append]);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setScrolled(el.scrollTop > 0);
+  }, []);
+
+  const commandEntries = useMemo(() => output.filter((e) => !isWelcome(e.id)), [output]);
+  const welcomeEntries = useMemo(() => output.filter((e) => isWelcome(e.id)), [output]);
+
+  // Auto-scroll the command area to the bottom whenever a new command entry
+  // is appended so the prompt stays in view.
+  const commandCount = commandEntries.length;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: commandCount is the trigger; scrollRef is stable
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [commandCount]);
 
   const handleSubmit = useCallback(
     (line: string) => {
@@ -118,6 +143,13 @@ export function Terminal({ fs }: TerminalProps) {
     input?.focus();
   }, []);
 
+  const dashStyle: CSSProperties = {
+    // --dash-opacity is read by NavBar's ::after (separator) and .indicator.
+    // Default 1 (so tab pages always show the line); Terminal toggles it
+    // based on whether the command zone has scrolled.
+    ['--dash-opacity' as string]: scrolled ? 1 : 0,
+  };
+
   return (
     <div
       ref={containerRef}
@@ -125,16 +157,39 @@ export function Terminal({ fs }: TerminalProps) {
       onClick={focusInput}
       onKeyDown={focusInput}
       role="presentation"
+      style={dashStyle}
     >
-      <BootAnimation onDone={onBootDone} />
-      <div className={styles.output} role="log" aria-live="polite" aria-label="Terminal output">
-        {output.map((entry) => (
+      <div className={styles.header}>
+        <BootAnimation onDone={onBootDone} />
+        <div className={styles.welcome}>
+          {welcomeEntries.map((entry) =>
+            entry.bare ? (
+              <Fragment key={entry.id}>{entry.node}</Fragment>
+            ) : (
+              <div key={entry.id} className={styles.line}>
+                {entry.node}
+              </div>
+            ),
+          )}
+        </div>
+      </div>
+      <div
+        ref={scrollRef}
+        className={styles.scrollable}
+        onScroll={handleScroll}
+        role="log"
+        aria-live="polite"
+        aria-label="Terminal output"
+      >
+        {commandEntries.map((entry) => (
           <div key={entry.id} className={styles.line}>
             {entry.node}
           </div>
         ))}
+        {phase === 'ready' ? (
+          <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} />
+        ) : null}
       </div>
-      {phase === 'ready' ? <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} /> : null}
     </div>
   );
 }

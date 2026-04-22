@@ -41,7 +41,6 @@ export function NavBar() {
   useEffect(() => {
     const onResize = () => measure();
     window.addEventListener('resize', onResize);
-    // Remeasure once fonts have settled to avoid indicator width drift.
     if (document.fonts?.ready) {
       document.fonts.ready.then(measure).catch(() => {});
     }
