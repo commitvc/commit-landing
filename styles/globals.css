@@ -52,7 +52,9 @@ a {
   justify-content: flex-start;
   align-items: flex-start;
   margin: auto;
-  padding: 3px 12px 1.5rem 12px;
+  /* padding-top = RRW button's top offset (20px) so the first line of
+     content aligns with the top of the button. */
+  padding: 20px 12px 1.5rem 12px;
   max-width: var(--content-max);
 }
 
@@ -109,11 +111,10 @@ a {
 
 .terminal-rule {
   display: block;
-  color: var(--fg-muted);
-}
-
-.terminal-rule::before {
-  content: "────────────────────────────────────────";
+  height: 0;
+  border: none;
+  border-top: 1px dashed var(--fg-muted);
+  margin: 0.25rem 0;
 }
 
 .terminal-story {

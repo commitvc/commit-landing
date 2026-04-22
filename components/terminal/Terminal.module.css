@@ -67,30 +67,24 @@
 }
 
 .neofetch {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-start;
   margin-bottom: 1rem;
-  max-width: 720px;
 }
 
 .neofetchLogo {
-  flex-shrink: 0;
+  margin-bottom: 1rem;
 }
 
 .neofetchData {
-  width: 100%;
-  max-width: 520px;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .neofetchRule {
   display: block;
-  color: var(--fg-muted);
-}
-
-.neofetchRule::before {
-  content: "────────────────────────────────────────";
+  height: 0;
+  border: none;
+  border-top: 1px dashed var(--fg-muted);
+  margin: 0.25rem 0;
 }
 
 .command {

@@ -1,7 +1,7 @@
 .container {
   margin-top: 1.5rem;
   margin-bottom: 2rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0;
   position: relative;
 }
 
@@ -11,14 +11,8 @@
   bottom: 0;
   left: -12px;
   right: -12px;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    to right,
-    var(--fg-muted) 0,
-    var(--fg-muted) 8px,
-    transparent 8px,
-    transparent 14px
-  );
+  height: 0;
+  border-top: 1px dashed var(--fg-muted);
   pointer-events: none;
 }
 
@@ -27,7 +21,7 @@
   flex-direction: row;
   gap: 2rem;
   align-items: center;
-  padding-bottom: 16px;
+  padding-bottom: 6px;
   padding-left: 18px;
   padding-right: 2ch;
 }
