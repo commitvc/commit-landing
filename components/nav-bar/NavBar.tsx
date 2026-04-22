@@ -25,7 +25,13 @@ export function NavBar() {
     if (!container || !activeEl) return;
     const containerRect = container.getBoundingClientRect();
     const elRect = activeEl.getBoundingClientRect();
-    setRect({ left: elRect.left - containerRect.left, width: elRect.width });
+    // Extend the indicator a few px on each side so it feels a bit larger
+    // than the tab's text bounds.
+    const BLEED = 6;
+    setRect({
+      left: elRect.left - containerRect.left - BLEED,
+      width: elRect.width + BLEED * 2,
+    });
   }, [active]);
 
   useIsoLayoutEffect(() => {

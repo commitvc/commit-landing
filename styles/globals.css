@@ -110,25 +110,11 @@ a {
 }
 
 .terminal-rule {
-  position: relative;
   display: block;
-  height: 1em;
-  overflow: hidden;
+  height: 3px;
+  margin: 0.4rem 0;
   color: var(--fg-muted);
-  font-size: inherit;
-  line-height: 1;
-  margin: 0.25rem 0;
-}
-
-.terminal-rule::before {
-  content: "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  letter-spacing: 0.35ch;
+  background-image: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
 }
 
 .terminal-story {
