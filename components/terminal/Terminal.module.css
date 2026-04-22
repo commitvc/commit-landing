@@ -80,11 +80,25 @@
 }
 
 .neofetchRule {
+  position: relative;
   display: block;
-  height: 0;
-  border: none;
-  border-top: 1px dashed var(--fg-muted);
+  height: 1em;
+  overflow: hidden;
+  color: var(--fg-muted);
+  font-size: inherit;
+  line-height: 1;
   margin: 0.25rem 0;
+}
+
+.neofetchRule::before {
+  content: "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  letter-spacing: 0.35ch;
 }
 
 .command {

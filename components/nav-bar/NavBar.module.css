@@ -6,13 +6,17 @@
 }
 
 .container::after {
-  content: "";
+  content: "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
   position: absolute;
   bottom: 0;
   left: -12px;
   right: -12px;
-  height: 0;
-  border-top: 1px dashed var(--fg-muted);
+  color: var(--fg-muted);
+  font-size: inherit;
+  line-height: 1;
+  letter-spacing: 0.35ch;
+  white-space: nowrap;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -45,11 +49,22 @@
 .indicator {
   position: absolute;
   bottom: 0;
-  height: 1px;
-  background: var(--fg);
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--fg);
+  font-size: inherit;
+  line-height: 1;
   pointer-events: none;
   z-index: 1;
   transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.indicator::before {
+  content: "----------------------------------------------------------------------";
+  position: absolute;
+  top: 0;
+  left: 0;
+  letter-spacing: 0.35ch;
 }
 
 @media (prefers-reduced-motion: reduce) {
