@@ -4,6 +4,7 @@ import { type CommandContext, autocomplete, findCommand, tokenize } from '@/lib/
 import type { FsDir } from '@/lib/filesystem';
 import type { ReactNode } from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { BootAnimation } from './BootAnimation';
 import { Neofetch } from './Neofetch';
 import { PromptBar } from './PromptBar';
 import styles from './Terminal.module.css';
@@ -17,8 +18,10 @@ type TerminalProps = {
 export function Terminal({ fs }: TerminalProps) {
   const [output, setOutput] = useState<OutputEntry[]>([]);
   const [cwd, setCwd] = useState('/');
+  const [bootDone, setBootDone] = useState(false);
   const idRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const handleBootDone = useCallback(() => setBootDone(true), []);
 
   const nextId = useCallback(() => {
     idRef.current += 1;
@@ -83,6 +86,9 @@ export function Terminal({ fs }: TerminalProps) {
       onKeyDown={focusInput}
       role="presentation"
     >
+      <div className={`${styles.bootContainer} ${bootDone ? styles.bootContainerCollapsed : ''}`}>
+        <BootAnimation onDone={handleBootDone} />
+      </div>
       <Neofetch />
       <div className={styles.output} role="log" aria-live="polite" aria-label="Terminal output">
         {output.map((entry) => (
@@ -91,7 +97,7 @@ export function Terminal({ fs }: TerminalProps) {
           </div>
         ))}
       </div>
-      <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} />
+      <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} disabled={!bootDone} />
     </div>
   );
 }

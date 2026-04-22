@@ -95,3 +95,27 @@
 .command {
   color: var(--green);
 }
+
+.boot {
+  margin-bottom: 1rem;
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+.bootContainer {
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.4s ease;
+  max-height: 400px;
+  opacity: 1;
+}
+
+.bootContainerCollapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bootContainer {
+    transition: none;
+  }
+}
