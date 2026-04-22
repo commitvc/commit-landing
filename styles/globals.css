@@ -1,0 +1,76 @@
+@font-face {
+  font-family: "MesloLGS NF";
+  src: url("/font.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #313445;
+  --fg: #c8d0f2;
+  --fg-muted: rgba(200, 208, 242, 0.35);
+  --fg-muted-hover: rgba(200, 208, 242, 0.6);
+  --red: #e06c75;
+  --yellow: #e5c07b;
+  --blue: #92a9e9;
+  --green: #98c379;
+  --nav-gap: 2rem;
+  --content-max: 100%;
+}
+
+* {
+  font-family: "MesloLGS NF", monospace;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--blue);
+}
+
+.red {
+  color: var(--red);
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.green {
+  color: var(--green);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: auto;
+  padding: 3px 12px 1.5rem 12px;
+  max-width: var(--content-max);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
