@@ -18,12 +18,14 @@
 
 html,
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
   background-color: var(--bg);
   color: var(--fg);
-  overflow-x: hidden;
+  /* Scrolling happens inside the content zone (below the header), not on
+     the body. Keeps the header perfectly sticky without any position: fixed. */
+  overflow: hidden;
 }
 
 a {
@@ -51,11 +53,13 @@ a {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  margin: auto;
-  /* padding-top = RRW button's top offset (20px) so the first line of
-     content aligns with the top of the button. */
-  padding: 20px 12px 1.5rem 12px;
+  height: 100%;
+  padding: 0 12px;
   max-width: var(--content-max);
+  /* Header is the first child (flex-shrink: 0); content/CLI zone is flex: 1
+     with its own overflow-y: auto. Body overflow is hidden so the header
+     never scrolls out of view. */
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Terminal } from '@/components/terminal/Terminal';
 import { getAllPosts } from '@/lib/blog';
 import { buildFileSystem } from '@/lib/filesystem';
+import { CliShell } from './CliShell';
 
 export const metadata: Metadata = {
   title: 'CLI',
   description: 'The >commit terminal — browse the site as a shell.',
-  alternates: { canonical: '/' },
+  alternates: { canonical: '/cli' },
 };
 
 export default function CliPage() {
@@ -18,5 +18,5 @@ export default function CliPage() {
     description: p.description,
   }));
   const fs = buildFileSystem(posts);
-  return <Terminal fs={fs} />;
+  return <CliShell fs={fs} />;
 }

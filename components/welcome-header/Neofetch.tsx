@@ -1,5 +1,5 @@
 import { AsciiLogo } from '@/components/ascii-logo/AsciiLogo';
-import styles from './Terminal.module.css';
+import styles from './WelcomeHeader.module.css';
 
 export function Neofetch() {
   return (

@@ -1,0 +1,41 @@
+.header {
+  flex: 0 0 auto;
+  padding-top: 20px;
+}
+
+.boot {
+  color: var(--fg);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.neofetch {
+  margin-bottom: 1rem;
+}
+
+.neofetchLogo {
+  margin-bottom: 1rem;
+}
+
+.neofetchData {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.neofetchRule {
+  display: block;
+  height: 2px;
+  margin: 0.4rem 0;
+  color: var(--fg-muted);
+  background-image: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
+}
+
+.tagline {
+  margin: 1rem 0;
+}

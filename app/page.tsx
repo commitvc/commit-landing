@@ -1,6 +1,6 @@
-import { Terminal } from '@/components/terminal/Terminal';
 import { getAllPosts } from '@/lib/blog';
 import { buildFileSystem } from '@/lib/filesystem';
+import { LandingShell } from './LandingShell';
 
 export default function HomePage() {
   const posts = getAllPosts().map((p) => ({
@@ -11,5 +11,5 @@ export default function HomePage() {
     description: p.description,
   }));
   const fs = buildFileSystem(posts);
-  return <Terminal fs={fs} />;
+  return <LandingShell fs={fs} />;
 }

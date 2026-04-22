@@ -1,25 +1,11 @@
 .terminal {
-  /* Two-zone layout: a non-scrollable header (boot, neofetch, tagline, nav)
-     and a scrollable command area below the tab dash line. Fixed to the
-     viewport so only the command area scrolls — never the header. */
-  position: fixed;
-  top: 20px;
-  left: 12px;
-  right: 12px;
-  bottom: 0;
+  /* Fills the remaining viewport height below the header (.container is
+     a flex-column; the terminal is flex: 1 with its own overflow). */
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   line-height: 1.5;
-}
-
-.header {
-  flex: 0 0 auto;
-}
-
-.welcome {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
 }
 
 .scrollable {
@@ -69,7 +55,8 @@
   font: inherit;
   padding: 0;
   margin: 0;
-  min-width: 1ch;
+  min-width: 0;
+  caret-color: transparent;
 }
 
 .cursor {
@@ -96,37 +83,6 @@
   }
 }
 
-.neofetch {
-  margin-bottom: 1rem;
-}
-
-.neofetchLogo {
-  margin-bottom: 1rem;
-}
-
-.neofetchData {
-  display: inline-block;
-  max-width: 100%;
-}
-
-.neofetchRule {
-  display: block;
-  height: 2px;
-  margin: 0.4rem 0;
-  color: var(--fg-muted);
-  background-image: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
-}
-
 .command {
   color: var(--green);
-}
-
-.boot {
-  color: var(--fg);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.tagline {
-  margin: 1rem 0;
 }

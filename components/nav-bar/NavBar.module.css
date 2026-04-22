@@ -1,6 +1,8 @@
 .container {
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  /* The dash line (::after at bottom: 0) is the sharp bottom limit of the
+     header zone — no margin below it. */
+  margin-bottom: 0;
   padding-bottom: 0;
   position: relative;
   align-self: stretch;

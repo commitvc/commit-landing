@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import styles from './Terminal.module.css';
+import styles from './CliTerminal.module.css';
 
 export type PromptBarProps = {
   cwd: string;
@@ -80,7 +80,7 @@ export function PromptBar({ cwd, onSubmit, suggest, disabled }: PromptBarProps) 
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        style={{ width: `${Math.max(value.length, 1)}ch` }}
+        style={{ width: `${value.length}ch` }}
       />
       <span className={styles.cursor}>_</span>
     </div>

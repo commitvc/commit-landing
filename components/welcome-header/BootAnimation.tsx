@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from './Terminal.module.css';
+import styles from './WelcomeHeader.module.css';
 
 const BOOT_LINES = [
   'System loading...',

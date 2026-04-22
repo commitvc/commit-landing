@@ -1,6 +1,12 @@
-import { SiteChrome } from '@/components/site-chrome/SiteChrome';
+import { CompactHeader } from '@/components/compact-header/CompactHeader';
 import type { ReactNode } from 'react';
+import styles from './SiteContent.module.css';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
-  return <SiteChrome>{children}</SiteChrome>;
+  return (
+    <>
+      <CompactHeader />
+      <main className={styles.content}>{children}</main>
+    </>
+  );
 }
