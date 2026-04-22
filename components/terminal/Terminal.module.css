@@ -68,8 +68,8 @@
 
 .neofetch {
   display: flex;
-  flex-direction: row;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 1rem;
   align-items: flex-start;
   margin-bottom: 1rem;
   max-width: 720px;
@@ -80,7 +80,8 @@
 }
 
 .neofetchData {
-  flex: 1;
+  width: 100%;
+  max-width: 520px;
 }
 
 .neofetchRule {
