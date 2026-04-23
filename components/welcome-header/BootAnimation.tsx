@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './WelcomeHeader.module.css';
 
 const BOOT_LINES = [
@@ -18,40 +18,39 @@ function prefersReducedMotion(): boolean {
 }
 
 export function BootAnimation({ onDone }: Props) {
-  const [shown, setShown] = useState<string[]>([]);
-  // React Strict Mode double-invokes effects in dev; without this guard
-  // every line is appended twice ("System loading..." repeats, etc.).
-  // The ref persists across the mount/cleanup/remount cycle but is fresh
-  // on a real route remount, so normal renders run the animation once.
-  const startedRef = useRef(false);
+  // `visibleCount` is the number of BOOT_LINES to render. Using a count
+  // (instead of pushing strings into an array with setShown(prev => ...))
+  // makes the effect idempotent: React Strict Mode's dev-only double-invoke
+  // re-runs the effect but the state is re-derived from the count, so
+  // nothing gets appended twice. Real remounts (route changes) still reset
+  // and play the animation from scratch.
+  const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
-    if (startedRef.current) return;
-    startedRef.current = true;
-
     const reduce = prefersReducedMotion();
     if (reduce) {
-      setShown(BOOT_LINES.map((l) => (typeof l === 'function' ? l() : l)));
+      setVisibleCount(BOOT_LINES.length);
       onDone();
       return;
     }
     let cancelled = false;
     let i = 0;
-    function next() {
+    function tick() {
       if (cancelled) return;
-      if (i >= BOOT_LINES.length) {
+      i += 1;
+      if (i > BOOT_LINES.length) {
         setTimeout(() => {
           if (!cancelled) onDone();
         }, 300);
         return;
       }
-      const line = BOOT_LINES[i];
-      const text = typeof line === 'function' ? line() : line;
-      setShown((prev) => [...prev, text ?? '']);
-      i += 1;
-      setTimeout(next, 350);
+      setVisibleCount(i);
+      setTimeout(tick, 350);
     }
-    next();
+    // Reset on every effect run so the second Strict Mode invocation
+    // re-plays from the first line instead of continuing from where it was.
+    setVisibleCount(0);
+    tick();
     return () => {
       cancelled = true;
     };
@@ -59,10 +58,13 @@ export function BootAnimation({ onDone }: Props) {
 
   return (
     <div className={styles.boot} aria-hidden>
-      {shown.map((line, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: boot lines are a fixed sequence
-        <div key={idx}>{line}</div>
-      ))}
+      {BOOT_LINES.slice(0, visibleCount).map((line, idx) => {
+        const text = typeof line === 'function' ? line() : line;
+        return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: fixed, ordered sequence
+          <div key={idx}>{text}</div>
+        );
+      })}
     </div>
   );
 }
