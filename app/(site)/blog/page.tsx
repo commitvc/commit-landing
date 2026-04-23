@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { formatDate, getAllPosts } from '@/lib/blog';
-import styles from './blog.module.css';
+import { FileTree } from '@/components/file-tree/FileTree';
+import { getAllPosts } from '@/lib/blog';
+import { buildFileSystem, type FsDir } from '@/lib/filesystem';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -11,20 +11,7 @@ export const metadata: Metadata = {
 
 export default function BlogIndexPage() {
   const posts = getAllPosts();
-  return (
-    <main>
-      <h1 className="yellow">blog</h1>
-      <div className={styles.indexList}>
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}/`} className={styles.indexCard}>
-            <h2 className={styles.indexTitle}>{post.title}</h2>
-            <p className={styles.indexMeta}>
-              {post.author} — {formatDate(post.date)}
-            </p>
-            <p className={styles.indexDescription}>{post.description}</p>
-          </Link>
-        ))}
-      </div>
-    </main>
-  );
+  const fs = buildFileSystem(posts);
+  const blog = fs.contents.blog as FsDir;
+  return <FileTree root={blog} basePath="/blog" blogPosts={posts} />;
 }

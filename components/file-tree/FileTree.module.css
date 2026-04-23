@@ -1,0 +1,73 @@
+.tree {
+  line-height: 1.8;
+  user-select: none;
+}
+
+.item {
+  cursor: pointer;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding: 0 4px;
+  margin: 0 -4px;
+  border-radius: 2px;
+}
+
+.item:hover {
+  background: rgba(200, 208, 242, 0.05);
+}
+
+.selected {
+  background: rgba(200, 208, 242, 0.08);
+}
+
+.prefix {
+  color: rgba(200, 208, 242, 0.3);
+}
+
+.toggle {
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+  color: rgba(200, 208, 242, 0.5);
+}
+
+.dir {
+  color: var(--blue);
+}
+
+.file {
+  color: var(--green);
+}
+
+.item:hover .file,
+.item.selected .file {
+  text-decoration: underline;
+}
+
+.viewer {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+}
+
+.viewer:not(:empty) {
+  border-top: 1px dashed rgba(200, 208, 242, 0.2);
+}
+
+.viewerHeader {
+  color: var(--fg-muted-hover);
+  margin: 0.5rem 0 0.75rem 0;
+}
+
+.textBlock {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 720px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  font-family: inherit;
+}
+
+.blogCard {
+  max-width: 640px;
+}

@@ -7,7 +7,7 @@ export type Tab = {
 };
 
 export const TABS: readonly Tab[] = [
-  { id: 'cli', label: 'CLI', href: '/' },
+  { id: 'cli', label: 'CLI', href: '/cli' },
   { id: 'companies', label: 'Companies', href: '/companies' },
   { id: 'blog', label: 'Blog', href: '/blog' },
   { id: 'team', label: 'Team', href: '/team' },
@@ -16,6 +16,8 @@ export const TABS: readonly Tab[] = [
 
 export function activeTabFromPathname(pathname: string): TabId {
   const clean = pathname.replace(/\/+$/, '') || '/';
+  // Landing (/) is the hero; the CLI tab highlights for both the landing
+  // and the dedicated /cli utility page.
   if (clean === '/' || clean === '/cli') return 'cli';
   if (clean.startsWith('/companies')) return 'companies';
   if (clean.startsWith('/blog')) return 'blog';

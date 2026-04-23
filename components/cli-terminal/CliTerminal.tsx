@@ -118,7 +118,7 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
             {entry.node}
           </div>
         ))}
-        <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} disabled={disabled} />
+        {disabled ? null : <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} />}
       </div>
     </div>
   );

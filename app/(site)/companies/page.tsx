@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { PortfolioCard } from '@/components/cards/PortfolioCard';
-import { ACTIVE_COMPANIES, PRE_COMMIT_COMPANIES } from '@/lib/portfolio';
+import { FileTree } from '@/components/file-tree/FileTree';
+import { buildFileSystem, type FsDir } from '@/lib/filesystem';
 
 export const metadata: Metadata = {
   title: 'Companies',
@@ -10,26 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function CompaniesPage() {
-  return (
-    <main>
-      <h1 className="yellow">companies</h1>
-
-      <section aria-label="Active portfolio" style={{ marginTop: '1rem' }}>
-        <h2 className="yellow">portfolio</h2>
-        {ACTIVE_COMPANIES.map((c) => (
-          <PortfolioCard key={c.slug} company={c} />
-        ))}
-      </section>
-
-      <section aria-label="Pre-commit companies" style={{ marginTop: '2rem' }}>
-        <h2 className="yellow">pre-commit</h2>
-        <p style={{ maxWidth: 640, lineHeight: 1.6 }}>
-          Commercial open-source companies the team backed before &gt;commit.
-        </p>
-        {PRE_COMMIT_COMPANIES.map((c) => (
-          <PortfolioCard key={c.slug} company={c} />
-        ))}
-      </section>
-    </main>
-  );
+  const fs = buildFileSystem([]);
+  const portfolio = fs.contents.portfolio as FsDir;
+  return <FileTree root={portfolio} basePath="/portfolio" />;
 }
