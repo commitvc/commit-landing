@@ -25,12 +25,21 @@ export function NavBar() {
     if (!container || !activeEl) return;
     const containerRect = container.getBoundingClientRect();
     const elRect = activeEl.getBoundingClientRect();
-    // Extend the indicator a few px on each side so it feels a bit larger
-    // than the tab's text bounds.
+    // The dash pattern is 8px dash + 2px gap, anchored to the viewport via
+    // background-attachment: fixed. To avoid cropped dashes at the indicator
+    // edges — and to stay perfectly aligned with the full nav underline —
+    // snap the viewport-left down to the nearest 10k and the viewport-right
+    // up to the nearest 10k+8, then grow the indicator outward to fit.
     const BLEED = 6;
+    const PERIOD = 10;
+    const DASH = 8;
+    const vpLeftTarget = elRect.left - BLEED;
+    const vpRightTarget = elRect.right + BLEED;
+    const vpLeft = Math.floor(vpLeftTarget / PERIOD) * PERIOD;
+    const vpRight = Math.ceil((vpRightTarget - DASH) / PERIOD) * PERIOD + DASH;
     setRect({
-      left: elRect.left - containerRect.left - BLEED,
-      width: elRect.width + BLEED * 2,
+      left: vpLeft - containerRect.left,
+      width: vpRight - vpLeft,
     });
   }, [active]);
 

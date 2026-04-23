@@ -2,13 +2,11 @@
 
 import { type CommandContext, autocomplete, findCommand, tokenize } from '@/lib/commands';
 import type { FsDir } from '@/lib/filesystem';
-import type { ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCliState } from './CliStateContext';
 import styles from './CliTerminal.module.css';
 import { PromptBar } from './PromptBar';
 import { PromptEcho } from './PromptEcho';
-
-type OutputEntry = { id: string; node: ReactNode };
 
 type Props = {
   fs: FsDir;
@@ -21,30 +19,17 @@ type Props = {
 };
 
 export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
-  const [output, setOutput] = useState<OutputEntry[]>([]);
-  const [cwd, setCwd] = useState('/');
+  // CLI output and cwd are stored in a provider above the root so they
+  // persist across navigations between / (landing) and /cli.
+  const { output, cwd, setCwd, append, clear, toggleCompact } = useCliState();
   const scrolledRef = useRef(false);
-  const runIdRef = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const nextId = useCallback((label: string) => {
-    runIdRef.current += 1;
-    return `${label}-${runIdRef.current}`;
-  }, []);
-
-  const append = useCallback(
-    (label: string, node: ReactNode) => {
-      setOutput((prev) => [...prev, { id: nextId(label), node }]);
-    },
-    [nextId],
+  const ctx = useMemo<CommandContext>(
+    () => ({ fs, cwd, setCwd, clear, toggleHeader: toggleCompact }),
+    [fs, cwd, setCwd, clear, toggleCompact],
   );
-
-  const clear = useCallback(() => {
-    setOutput([]);
-  }, []);
-
-  const ctx = useMemo<CommandContext>(() => ({ fs, cwd, setCwd, clear }), [fs, cwd, clear]);
 
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -57,7 +42,8 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
   }, [onScrolledChange]);
 
   // Auto-scroll to the bottom whenever a new entry lands so the prompt
-  // stays in view.
+  // stays in view. Also fires on mount when mounting with pre-existing
+  // persisted output (coming back to / after running commands on /cli).
   const entryCount = output.length;
   // biome-ignore lint/correctness/useExhaustiveDependencies: entryCount is the trigger; scrollRef is stable
   useEffect(() => {

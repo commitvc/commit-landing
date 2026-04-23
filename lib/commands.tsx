@@ -10,6 +10,7 @@ export type CommandContext = {
   cwd: string;
   setCwd: (path: string) => void;
   clear: () => void;
+  toggleHeader: () => void;
 };
 
 export type Command = {
@@ -359,6 +360,15 @@ const neofetch: Command = {
   },
 };
 
+const header: Command = {
+  name: 'header',
+  description: 'Toggle between the welcome banner and the compact header',
+  run(_args, ctx) {
+    ctx.toggleHeader();
+    return null;
+  },
+};
+
 const email: Command = {
   name: 'email',
   description: 'Subscribe to our mailing list',
@@ -413,6 +423,7 @@ export const ALL_COMMANDS: readonly Command[] = [
   clear,
   decryptCmd,
   email,
+  header,
   help,
   neofetch,
   secret,

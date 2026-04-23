@@ -1,6 +1,8 @@
 'use client';
 
 import { CliTerminal } from '@/components/cli-terminal/CliTerminal';
+import { useCliState } from '@/components/cli-terminal/CliStateContext';
+import { CompactHeader } from '@/components/compact-header/CompactHeader';
 import { WelcomeHeader } from '@/components/welcome-header/WelcomeHeader';
 import type { FsDir } from '@/lib/filesystem';
 import type { CSSProperties } from 'react';
@@ -15,6 +17,7 @@ type Props = { fs: FsDir };
  * without introducing an extra layout box.
  */
 export function LandingShell({ fs }: Props) {
+  const { compact } = useCliState();
   const [ready, setReady] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -28,8 +31,8 @@ export function LandingShell({ fs }: Props) {
 
   return (
     <div style={style}>
-      <WelcomeHeader onReady={onReady} />
-      <CliTerminal fs={fs} disabled={!ready} onScrolledChange={onScrolledChange} />
+      {compact ? <CompactHeader /> : <WelcomeHeader onReady={onReady} />}
+      <CliTerminal fs={fs} disabled={!compact && !ready} onScrolledChange={onScrolledChange} />
     </div>
   );
 }

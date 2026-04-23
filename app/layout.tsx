@@ -1,3 +1,4 @@
+import { CliStateProvider } from '@/components/cli-terminal/CliStateContext';
 import { PostHogProvider } from '@/components/posthog-provider';
 import { RedRiverButton } from '@/components/red-river-button/RedRiverButton';
 import type { Metadata } from 'next';
@@ -48,8 +49,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <PostHogProvider>
-          <RedRiverButton />
-          <div className="container">{children}</div>
+          <CliStateProvider>
+            <RedRiverButton />
+            <div className="container">{children}</div>
+          </CliStateProvider>
         </PostHogProvider>
       </body>
     </html>
