@@ -4,6 +4,13 @@
 }
 
 .item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
   white-space: nowrap;
   overflow-x: auto;

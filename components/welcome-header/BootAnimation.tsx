@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './WelcomeHeader.module.css';
 
 const BOOT_LINES = [
@@ -19,8 +19,16 @@ function prefersReducedMotion(): boolean {
 
 export function BootAnimation({ onDone }: Props) {
   const [shown, setShown] = useState<string[]>([]);
+  // React Strict Mode double-invokes effects in dev; without this guard
+  // every line is appended twice ("System loading..." repeats, etc.).
+  // The ref persists across the mount/cleanup/remount cycle but is fresh
+  // on a real route remount, so normal renders run the animation once.
+  const startedRef = useRef(false);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
     const reduce = prefersReducedMotion();
     if (reduce) {
       setShown(BOOT_LINES.map((l) => (typeof l === 'function' ? l() : l)));
