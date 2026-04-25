@@ -1,7 +1,7 @@
 'use client';
 
-import { useCliState } from '@/components/cli-terminal/CliStateContext';
 import Link from 'next/link';
+import { useCliState } from '@/components/cli-terminal/CliStateContext';
 import styles from './AsciiLogo.module.css';
 import { LOGO_ART } from './logo-art';
 
@@ -14,7 +14,7 @@ type Props = {
 export function AsciiLogo({ href = '/', ariaLabel = 'commit', className }: Props) {
   const { resetHeader, bumpLandingNonce } = useCliState();
   const art = (
-    <pre className={`${styles.logo} ${className ?? ''}`.trim()} aria-label={ariaLabel}>
+    <pre className={`${styles.logo} ${className ?? ''}`.trim()} role="img" aria-label={ariaLabel}>
       {LOGO_ART}
     </pre>
   );

@@ -1,9 +1,9 @@
 'use client';
 
+import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
 import { useCliState } from '@/components/cli-terminal/CliStateContext';
 import { CompactHeader } from '@/components/compact-header/CompactHeader';
 import { WelcomeHeader } from '@/components/welcome-header/WelcomeHeader';
-import { type ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 type ChromeCtx = {
   /** Whether any scroll container on the current page has scrolled. NavBar

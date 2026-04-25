@@ -3,7 +3,7 @@
 // Extracts <article> body and OG/canonical metadata, writes MDX with frontmatter.
 // Safe to re-run.
 
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

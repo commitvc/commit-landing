@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import {
-  type ReactNode,
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,

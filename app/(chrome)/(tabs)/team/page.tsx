@@ -1,6 +1,6 @@
+import type { Metadata } from 'next';
 import { breadcrumbJsonLd, teamItemList } from '@/lib/structured-data';
 import { TEAM } from '@/lib/team';
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Team',

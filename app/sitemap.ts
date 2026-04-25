@@ -1,8 +1,8 @@
+import type { MetadataRoute } from 'next';
 import { getAllPosts } from '@/lib/blog';
 import { COMPANIES } from '@/lib/companies';
 import { SITE_URL } from '@/lib/structured-data';
 import { TEAM } from '@/lib/team';
-import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
 

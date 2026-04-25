@@ -1,12 +1,12 @@
 'use client';
 
+import { useCallback, useState } from 'react';
 import { ChromeProvider, useChrome } from '@/app/(chrome)/ChromeShell';
 import { useCliState } from '@/components/cli-terminal/CliStateContext';
 import { CliTerminal } from '@/components/cli-terminal/CliTerminal';
 import { CompactHeader } from '@/components/compact-header/CompactHeader';
 import { WelcomeHeader } from '@/components/welcome-header/WelcomeHeader';
 import type { FsDir } from '@/lib/filesystem';
-import { useCallback, useState } from 'react';
 
 type Props = { fs: FsDir };
 

@@ -1,9 +1,9 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
 import { AsciiLogo } from '@/components/ascii-logo/AsciiLogo';
 import { PromptEcho } from '@/components/cli-terminal/PromptEcho';
 import { NavBar } from '@/components/nav-bar/NavBar';
-import { useCallback, useEffect, useState } from 'react';
 import { BootAnimation } from './BootAnimation';
 import { Neofetch, NeofetchData } from './Neofetch';
 import styles from './WelcomeHeader.module.css';

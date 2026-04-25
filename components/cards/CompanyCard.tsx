@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import { Fragment, useEffect, useState } from 'react';
 import { type Company, formatFounderShortNames } from '@/lib/companies';
 import {
   type CompanyStats,
@@ -7,8 +9,6 @@ import {
   fetchCompanyStats,
   formatNumber,
 } from '@/lib/github-stats';
-import Image from 'next/image';
-import { Fragment, useEffect, useState } from 'react';
 import styles from './CompanyCard.module.css';
 
 type Props = { company: Company };

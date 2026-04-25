@@ -1,6 +1,5 @@
 'use client';
 
-import { useChrome } from '@/app/(chrome)/ChromeShell';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -11,8 +10,9 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useChrome } from '@/app/(chrome)/ChromeShell';
 import styles from './NavBar.module.css';
-import { TABS, type TabId, activeTabFromPathname } from './tabs';
+import { activeTabFromPathname, TABS, type TabId } from './tabs';
 
 type IndicatorRect = { left: number; width: number };
 
