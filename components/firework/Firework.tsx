@@ -367,18 +367,40 @@ export function Firework({ id }: FireworkProps = {}) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Prefer the *visual* viewport on mobile: `window.innerHeight` reports
+    // the layout viewport, which on iOS Safari and Android Chrome includes
+    // the area behind the URL bar / bottom toolbar. Using innerHeight there
+    // would push the canvas bottom (and therefore rocket launch y) off the
+    // visible screen, so rockets appear to emerge from somewhere above the
+    // actual bottom edge — typically near the NavBar. visualViewport gives
+    // us the real visible rect; fall back to innerHeight where it's missing.
+    function viewportSize(): { w: number; h: number } {
+      const vv = window.visualViewport;
+      return {
+        w: vv?.width ?? window.innerWidth,
+        h: vv?.height ?? window.innerHeight,
+      };
+    }
     let dpr = Math.max(1, window.devicePixelRatio || 1);
+    let vw = 0;
+    let vh = 0;
     function resize() {
       if (!canvas) return;
       dpr = Math.max(1, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      const { w, h } = viewportSize();
+      vw = w;
+      vh = h;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
       ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
     window.addEventListener('resize', resize);
+    // visualViewport fires resize when the URL bar collapses/expands on
+    // mobile — re-anchor so the canvas keeps matching the visible area.
+    window.visualViewport?.addEventListener('resize', resize);
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const start = performance.now();
@@ -399,8 +421,11 @@ export function Firework({ id }: FireworkProps = {}) {
     window.addEventListener('keydown', onKey);
 
     function launchRocket(now: number) {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      // Use the cached visual-viewport size (kept fresh by `resize()`),
+      // not `window.innerWidth/Height`, so rockets launch from the bottom
+      // of where the canvas is actually painted on mobile.
+      const w = vw;
+      const h = vh;
       const fromX = w * (0.15 + Math.random() * 0.7);
       const targetY = h * (0.18 + Math.random() * 0.32);
       const fuseMs = 700 + Math.random() * 400;
@@ -420,8 +445,8 @@ export function Firework({ id }: FireworkProps = {}) {
 
     if (reduce) {
       // Static single chrysanthemum — render once, hold briefly, exit.
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 3;
+      const cx = vw / 2;
+      const cy = vh / 3;
       const ps = emit('chrysanthemum', cx, cy, pickHue(), start);
       ctx.font = `${FONT_PX}px var(--font-meslo, "MesloLGS NF", Menlo, Consolas, monospace)`;
       ctx.textAlign = 'center';
@@ -435,6 +460,7 @@ export function Firework({ id }: FireworkProps = {}) {
       return () => {
         window.clearTimeout(id);
         window.removeEventListener('resize', resize);
+        window.visualViewport?.removeEventListener('resize', resize);
         window.removeEventListener('keydown', onKey);
       };
     }
@@ -489,14 +515,12 @@ export function Firework({ id }: FireworkProps = {}) {
       }
       particles = next.concat(newSpawns);
 
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-
       // Trail fade — alpha-erase ~13% of existing pixels each frame so the
       // canvas itself stays transparent (page underneath remains visible).
+      // Use the cached visual-viewport size — see `viewportSize()` above.
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = `rgba(0, 0, 0, ${TRAIL_FADE_ALPHA})`;
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, vw, vh);
 
       // Additive blending → overlapping particles bloom into bright cores.
       ctx.globalCompositeOperation = 'lighter';
@@ -550,6 +574,7 @@ export function Firework({ id }: FireworkProps = {}) {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      window.visualViewport?.removeEventListener('resize', resize);
       window.removeEventListener('keydown', onKey);
     };
   }, [id]);
