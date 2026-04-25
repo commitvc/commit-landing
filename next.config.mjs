@@ -1,9 +1,4 @@
 import createMDX from '@next/mdx';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeSlug from 'rehype-slug';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkGfm from 'remark-gfm';
-import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,11 +9,19 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
+// Plugins are referenced by string name (not imported function refs) so
+// Turbopack — the default builder in Next 16 — can serialize them to its
+// worker pool. Importing the plugin module here would crash with
+// "loader does not have serializable options".
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [remarkFrontmatter, [remarkMdxFrontmatter, { name: 'frontmatter' }], remarkGfm],
-    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+    remarkPlugins: [
+      'remark-frontmatter',
+      ['remark-mdx-frontmatter', { name: 'frontmatter' }],
+      'remark-gfm',
+    ],
+    rehypePlugins: ['rehype-slug', ['rehype-autolink-headings', { behavior: 'wrap' }]],
   },
 });
 

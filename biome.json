@@ -11,6 +11,7 @@
       "!**/public",
       "!**/*.mdx",
       "!**/next-env.d.ts",
+      "!**/tsconfig.json",
       "!**/shared",
       "!**/about",
       "!**/blog",
