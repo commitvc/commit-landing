@@ -1,8 +1,8 @@
-import { ProfileCard } from '@/components/cards/ProfileCard';
-import { ORG_ID, SITE_URL, breadcrumbJsonLd } from '@/lib/structured-data';
-import { TEAM } from '@/lib/team';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { ProfileCard } from '@/components/cards/ProfileCard';
+import { breadcrumbJsonLd, ORG_ID, SITE_URL } from '@/lib/structured-data';
+import { TEAM } from '@/lib/team';
 
 export function generateStaticParams() {
   return TEAM.map((m) => ({ slug: m.slug }));

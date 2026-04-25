@@ -1,6 +1,6 @@
-import { FileTree } from '@/components/file-tree/FileTree';
-import { type FsDir, buildFileSystem } from '@/lib/filesystem';
 import type { ReactNode } from 'react';
+import { FileTree } from '@/components/file-tree/FileTree';
+import { buildFileSystem, type FsDir } from '@/lib/filesystem';
 
 /**
  * Shared layout for /team/ and /team/<slug>/. Renders the file tree once so

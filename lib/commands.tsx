@@ -1,8 +1,8 @@
-import { CompanyCard } from '@/components/cards/CompanyCard';
-import { Firework } from '@/components/firework/Firework';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { CompanyCard } from '@/components/cards/CompanyCard';
+import { Firework } from '@/components/firework/Firework';
 import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
 import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';

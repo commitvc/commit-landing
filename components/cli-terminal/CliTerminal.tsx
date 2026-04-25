@@ -1,8 +1,8 @@
 'use client';
 
-import { type CommandContext, autocomplete, findCommand, tokenize } from '@/lib/commands';
-import type { FsDir } from '@/lib/filesystem';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { autocomplete, type CommandContext, findCommand, tokenize } from '@/lib/commands';
+import type { FsDir } from '@/lib/filesystem';
 import { useCliState } from './CliStateContext';
 import styles from './CliTerminal.module.css';
 import { PromptBar } from './PromptBar';
@@ -86,13 +86,8 @@ export function CliTerminal({ fs, onScrolledChange }: Props) {
   }, []);
 
   return (
-    <div
-      ref={rootRef}
-      className={styles.terminal}
-      onClick={focusInput}
-      onKeyDown={focusInput}
-      role="presentation"
-    >
+    // biome-ignore lint/a11y/noStaticElementInteractions: click-to-focus shim — real interactive surface is the <input> below; wrapper has no tabIndex so it can't receive focus itself
+    <div ref={rootRef} className={styles.terminal} onClick={focusInput} role="presentation">
       <div
         ref={scrollRef}
         className={`${styles.scrollable} ${atBottom ? '' : styles.scrolledUp}`}

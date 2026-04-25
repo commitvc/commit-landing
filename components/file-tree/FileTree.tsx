@@ -1,14 +1,14 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Linkify } from '@/components/linkify/Linkify';
 import { COMPANIES } from '@/lib/companies';
 import type { FsDir, FsNode } from '@/lib/filesystem';
 import { TEAM } from '@/lib/team';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import styles from './FileTree.module.css';
 
 /** Pure formatter — kept local rather than imported from `@/lib/blog`,

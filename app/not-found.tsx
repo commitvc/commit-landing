@@ -22,7 +22,7 @@ export default function NotFound() {
   return (
     <ChromeShell>
       <main className={styles.main}>
-        <pre className={styles.art} aria-label="404">
+        <pre className={styles.art} role="img" aria-label="404">
           {ART_404}
         </pre>
         <p className={styles.lead}>This page hasn&rsquo;t been committed yet.</p>

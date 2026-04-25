@@ -1,8 +1,8 @@
 'use client';
 
-import type { TeamMember } from '@/lib/team';
 import Image from 'next/image';
 import { useLayoutEffect, useRef, useState } from 'react';
+import type { TeamMember } from '@/lib/team';
 import styles from './ProfileCard.module.css';
 
 export function ProfileCard({ member }: { member: TeamMember }) {

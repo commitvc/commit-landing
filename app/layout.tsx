@@ -1,9 +1,9 @@
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { CliStateProvider } from '@/components/cli-terminal/CliStateContext';
 import { PostHogProvider } from '@/components/posthog-provider';
 import { RedRiverButton } from '@/components/red-river-button/RedRiverButton';
-import { SITE_URL, organizationJsonLd, websiteJsonLd } from '@/lib/structured-data';
-import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import { organizationJsonLd, SITE_URL, websiteJsonLd } from '@/lib/structured-data';
 import { meslo } from './fonts';
 import '../styles/globals.css';
 

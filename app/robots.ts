@@ -1,5 +1,5 @@
-import { SITE_URL } from '@/lib/structured-data';
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/structured-data';
 
 export const dynamic = 'force-static';
 
