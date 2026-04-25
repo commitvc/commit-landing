@@ -172,10 +172,23 @@ export function isDirectory(root: FsDir, path: string): boolean {
   return node !== null && node.type === 'directory';
 }
 
+/** Directories first (alphabetical), then files (alphabetical) — matches the
+ *  ordering used by the file-tree sidebar so `ls` and the tree show the same
+ *  shape for the same directory. Visibility filtering (e.g. the tree hiding
+ *  `private/`) is handled in the renderers, not here. */
 export function listDirectory(root: FsDir, path: string): string[] {
   const node = getNode(root, path);
   if (!node || node.type !== 'directory') return [];
-  return Object.keys(node.contents).sort();
+  const entries = Object.entries(node.contents);
+  const dirs = entries
+    .filter(([, v]) => v.type === 'directory')
+    .map(([name]) => name)
+    .sort((a, b) => a.localeCompare(b));
+  const files = entries
+    .filter(([, v]) => v.type === 'file')
+    .map(([name]) => name)
+    .sort((a, b) => a.localeCompare(b));
+  return [...dirs, ...files];
 }
 
 export function readFile(root: FsDir, path: string): string | null {
