@@ -1,0 +1,21 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  /* Keep the bg fully transparent so the page underneath stays visible. */
+  background: transparent;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 800ms ease-out;
+}
+
+.overlayFading {
+  opacity: 0;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

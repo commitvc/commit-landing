@@ -1,10 +1,12 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import {
   type ReactNode,
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -18,9 +20,16 @@ type CliState = {
   setCwd: (cwd: string) => void;
   append: (label: string, node: ReactNode) => void;
   clear: () => void;
-  compact: boolean;
-  setCompact: (v: boolean) => void;
-  toggleCompact: () => void;
+  /** True when the user has flipped the default header for the current shell
+      (welcome ↔ compact) via the `header` command. */
+  headerSwapped: boolean;
+  toggleHeader: () => void;
+  resetHeader: () => void;
+  /** Bumped when the user clicks the ASCII logo to "go home". The landing
+      shell watches this to replay the boot animation when the user is
+      already on `/` (same-route click, no remount). */
+  landingNonce: number;
+  bumpLandingNonce: () => void;
 };
 
 const CliStateContext = createContext<CliState | null>(null);
@@ -33,10 +42,23 @@ const CliStateContext = createContext<CliState | null>(null);
 export function CliStateProvider({ children }: { children: ReactNode }) {
   const [output, setOutput] = useState<OutputEntry[]>([]);
   const [cwd, setCwd] = useState('/');
-  const [compact, setCompact] = useState(false);
+  const [headerSwapped, setHeaderSwapped] = useState(false);
+  const [landingNonce, setLandingNonce] = useState(0);
   const runIdRef = useRef(0);
 
-  const toggleCompact = useCallback(() => setCompact((v) => !v), []);
+  const toggleHeader = useCallback(() => setHeaderSwapped((v) => !v), []);
+  const resetHeader = useCallback(() => setHeaderSwapped(false), []);
+  const bumpLandingNonce = useCallback(() => setLandingNonce((n) => n + 1), []);
+
+  // Reset the header swap whenever the route changes so each page always
+  // opens with its natural header (welcome on `/`, compact elsewhere). The
+  // dep is the trigger — pathname isn't read in the body but its change is
+  // exactly what we want to react to.
+  const pathname = usePathname();
+  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname is the trigger, not a value used in the body
+  useEffect(() => {
+    setHeaderSwapped(false);
+  }, [pathname]);
 
   const nextId = useCallback((label: string) => {
     runIdRef.current += 1;
@@ -55,8 +77,29 @@ export function CliStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<CliState>(
-    () => ({ output, cwd, setCwd, append, clear, compact, setCompact, toggleCompact }),
-    [output, cwd, append, clear, compact, toggleCompact],
+    () => ({
+      output,
+      cwd,
+      setCwd,
+      append,
+      clear,
+      headerSwapped,
+      toggleHeader,
+      resetHeader,
+      landingNonce,
+      bumpLandingNonce,
+    }),
+    [
+      output,
+      cwd,
+      append,
+      clear,
+      headerSwapped,
+      toggleHeader,
+      resetHeader,
+      landingNonce,
+      bumpLandingNonce,
+    ],
   );
 
   return <CliStateContext.Provider value={value}>{children}</CliStateContext.Provider>;

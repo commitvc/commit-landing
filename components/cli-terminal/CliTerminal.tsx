@@ -2,7 +2,7 @@
 
 import { type CommandContext, autocomplete, findCommand, tokenize } from '@/lib/commands';
 import type { FsDir } from '@/lib/filesystem';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCliState } from './CliStateContext';
 import styles from './CliTerminal.module.css';
 import { PromptBar } from './PromptBar';
@@ -10,25 +10,23 @@ import { PromptEcho } from './PromptEcho';
 
 type Props = {
   fs: FsDir;
-  /** When true, the prompt is disabled (used on the landing while the
-      welcome animation is still playing above). */
-  disabled?: boolean;
   /** Fired when the scrollable zone transitions between top (false) and
       scrolled (true). The parent shell uses this to fade the nav dash line. */
   onScrolledChange?: (scrolled: boolean) => void;
 };
 
-export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
+export function CliTerminal({ fs, onScrolledChange }: Props) {
   // CLI output and cwd are stored in a provider above the root so they
   // persist across navigations between / (landing) and /cli.
-  const { output, cwd, setCwd, append, clear, toggleCompact } = useCliState();
+  const { output, cwd, setCwd, append, clear, toggleHeader } = useCliState();
   const scrolledRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const [atBottom, setAtBottom] = useState(true);
 
   const ctx = useMemo<CommandContext>(
-    () => ({ fs, cwd, setCwd, clear, toggleHeader: toggleCompact }),
-    [fs, cwd, setCwd, clear, toggleCompact],
+    () => ({ fs, cwd, setCwd, clear, toggleHeader }),
+    [fs, cwd, setCwd, clear, toggleHeader],
   );
 
   const handleScroll = useCallback(() => {
@@ -39,6 +37,8 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
       scrolledRef.current = next;
       onScrolledChange?.(next);
     }
+    const gap = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setAtBottom(gap < 5);
   }, [onScrolledChange]);
 
   // Auto-scroll to the bottom whenever a new entry lands so the prompt
@@ -50,6 +50,7 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
     const el = scrollRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
+    setAtBottom(true);
   }, [entryCount]);
 
   const handleSubmit = useCallback(
@@ -64,7 +65,8 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
         append(
           'not-found',
           <p>
-            <span className="red">{name}</span>: command not found. Type 'help' for options.
+            <span className="purple">{name}</span>: command not found. Type{' '}
+            <span className="purple">'help'</span> for options.
           </p>,
         );
         return;
@@ -93,7 +95,7 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
     >
       <div
         ref={scrollRef}
-        className={styles.scrollable}
+        className={`${styles.scrollable} ${atBottom ? '' : styles.scrolledUp}`}
         onScroll={handleScroll}
         role="log"
         aria-live="polite"
@@ -104,8 +106,8 @@ export function CliTerminal({ fs, disabled = false, onScrolledChange }: Props) {
             {entry.node}
           </div>
         ))}
-        {disabled ? null : <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} />}
       </div>
+      <PromptBar cwd={cwd} onSubmit={handleSubmit} suggest={suggest} />
     </div>
   );
 }

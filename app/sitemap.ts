@@ -1,4 +1,6 @@
 import { getAllPosts } from '@/lib/blog';
+import { COMPANIES } from '@/lib/companies';
+import { TEAM } from '@/lib/team';
 import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
@@ -21,5 +23,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'yearly',
     priority: 0.6,
   }));
-  return [...staticEntries, ...postEntries];
+  const teamEntries: MetadataRoute.Sitemap = TEAM.map((m) => ({
+    url: `${BASE_URL}/team/${m.slug}/`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+  const companyEntries: MetadataRoute.Sitemap = COMPANIES.map((c) => ({
+    url:
+      c.folder === 'pre-commit'
+        ? `${BASE_URL}/companies/pre-commit/${c.slug}/`
+        : `${BASE_URL}/companies/${c.slug}/`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+  return [...staticEntries, ...postEntries, ...teamEntries, ...companyEntries];
 }

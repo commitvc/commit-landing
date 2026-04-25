@@ -1,5 +1,5 @@
 import { ABOUT_CONTACT, ABOUT_PROJECTS, ABOUT_README } from './about';
-import { PORTFOLIO } from './portfolio';
+import { COMPANIES } from './companies';
 import { TEAM } from './team';
 
 export type FsFile = { type: 'file'; content: string };
@@ -18,15 +18,11 @@ function fileContentsFromMember(m: (typeof TEAM)[number]): string {
   return lines.join('\n');
 }
 
-function fileContentsFromCompany(c: (typeof PORTFOLIO)[number]): string {
-  const lines: string[] = [];
-  if (c.story) lines.push(`Story: ${c.story}`);
-  lines.push(`Company: ${c.company}`, `One-Liner: ${c.oneLiner}`);
-  lines.push(`Website: ${c.website ?? '$website'}`);
-  lines.push(`Github: ${c.github ?? '$github'}`);
-  if (c.package) lines.push(`Package: ${c.package}`);
-  lines.push(`Avatar: ${c.avatar.replace(/^\//, '')}`);
-  return lines.join('\n');
+/** The file body is just the slug; the card is looked up against COMPANIES
+ *  and rendered by the CompanyCard component in both the CLI's `cat` and the
+ *  file-tree viewer. Keeps one source of truth for the data. */
+function fileContentsFromCompany(c: (typeof COMPANIES)[number]): string {
+  return `slug:${c.slug}`;
 }
 
 function teamDirectory(): FsDir {
@@ -58,10 +54,10 @@ function teamDirectory(): FsDir {
   return { type: 'directory', contents };
 }
 
-function portfolioDirectory(): FsDir {
+function companiesDirectory(): FsDir {
   const preCommit: Record<string, FsNode> = {};
   const active: Record<string, FsNode> = {};
-  for (const c of PORTFOLIO) {
+  for (const c of COMPANIES) {
     const file: FsNode = { type: 'file', content: fileContentsFromCompany(c) };
     if (c.folder === 'pre-commit') {
       preCommit[`${c.slug}.txt`] = file;
@@ -128,7 +124,7 @@ export function buildFileSystem(
     contents: {
       about: aboutDirectory(),
       team: teamDirectory(),
-      portfolio: portfolioDirectory(),
+      companies: companiesDirectory(),
       blog: blogDirectory(blogPosts),
       admin: {
         type: 'directory',

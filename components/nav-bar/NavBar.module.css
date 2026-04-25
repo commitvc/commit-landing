@@ -9,6 +9,20 @@
   --dash-pattern: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
 }
 
+/* On narrow screens the 5 tabs don't fit at the desktop gap. The scroll
+   container is an *inner* wrapper, not the outer .container — moving it
+   inside means the outer's ::after dash line isn't clipped by the
+   overflow-x scope and can extend edge-to-edge with left/right: -12px. */
+.scroller {
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
 .container::after {
   content: "";
   position: absolute;
@@ -19,6 +33,9 @@
   right: -12px;
   height: 2px;
   color: var(--fg-muted);
+  /* Solid bg fill so scrolled content behind the nav can't show through the
+     transparent gaps in the dash pattern. */
+  background-color: var(--bg);
   background-image: var(--dash-pattern);
   background-attachment: fixed;
   pointer-events: none;
@@ -26,16 +43,29 @@
      CLI page, Terminal sets it to 0 until the command zone scrolls. */
   opacity: var(--dash-opacity, 1);
   transition: opacity 0.25s ease;
+  /* 2px band of page-bg colour just below the dashes, on the content-facing
+     side of the rule. Creates a clean gap between the dashes and whatever
+     sits immediately underneath (active-tab indicator dashes, card content)
+     so the two patterns can't visually bleed into each other. */
+  box-shadow: 0 2px 0 var(--bg);
 }
 
 .nav {
   display: inline-flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 4rem;
   align-items: center;
   padding-bottom: 14px;
   padding-left: 18px;
   padding-right: 2ch;
+}
+
+@media (max-width: 640px) {
+  .nav {
+    gap: 2.25rem;
+    /* Inherit the desktop left pad so the active-tab dashed indicator
+       under "CLI" doesn't get clipped by the viewport edge. */
+  }
 }
 
 .item {

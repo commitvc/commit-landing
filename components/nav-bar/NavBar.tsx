@@ -13,7 +13,7 @@ const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayout
 
 export function NavBar() {
   const pathname = usePathname() ?? '/';
-  const active: TabId = activeTabFromPathname(pathname);
+  const active: TabId | null = activeTabFromPathname(pathname);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Partial<Record<TabId, HTMLAnchorElement | null>>>({});
@@ -21,6 +21,10 @@ export function NavBar() {
 
   const measure = useCallback(() => {
     const container = containerRef.current;
+    if (!active) {
+      setRect(null);
+      return;
+    }
     const activeEl = itemRefs.current[active];
     if (!container || !activeEl) return;
     const containerRect = container.getBoundingClientRect();
@@ -57,32 +61,39 @@ export function NavBar() {
   }, [measure]);
 
   return (
-    <div ref={containerRef} className={styles.container}>
-      <nav className={styles.nav} aria-label="Primary">
-        {TABS.map((tab) => {
-          const isActive = tab.id === active;
-          return (
-            <Link
-              key={tab.id}
-              href={tab.href}
-              ref={(el) => {
-                itemRefs.current[tab.id] = el;
-              }}
-              className={styles.item}
-              aria-current={isActive ? 'page' : undefined}
-            >
-              {tab.label}
-            </Link>
-          );
-        })}
-      </nav>
-      {rect ? (
-        <span
-          aria-hidden
-          className={styles.indicator}
-          style={{ left: `${rect.left}px`, width: `${rect.width}px` }}
-        />
-      ) : null}
+    <div className={styles.container}>
+      {/* Inner scroller for narrow viewports — keeps the dash line above
+          (rendered as the outer container's ::after) outside the overflow
+          clipping context so it spans edge-to-edge regardless of width.
+          The active-tab indicator lives inside the scroller so it tracks
+          its tab when the nav scrolls horizontally. */}
+      <div ref={containerRef} className={styles.scroller}>
+        <nav className={styles.nav} aria-label="Primary">
+          {TABS.map((tab) => {
+            const isActive = tab.id === active;
+            return (
+              <Link
+                key={tab.id}
+                href={tab.href}
+                ref={(el) => {
+                  itemRefs.current[tab.id] = el;
+                }}
+                className={styles.item}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {tab.label}
+              </Link>
+            );
+          })}
+        </nav>
+        {rect ? (
+          <span
+            aria-hidden
+            className={styles.indicator}
+            style={{ left: `${rect.left}px`, width: `${rect.width}px` }}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

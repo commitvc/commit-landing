@@ -1,6 +1,9 @@
+import { CompanyCard } from '@/components/cards/CompanyCard';
+import { Firework } from '@/components/firework/Firework';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
 import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';
 import { decrypt } from './tea';
@@ -94,58 +97,15 @@ function TeamProfileCard({ file }: { file: string }) {
   );
 }
 
-function PortfolioProfileCard({ file }: { file: string }) {
-  const p = parseKeyedText(file);
-  const avatar = p.Avatar ? `/${p.Avatar.replace(/^\//, '')}` : undefined;
-  const isPlaceholder = (v: string | undefined) => !!v && v.startsWith('$');
-  const story = p.Story;
-  return (
-    <div className="terminal-portfolio">
-      {story ? (
-        <div className="terminal-story">
-          {story.split('\n').map((line, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: story lines are stable per invocation
-            <p key={i}>{line}</p>
-          ))}
-        </div>
-      ) : null}
-      <div className="terminal-profile">
-        {avatar ? (
-          <div className="terminal-profile-image terminal-portfolio-image">
-            <Image src={avatar} alt={`${p.Company ?? ''} logo`} width={96} height={96} />
-          </div>
-        ) : null}
-        <div className="terminal-profile-data">
-          <span className="terminal-rule" />
-          <p>
-            {isPlaceholder(p.Company) ? (
-              <span className="placeholder">{p.Company}</span>
-            ) : (
-              <Yellow>{p.Company}</Yellow>
-            )}
-          </p>
-          <p>
-            <Yellow>{p['One-Liner']}</Yellow>
-          </p>
-          <p>
-            {isPlaceholder(p.Website) ? (
-              <span className="placeholder">{p.Website}</span>
-            ) : p.Website ? (
-              <Blue href={p.Website}>{p.Website}</Blue>
-            ) : null}
-          </p>
-          <p>
-            {isPlaceholder(p.Github) ? (
-              <span className="placeholder">{p.Github}</span>
-            ) : p.Github ? (
-              <Blue href={p.Github}>{p.Github}</Blue>
-            ) : null}
-          </p>
-          <span className="terminal-rule" />
-        </div>
-      </div>
-    </div>
-  );
+/** Companies are rendered by looking them up in COMPANIES by slug and
+ *  delegating to CompanyCard — same component used by the file-tree viewer,
+ *  so the CLI's `cat companies/x.txt` and the tree preview stay in sync. */
+function CompanyProfileCard({ file }: { file: string }) {
+  const match = file.match(/^slug:(.+)$/);
+  const slug = match?.[1]?.trim();
+  const company = slug ? COMPANIES.find((c) => c.slug === slug) : undefined;
+  if (!company) return null;
+  return <CompanyCard company={company} />;
 }
 
 function BlogCard({ slug, file }: { slug: string; file: string }) {
@@ -203,7 +163,7 @@ function LegalCard({ file }: { file: string }) {
 }
 
 function ErrorLine({ children }: { children: ReactNode }) {
-  return <span className="red">{children}</span>;
+  return <span>{children}</span>;
 }
 
 /** Split a command-line into its tokens (whitespace-separated, no quotes). */
@@ -213,8 +173,8 @@ export function tokenize(input: string): string[] {
 
 function renderFileAs(path: string, slug: string, content: string): ReactNode {
   if (/(\/team\/)[^/]+\.txt$/.test(path)) return <TeamProfileCard file={content} />;
-  if (/\/portfolio\//.test(path) && path.endsWith('.txt')) {
-    return <PortfolioProfileCard file={content} />;
+  if (/\/companies\//.test(path) && path.endsWith('.txt')) {
+    return <CompanyProfileCard file={content} />;
   }
   if (/\/about\/legal\.txt$/.test(path)) return <LegalCard file={content} />;
   if (/\/blog\//.test(path) && path.endsWith('.txt')) {
@@ -233,7 +193,20 @@ const ls: Command = {
       return <ErrorLine>ls: {target}: No such directory</ErrorLine>;
     }
     const entries = listDirectory(ctx.fs, resolved);
-    return <div className="ls-output">{entries.join('  ')}</div>;
+    return (
+      <div className="ls-output">
+        {entries.map((name) => {
+          const childPath = resolvePath(resolved, name);
+          const dir = isDirectory(ctx.fs, childPath);
+          return (
+            <div key={name}>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span className={dir ? 'blue' : 'green'}>{name}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
   },
 };
 
@@ -360,6 +333,16 @@ const neofetch: Command = {
   },
 };
 
+const firework: Command = {
+  name: 'firework',
+  description: 'Launch a fireworks show',
+  run() {
+    // Stable id so remounting this scrollback entry (e.g. switching tabs
+    // back to /cli) doesn't replay the show — Firework dedupes by id.
+    return <Firework id={`fw-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`} />;
+  },
+};
+
 const header: Command = {
   name: 'header',
   description: 'Toggle between the welcome banner and the compact header',
@@ -395,21 +378,24 @@ const help: Command = {
       const found = ALL_COMMANDS.find((c) => c.name === name);
       if (found) {
         return (
-          <p>
+          <div>
             &nbsp;&nbsp;&nbsp;&nbsp;<span className="command">{found.name}</span> —{' '}
             {found.description}
-          </p>
+          </div>
         );
       }
     }
     return (
       <div>
-        <p>If you want to see the help for a specific command, type 'help' and the command name</p>
-        <p>Here are the available commands on this terminal:</p>
+        <div>
+          If you want to see the help for a specific command, type{' '}
+          <span className="purple">'help'</span> and the command name
+        </div>
+        <div>Here are the available commands on this terminal:</div>
         {visible.map((c) => (
-          <p key={c.name}>
+          <div key={c.name}>
             &nbsp;&nbsp;&nbsp;&nbsp;<span className="command">{c.name}</span>
-          </p>
+          </div>
         ))}
       </div>
     );
@@ -423,6 +409,7 @@ export const ALL_COMMANDS: readonly Command[] = [
   clear,
   decryptCmd,
   email,
+  firework,
   header,
   help,
   neofetch,

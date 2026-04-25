@@ -14,7 +14,7 @@ export const TABS: readonly Tab[] = [
   { id: 'about', label: 'About', href: '/about' },
 ] as const;
 
-export function activeTabFromPathname(pathname: string): TabId {
+export function activeTabFromPathname(pathname: string): TabId | null {
   const clean = pathname.replace(/\/+$/, '') || '/';
   // Landing (/) is the hero; the CLI tab highlights for both the landing
   // and the dedicated /cli utility page.
@@ -23,5 +23,6 @@ export function activeTabFromPathname(pathname: string): TabId {
   if (clean.startsWith('/blog')) return 'blog';
   if (clean.startsWith('/team')) return 'team';
   if (clean.startsWith('/about')) return 'about';
-  return 'cli';
+  // Unknown routes (e.g. 404) — no tab highlighted.
+  return null;
 }

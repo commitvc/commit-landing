@@ -1,12 +1,13 @@
 'use client';
 
-import { PortfolioCard } from '@/components/cards/PortfolioCard';
+import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
+import { COMPANIES } from '@/lib/companies';
 import type { FsDir, FsNode } from '@/lib/filesystem';
-import { PORTFOLIO } from '@/lib/portfolio';
 import { TEAM } from '@/lib/team';
 import Link from 'next/link';
-import { type ReactNode, useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import styles from './FileTree.module.css';
 
 type BlogPostSummary = {
@@ -93,9 +94,66 @@ function readContent(root: FsDir, basePath: string, fullPath: string): string | 
   return node.type === 'file' ? node.content : null;
 }
 
+/** Team / companies have indexable static routes. Clicking those files in
+ *  the tree should navigate there; other files (about, blog summaries) stay
+ *  inline. Pre-commit companies live under /companies/pre-commit/<slug>/
+ *  so the URL mirrors the tree's folder structure. */
+function staticRouteFor(fullPath: string): string | null {
+  const team = fullPath.match(/^\/team\/([^/]+)\.txt$/);
+  if (team) return `/team/${team[1]}/`;
+  const preCommit = fullPath.match(/^\/companies\/pre-commit\/([^/]+)\.txt$/);
+  if (preCommit) return `/companies/pre-commit/${preCommit[1]}/`;
+  const company = fullPath.match(/^\/companies\/([^/]+)\.txt$/);
+  if (company) return `/companies/${company[1]}/`;
+  return null;
+}
+
+/** Current URL → the filesystem path (if any) of the file that URL represents.
+ *  Used so the tree can stay mounted across route transitions and just
+ *  re-highlight the selected file as the URL changes. */
+function routeToFsPath(pathname: string | null): string | null {
+  if (!pathname) return null;
+  const team = pathname.match(/^\/team\/([^/]+)\/?$/);
+  if (team) return `/team/${team[1]}.txt`;
+  const preCommit = pathname.match(/^\/companies\/pre-commit\/([^/]+)\/?$/);
+  if (preCommit) return `/companies/pre-commit/${preCommit[1]}.txt`;
+  const company = pathname.match(/^\/companies\/([^/]+)\/?$/);
+  if (company) return `/companies/${company[1]}.txt`;
+  return null;
+}
+
 export function FileTree({ root, basePath, blogPosts }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const routedSelection = routeToFsPath(pathname);
+
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [selected, setSelected] = useState<string | null>(null);
+  const [localSelected, setLocalSelected] = useState<string | null>(null);
+
+  // Auto-expand ancestor folders of the route-driven selection so a deep-link
+  // like /companies/mastra/ lands with the `pre-commit/` branch open.
+  useEffect(() => {
+    if (!routedSelection) return;
+    const rel = routedSelection.slice(basePath.length).replace(/^\//, '');
+    const parts = rel.split('/').filter(Boolean);
+    if (parts.length <= 1) return;
+    setExpanded((prev) => {
+      const next = { ...prev };
+      let p = basePath;
+      for (let i = 0; i < parts.length - 1; i++) {
+        p = p === '/' ? `/${parts[i]}` : `${p}/${parts[i]}`;
+        next[p] = true;
+      }
+      return next;
+    });
+  }, [routedSelection, basePath]);
+
+  // routedSelection (URL-driven) takes precedence for highlighting; localSelected
+  // only kicks in for non-routable files (about, blog summaries) which still
+  // render inline below the tree.
+  const selected = routedSelection ?? localSelected;
+  const inlineContent =
+    !routedSelection && localSelected ? readContent(root, basePath, localSelected) : null;
 
   const lines = useMemo(() => {
     const out: Line[] = [];
@@ -103,17 +161,23 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
     return out;
   }, [root, basePath, expanded]);
 
-  const selectedContent = selected ? readContent(root, basePath, selected) : null;
-
   return (
     <div>
       <div className={styles.tree}>
         {lines.map((line) => {
           const isSelected = !line.isDir && selected === line.fullPath;
-          const onClick = () =>
-            line.isDir
-              ? setExpanded((e) => ({ ...e, [line.fullPath]: !e[line.fullPath] }))
-              : setSelected(line.fullPath);
+          const onClick = () => {
+            if (line.isDir) {
+              setExpanded((e) => ({ ...e, [line.fullPath]: !e[line.fullPath] }));
+              return;
+            }
+            const route = staticRouteFor(line.fullPath);
+            if (route) {
+              router.push(route);
+              return;
+            }
+            setLocalSelected(line.fullPath);
+          };
           return (
             <button
               type="button"
@@ -137,10 +201,10 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
           );
         })}
       </div>
-      {selected && selectedContent !== null ? (
+      {inlineContent !== null && localSelected ? (
         <div className={styles.viewer}>
-          <div className={styles.viewerHeader}>── {selected} ──</div>
-          {renderDetail(selected, selectedContent, blogPosts)}
+          <div className={styles.viewerHeader}>── {localSelected} ──</div>
+          {renderDetail(localSelected, inlineContent, blogPosts)}
         </div>
       ) : null}
     </div>
@@ -163,9 +227,9 @@ function renderDetail(
     if (m) return <ProfileCard member={m} />;
   }
 
-  if (/^\/portfolio\//.test(path) && path.endsWith('.txt')) {
-    const c = PORTFOLIO.find((x) => x.slug === slug);
-    if (c) return <PortfolioCard company={c} />;
+  if (/^\/companies\//.test(path) && path.endsWith('.txt')) {
+    const c = COMPANIES.find((x) => x.slug === slug);
+    if (c) return <CompanyCard company={c} />;
   }
 
   if (path === '/about/legal.txt') {

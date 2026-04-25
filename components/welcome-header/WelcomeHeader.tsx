@@ -18,6 +18,10 @@ type Props = {
   /** Called once the welcome animation finishes and the nav is revealed,
       so the CLI below can enable its prompt. */
   onReady?: () => void;
+  /** If true, skip the boot log + staged reveals and mount directly in the
+      final 'ready' state. Used when the user toggles the header via the
+      `header` command — we don't want to replay the loader. */
+  skipBoot?: boolean;
 };
 
 /**
@@ -25,10 +29,18 @@ type Props = {
  * → tagline → NavBar. Each section reveals in sequence; the nav's dash line
  * is the sharp bottom limit of this zone.
  */
-export function WelcomeHeader({ onReady }: Props) {
-  const [phase, setPhase] = useState<Phase>('boot');
+export function WelcomeHeader({ onReady, skipBoot = false }: Props) {
+  const [phase, setPhase] = useState<Phase>(skipBoot ? 'ready' : 'boot');
 
   const onBootDone = useCallback(() => setPhase('welcome-neofetch'), []);
+
+  // When the parent skips the boot animation (returning to welcome via the
+  // `header` command), the staged-reveal effect below never runs, so onReady
+  // would otherwise never fire. Trigger it explicitly. `onReady` is stable
+  // in practice (parents wrap it in useCallback), so re-firing is a no-op.
+  useEffect(() => {
+    if (skipBoot) onReady?.();
+  }, [skipBoot, onReady]);
 
   useEffect(() => {
     if (phase === 'boot' || phase === 'ready') return;
@@ -65,7 +77,7 @@ export function WelcomeHeader({ onReady }: Props) {
 
   return (
     <header className={styles.header}>
-      <BootAnimation onDone={onBootDone} />
+      <BootAnimation instant={skipBoot} onDone={onBootDone} />
       <div className={styles.welcome}>
         {showNeofetch ? (
           <>
@@ -75,7 +87,7 @@ export function WelcomeHeader({ onReady }: Props) {
         ) : null}
         {showTagline ? (
           <p className={styles.tagline}>
-            Type <span className="yellow">'help'</span> to get started, or click a tab below — we
+            Type <span className="purple">'help'</span> to get started, or click a tab below — we
             won't judge
           </p>
         ) : null}

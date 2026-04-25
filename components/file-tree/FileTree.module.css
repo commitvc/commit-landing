@@ -1,6 +1,10 @@
 .tree {
   line-height: 1.8;
   user-select: none;
+  /* Breathing room between the tree's last entry and whatever sibling
+     renders below (e.g. the detail card from /team/[slug]/ or
+     /companies/[slug]/), so the two zones don't feel pinned together. */
+  margin-bottom: 1.75rem;
 }
 
 .item {
@@ -20,22 +24,22 @@
 }
 
 .item:hover {
-  background: rgba(200, 208, 242, 0.05);
+  background: rgba(192, 202, 245, 0.05);
 }
 
 .selected {
-  background: rgba(200, 208, 242, 0.08);
+  background: rgba(192, 202, 245, 0.08);
 }
 
 .prefix {
-  color: rgba(200, 208, 242, 0.3);
+  color: rgba(192, 202, 245, 0.3);
 }
 
 .toggle {
   display: inline-block;
   width: 1.2em;
   text-align: center;
-  color: rgba(200, 208, 242, 0.5);
+  color: rgba(192, 202, 245, 0.5);
 }
 
 .dir {
@@ -57,7 +61,7 @@
 }
 
 .viewer:not(:empty) {
-  border-top: 1px dashed rgba(200, 208, 242, 0.2);
+  border-top: 1px dashed rgba(192, 202, 245, 0.2);
 }
 
 .viewerHeader {

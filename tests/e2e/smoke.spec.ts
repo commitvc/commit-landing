@@ -48,7 +48,7 @@ test('terminal ls lists top-level directories', async ({ page }) => {
   const output = page.locator('[role="log"]');
   await expect(output).toContainText('about');
   await expect(output).toContainText('team');
-  await expect(output).toContainText('portfolio');
+  await expect(output).toContainText('companies');
   await expect(output).toContainText('blog');
 });
 

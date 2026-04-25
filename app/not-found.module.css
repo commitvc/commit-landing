@@ -1,0 +1,39 @@
+.main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 12px 4rem;
+}
+
+.art {
+  color: var(--red);
+  font-family: var(--font-meslo), "MesloLGS NF", Menlo, Consolas, monospace;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  margin: 0 0 2.5rem 0;
+  white-space: pre;
+  /* inline-block so the pre shrinks to its content and parent's
+     text-align: center centers the block as a whole, instead of centering
+     each line of the art independently and scrambling the alignment. */
+  display: inline-block;
+  text-align: left;
+  /* Disable ligatures so `| |`, `|_|`, `\_/` etc. render as the literal
+     glyphs instead of any composed ligature MesloLGS might apply. */
+  font-variant-ligatures: none;
+}
+
+.lead {
+  margin: 0 0 0.5rem 0;
+  color: var(--fg);
+}
+
+.dim {
+  margin: 0;
+  color: var(--fg-muted-hover);
+  max-width: 560px;
+}

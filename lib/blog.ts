@@ -8,6 +8,9 @@ export type BlogPost = {
   description: string;
   author: string;
   date: string;
+  /** Optional `dateModified` from frontmatter. If absent, callers should
+   *  fall back to `date` so Article schema always carries both fields. */
+  dateModified?: string;
   canonical?: string;
   ogImage?: string;
   substack?: string;
@@ -22,10 +25,11 @@ function readPost(slug: string): BlogPost {
   const description = typeof data.description === 'string' ? data.description : '';
   const author = typeof data.author === 'string' ? data.author : '';
   const date = typeof data.date === 'string' ? data.date : '';
+  const dateModified = typeof data.dateModified === 'string' ? data.dateModified : undefined;
   const canonical = typeof data.canonical === 'string' ? data.canonical : undefined;
   const ogImage = typeof data.ogImage === 'string' ? data.ogImage : undefined;
   const substack = typeof data.substack === 'string' ? data.substack : undefined;
-  return { slug, title, description, author, date, canonical, ogImage, substack };
+  return { slug, title, description, author, date, dateModified, canonical, ogImage, substack };
 }
 
 export function getAllSlugs(): string[] {

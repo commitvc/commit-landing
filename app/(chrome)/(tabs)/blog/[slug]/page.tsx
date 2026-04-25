@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { formatDate, getAllSlugs, getPost } from '@/lib/blog';
+import {
+  LOGO_IMAGE,
+  ORG_ID,
+  SITE_URL,
+  breadcrumbJsonLd,
+  teamMemberUrlByName,
+} from '@/lib/structured-data';
 import styles from '../blog.module.css';
 
 export function generateStaticParams() {
@@ -47,16 +54,49 @@ export default async function BlogPostPage({ params }: Params) {
   if (!mdx) notFound();
   const MDX = mdx.default;
 
+  // If the author is a current team member, link the Person node to their
+  // /team/<slug>/ page so AI can resolve the author entity. Otherwise emit
+  // a name-only Person.
+  const authorUrl = teamMemberUrlByName(post.author);
+  const author = authorUrl
+    ? { '@type': 'Person', '@id': `${authorUrl}#person`, name: post.author, url: authorUrl }
+    : { '@type': 'Person', name: post.author };
+
+  const canonical = post.canonical ?? `${SITE_URL}/blog/${slug}/`;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
     description: post.description,
-    author: { '@type': 'Person', name: post.author },
+    author,
     datePublished: post.date,
-    publisher: { '@type': 'Organization', name: 'commit' },
+    // `dateModified` is required for Google Article rich results and is a
+    // strong freshness signal AI uses to weight citations. Falls back to
+    // `date` so every Article carries both.
+    dateModified: post.dateModified ?? post.date,
+    // Link publisher to the global Organization @id so the entity graph
+    // dedupes across the site. `logo` must be an ImageObject (not a string)
+    // for the markup to be valid.
+    publisher: {
+      '@type': 'Organization',
+      '@id': ORG_ID,
+      name: '>commit',
+      logo: LOGO_IMAGE,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+    },
+    inLanguage: 'en',
     ...(post.ogImage ? { image: post.ogImage } : {}),
   };
+
+  const breadcrumb = breadcrumbJsonLd([
+    { name: '>commit', url: '/' },
+    { name: 'Blog', url: '/blog/' },
+    { name: post.title, url: `/blog/${slug}/` },
+  ]);
 
   return (
     <main>
@@ -64,6 +104,11 @@ export default async function BlogPostPage({ params }: Params) {
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be raw JSON.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be raw JSON.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
       <article className={styles.article}>
         <h1>{post.title}</h1>

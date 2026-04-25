@@ -21,7 +21,7 @@ export function PromptBar({ cwd, onSubmit, suggest, disabled }: PromptBarProps) 
     if (!disabled) inputRef.current?.focus();
   }, [disabled]);
 
-  const promptText = cwd === '/' ? 'user@commit.fund' : `user@commit.fund:${cwd}`;
+  const path = cwd === '/' ? '' : cwd;
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
@@ -65,8 +65,9 @@ export function PromptBar({ cwd, onSubmit, suggest, disabled }: PromptBarProps) 
   }
 
   return (
-    <div className={styles.promptLine}>
-      <span className={styles.prompt}>{promptText}</span>
+    <div className={styles.liveBar}>
+      <span className={styles.prompt}>user@commit.fund</span>
+      {path ? <span>:{path}</span> : null}
       <span className={styles.promptSeparator}>&gt;</span>
       <input
         ref={inputRef}

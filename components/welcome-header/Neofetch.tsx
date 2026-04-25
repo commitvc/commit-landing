@@ -18,15 +18,19 @@ export function Neofetch() {
         <p>
           <span className="yellow">Stage:</span> Pre-Seed & Seed
         </p>
-        <p>
-          <span className="yellow">Github:</span>{' '}
+        <p className={styles.neofetchLinks}>
+          <a href="https://github.com/commitvc" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
           <a
-            href="https://github.com/commitvc"
+            href="https://www.linkedin.com/company/commitvc/"
             target="_blank"
             rel="noopener noreferrer"
-            className="blue"
           >
-            github.com/commitvc
+            LinkedIn
+          </a>
+          <a href="https://x.com/commitvc" target="_blank" rel="noopener noreferrer">
+            X
           </a>
         </p>
         <span className={styles.neofetchRule} />

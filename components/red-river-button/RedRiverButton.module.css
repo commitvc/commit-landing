@@ -1,3 +1,4 @@
+/* Desktop: floating rounded button in the top-right corner. Unchanged. */
 .button {
   position: fixed;
   top: 20px;
@@ -26,5 +27,67 @@
   }
   .button:hover {
     transform: none;
+  }
+}
+
+/* Mobile banner: hidden by default, shown <=640px. Three-column row:
+   sun icon (cropped from the same PNG via background-position), label,
+   right-aligned CTA. */
+.banner {
+  display: none;
+}
+
+.icon,
+.label,
+.cta {
+  /* Inherits inside .banner; safe defaults so they don't leak elsewhere. */
+}
+
+@media (max-width: 640px) {
+  .button {
+    display: none;
+  }
+  .banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* Run edge-to-edge regardless of .container's 12px side padding. */
+    margin: 0 -12px;
+    padding: 8px 24px;
+    height: 50px;
+    box-sizing: border-box;
+    background: #e63625;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+  .icon {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    background-image: url("/ButtonWebSitev2.png");
+    /* PNG is 3500×800; sun region runs roughly x=80–740, y=100–700. Scale
+       the PNG so the 660-wide sun fits the 32px icon (PNG ≈ 170px wide,
+       auto-height ≈ 39px) and shift the background so the sun lands at
+       the icon's left edge. */
+    background-size: 170px auto;
+    background-position: -4px center;
+    background-repeat: no-repeat;
+  }
+  .label {
+    flex: 1 1 auto;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cta {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    opacity: 0.95;
   }
 }
