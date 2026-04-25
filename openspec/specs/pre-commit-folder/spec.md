@@ -1,5 +1,9 @@
-## ADDED Requirements
+# pre-commit-folder Specification
 
+## Purpose
+Defines how the virtual filesystem represents the historical pre-commit portfolio: the folder name (`pre-commit/` not `roots/`), the per-company `.txt` files, and the rendering rule that a story blurb appears above the standard portfolio card.
+
+## Requirements
 ### Requirement: `pre-commit/` replaces `roots/` in the virtual filesystem
 The virtual filesystem SHALL contain `pre-commit/` under `portfolio/` in place of `roots/`. The `about.txt` folder-level description file SHALL be removed. Each company SHALL have its own `.txt` file.
 

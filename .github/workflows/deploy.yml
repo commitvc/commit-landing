@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,8 +12,11 @@ permissions:
   pages: write
   id-token: write
 
+# `pages` is global — without per-ref grouping, two parallel PR runs race
+# each other for the deploy slot and the loser cancels. Scope the lock to
+# the workflow + ref so each branch / PR has its own queue.
 concurrency:
-  group: pages
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -39,13 +44,21 @@ jobs:
 
       - run: pnpm build
 
-      - uses: actions/configure-pages@v5
+      # Pages artifact only matters for the deploy job, which only runs on
+      # push-to-main. Skip the artifact upload on PR runs to save a few
+      # seconds and keep the artifact tab clean.
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
 
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
   deploy:
+    # Only deploy from main, never from a PR head — PR runs validate the
+    # build but must not publish.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

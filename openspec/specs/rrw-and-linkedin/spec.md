@@ -1,5 +1,9 @@
-## ADDED Requirements
+# rrw-and-linkedin Specification
 
+## Purpose
+Defines the canonical opening sentence of the about-page README (the Red River West family relationship), the LinkedIn field on team profiles, and the team profile card's 4-line layout.
+
+## Requirements
 ### Requirement: `about/readme.txt` opens with the Red River West family sentence
 The `about/` directory's `readme.txt` content SHALL begin with: ">commit is part of the Red River West family and is the early-stage investment vehicle focused on commercial open source startups. We back commercial open source companies at pre-seed and seed, with checks up to $1.5M."
 
@@ -28,11 +32,23 @@ The team profile card SHALL display data in a compact 4-line format: `Name, Role
 ### Requirement: Profile cards (team and company) are not wrapped in `<pre>`
 Both `viewFile()` and the `cat` command SHALL return profile card HTML directly, without wrapping in `<pre>` tags. Only plain text files use `<pre>`. This prevents the `<pre>` tag from breaking flex layout inside cards.
 
+#### Scenario: profile card emits raw HTML
+- **WHEN** the `cat team/<member>.txt` command renders or the file-tree viewer opens a profile
+- **THEN** the rendered output is the card's HTML directly, without an enclosing `<pre>` element
+
 ### Requirement: Profile card container layout
 `.profile-card2-container` SHALL use `display: flex; align-items: center; justify-content: flex-start; gap: 1rem`. Image container uses `flex-shrink: 0`. Data container uses `min-width: 0; overflow: hidden` so long `.neofetch-rule` dashes clip rather than expanding the layout.
 
+#### Scenario: container is flex with non-shrinking image
+- **WHEN** the computed style of `.profile-card2-container` is read
+- **THEN** `display` is `flex`, the image container has `flex-shrink: 0`, and the data container has `min-width: 0` and `overflow: hidden`
+
 ### Requirement: Story text uses default terminal color
-The `.story-text` class SHALL use `color: #c8d0f2` (the standard terminal text color), not white.
+The `.story-text` class SHALL use `color: #c8d0f2` (the standard terminal text colour), not white.
+
+#### Scenario: story-text colour matches terminal default
+- **WHEN** the computed style of an element with `.story-text` is read
+- **THEN** `color` resolves to `rgb(200, 208, 242)` (i.e. `#c8d0f2`)
 
 **LinkedIn URLs:**
 - Max Corbani: https://www.linkedin.com/in/mxcrbn/

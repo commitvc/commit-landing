@@ -1,0 +1,40 @@
+queue_rules:
+  - name: default
+    queue_conditions:
+      - "check-success=build"
+      - "#approved-reviews-by>=1"
+      - "-conflict"
+      - "-draft"
+    merge_conditions:
+      - "check-success=build"
+    merge_method: squash
+
+pull_request_rules:
+  - name: auto-merge approved + green
+    conditions:
+      - base=main
+      - "#approved-reviews-by>=1"
+      - "check-success=build"
+      - -conflict
+      - -draft
+    actions:
+      queue:
+        name: default
+
+  - name: comment when conflicts appear
+    conditions:
+      - conflict
+      - -closed
+    actions:
+      comment:
+        message: |
+          @{{author}} this PR is conflicting with `main`. Rebase or merge to resolve, then I'll re-evaluate.
+
+  - name: comment when CI fails on main
+    conditions:
+      - check-failure=build
+      - -closed
+    actions:
+      comment:
+        message: |
+          @{{author}} the `build` check failed. PR can't auto-merge until it's green.
