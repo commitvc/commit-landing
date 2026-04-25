@@ -1,5 +1,9 @@
-## ADDED Requirements
+# whois-command Specification
 
+## Purpose
+Defines the hidden `whois commit.fund` CLI command — its output format (RDAP-style key-value block), the metadata it returns (Domain, Vehicle, Manager, Focus, Contact), and its exclusion from `help` listings.
+
+## Requirements
 ### Requirement: `whois commit.fund` returns structured metadata about commit
 The terminal SHALL support a `whois` command. Running `whois commit.fund` SHALL return a styled block of registration-style metadata, including the Red River West management company relationship. The command SHALL be hidden from `help` output.
 

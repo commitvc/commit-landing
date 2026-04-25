@@ -1,23 +1,27 @@
-## ADDED Requirements
+# prompt-format Specification
 
+## Purpose
+Defines the visible format of the CLI terminal prompt and command echoes — the host prefix, the working-directory path, the `>` glyph, and the spacing rules between them. The prompt is the most-typed surface on the site and its visual rhythm is part of the brand.
+
+## Requirements
 ### Requirement: Terminal prompt displays `>` in default text color
-The terminal prompt SHALL render `>` in the default terminal text color (`#c8d0f2`), NOT red. The red `>` is reserved exclusively for the active tab prefix in the tab bar. When the current directory is `/`, the prompt is `>` alone. When in a subdirectory, the current path is shown before `>`. The `user@commit.fund:` prefix is removed entirely. There SHALL be no space between the prompt `>` and the typed command text.
+The terminal prompt SHALL render with `user@commit.fund` as a constant left-hand prefix (in the prompt's pink/highlight colour), followed directly (no colon, no space) by the current working directory if it is not `/`, followed by `>` in the default terminal text colour (`#c8d0f2` — NOT red; the red `>` is reserved exclusively for the active tab prefix in the tab bar). There SHALL be no space between the `>` and the typed command text, nor between the host prefix and the path.
 
-#### Scenario: Prompt at root shows only `>`
+#### Scenario: Prompt at root shows `user@commit.fund>`
 - **WHEN** the current directory is `/`
-- **THEN** the input line renders as `>` in default text color, no space before command text
+- **THEN** the input line renders as `user@commit.fund>` with `user@commit.fund` in the prompt highlight colour and `>` in the default terminal text colour, no path between them, no space before the typed command
 
-#### Scenario: Prompt in subdirectory shows path then `>`
-- **WHEN** the current directory is `/portfolio`
-- **THEN** the input line renders as `/portfolio >` with `>` in default text color
+#### Scenario: Prompt in subdirectory shows host directly followed by path then `>`
+- **WHEN** the current directory is `/companies`
+- **THEN** the input line renders as `user@commit.fund/companies>` (no colon, no space between the host and the path, no space between the path and `>`)
 
-#### Scenario: Command history echoes use the same format with no space
+#### Scenario: Command history echoes use the same format
 - **WHEN** a command is executed and echoed in terminal history
-- **THEN** the history line renders as `>command` (no space between `>` and command text)
+- **THEN** the history line renders as `user@commit.fund<path>><command>` with the same format as the live prompt and no space between `>` and the command text
 
-#### Scenario: Neofetch boot echo uses the new format
-- **WHEN** the terminal boots and auto-runs the neofetch echo line
-- **THEN** the echoed command renders as `>neofetch` (no space, no prefix)
+#### Scenario: Neofetch boot echo uses the same format
+- **WHEN** the terminal boots and auto-runs the neofetch echo line on the homepage WelcomeHeader (desktop branch only)
+- **THEN** the echoed command renders as `user@commit.fund>neofetch` (host prefix, no path because it is at root, no space, no colon)
 
 ### Requirement: CLI command blocks have visual spacing
 Each command block (prompt + output) SHALL have a `1.5rem` bottom margin on the `.command-output` div. A `.command-output` div SHALL always be emitted after every command, even if the command produces no output (e.g. `cd`), to ensure consistent spacing between command blocks.
