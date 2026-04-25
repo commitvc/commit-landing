@@ -1,5 +1,5 @@
 import { ProfileCard } from '@/components/cards/ProfileCard';
-import { ORG_ID, breadcrumbJsonLd } from '@/lib/structured-data';
+import { ORG_ID, SITE_URL, breadcrumbJsonLd } from '@/lib/structured-data';
 import { TEAM } from '@/lib/team';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -17,8 +17,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const member = TEAM.find((m) => m.slug === slug);
   if (!member) return {};
   const title = `${member.name} — ${member.role} at >commit`;
-  const description = member.description ?? `${member.name}, ${member.role} at >commit.`;
-  const url = `https://commit.fund/team/${slug}/`;
+  // SERP/social-friendly short description (~120 chars). Falls back to the
+  // long-form bio if `seoDescription` isn't set, but the long bio gets
+  // mid-sentence-truncated by Google so every member should set it.
+  const description =
+    member.seoDescription ?? member.description ?? `${member.name}, ${member.role} at >commit.`;
+  const url = `${SITE_URL}/team/${slug}/`;
   return {
     title,
     description,
@@ -28,7 +32,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title,
       description,
       url,
-      images: [`https://commit.fund${member.avatar}`],
+      images: [`${SITE_URL}${member.avatar}`],
     },
   };
 }
@@ -42,7 +46,7 @@ export default async function TeamMemberPage({ params }: Params) {
     (v): v is string => !!v,
   );
 
-  const personUrl = `https://commit.fund/team/${slug}/`;
+  const personUrl = `${SITE_URL}/team/${slug}/`;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -53,7 +57,7 @@ export default async function TeamMemberPage({ params }: Params) {
     // Reference the global Organization node by @id so the entity graph
     // dedupes (instead of emitting a separate, parallel Org node).
     worksFor: { '@id': ORG_ID },
-    image: `https://commit.fund${member.avatar}`,
+    image: `${SITE_URL}${member.avatar}`,
     url: personUrl,
     ...(member.description ? { description: member.description } : {}),
     ...(sameAs.length ? { sameAs } : {}),

@@ -151,11 +151,16 @@ export function companiesItemList(): JsonLd {
 }
 
 /** Two distinct ItemLists for active vs pre-commit. Use these instead of
- *  `companiesItemList()` if you want AI to clearly separate the two. */
+ *  `companiesItemList()` if you want AI to clearly separate the two.
+ *
+ *  Stealth investments are omitted — they're real Fund I commitments but
+ *  we don't broadcast them to AI knowledge graphs as entities until launch.
+ *  Their detail pages still ship (with no Organization JSON-LD) so direct
+ *  visitors hit the redacted card. */
 export function activeCompaniesItemList(): JsonLd {
   return itemListJsonLd(
     '>commit Fund I portfolio',
-    ACTIVE_COMPANIES.map((c) => ({
+    ACTIVE_COMPANIES.filter((c) => !c.stealth).map((c) => ({
       name: `${c.company} — ${c.oneLiner}`,
       url: `/companies/${c.slug}/`,
       description: c.about,

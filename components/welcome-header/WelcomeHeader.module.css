@@ -36,6 +36,13 @@
 }
 
 .neofetchLogo {
+  /* Match CompactHeader's logo offset (CompactHeader.module.css `.logo`):
+     the first ASCII row is `_ _`, whose underscore stroke sits ~10px below
+     the em-box top. Pull the wrapper up by that amount so the visible
+     glyphs land at the same screen-y as the RRW button's top edge — and
+     so the logo doesn't visibly drop when navigating from a tab page back
+     to the welcome page. */
+  margin-top: -10px;
   margin-bottom: 1rem;
 }
 
@@ -82,4 +89,21 @@
   user-select: none;
   display: inline-block;
   text-decoration: none;
+}
+
+/* Mobile WelcomeHeader (≤480px) — boot animation, neofetch data column, and
+   `>neofetch` echo are dropped by the JS branch in WelcomeHeader.tsx. What
+   remains is just the ASCII logo, the tagline, and the NavBar, rendered
+   immediately at first paint with no staged reveal. */
+.mobile {
+  gap: 0.5rem;
+}
+
+.mobileLogo {
+  /* Same -10px lift as `.neofetchLogo` / CompactHeader's `.logo` so the
+     ASCII underscores line up with the RRW button across all headers. */
+  margin-top: -10px;
+  /* Match the existing `.neofetchLogo` bottom rhythm so the gap between
+     logo and tagline reads consistently with the desktop layout. */
+  margin-bottom: 0.5rem;
 }

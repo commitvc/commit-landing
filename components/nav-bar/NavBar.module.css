@@ -23,6 +23,23 @@
   display: none;
 }
 
+/* On narrow viewports where the tabs spill past the right edge, fade the
+   trailing 28px so the cut-off tab signals "more here, swipe to see it"
+   rather than reading as a hard truncation. Always-on at this breakpoint
+   — even when scrolled to the end the fade is harmless because it sits
+   over background, not over a tab edge. */
+@media (max-width: 640px) {
+  .scroller {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      black 0,
+      black calc(100% - 28px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
+  }
+}
+
 .container::after {
   content: "";
   position: absolute;
@@ -65,6 +82,15 @@
     gap: 2.25rem;
     /* Inherit the desktop left pad so the active-tab dashed indicator
        under "CLI" doesn't get clipped by the viewport edge. */
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    /* Tightened phone gap — 4rem → 2.25rem → 1.5rem in three smooth steps.
+       Going below 1.5rem starts crowding the active-tab dashed indicator
+       against neighbouring labels, so this is the floor. */
+    gap: 1.5rem;
   }
 }
 

@@ -49,9 +49,9 @@ function extractFrontmatter(html, slug) {
   const ogImage = pick(html, /<meta\s+property="og:image"\s+content="([^"]+)"/);
   const author = pick(html, /<meta\s+property="article:author"\s+content="([^"]+)"/);
   const date = pick(html, /<meta\s+property="article:published_time"\s+content="([^"]+)"/);
-  // Substack link if present
-  const substack = pick(html, /Originally published on\s*<a href="([^"]+)"/);
-  return { slug, title, description, canonical, ogImage, author, date, substack };
+  // Original-source link if present (Substack, mxcrbn.com, etc.)
+  const source = pick(html, /Originally published on\s*<a href="([^"]+)"/);
+  return { slug, title, description, canonical, ogImage, author, date, source };
 }
 
 function yaml(fm) {

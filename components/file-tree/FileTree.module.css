@@ -55,6 +55,13 @@
   text-decoration: underline;
 }
 
+/* Stealth file: faded version of the regular file colour so it reads as
+   "different / not yet readable" without shifting hue away from the rest
+   of the tree. Hover/selected still works (the file is a real route). */
+.fileStealth {
+  color: rgba(158, 206, 106, 0.55);
+}
+
 .viewer {
   margin-top: 1rem;
   padding-top: 0.5rem;

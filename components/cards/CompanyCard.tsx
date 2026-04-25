@@ -226,10 +226,37 @@ function ProjectSection({ company, stats }: Props & { stats: CompanyStats | null
   );
 }
 
+/**
+ * Stealth card: a single `<filename>: Permission denied` line. No Org
+ * JSON-LD is emitted upstream (handled in the slug page component) so AI
+ * knowledge graphs don't index the teaser as a real entity.
+ */
+function StealthCard({ company }: Props) {
+  if (!company.stealth) return null;
+  const file = `${company.slug}.txt`;
+  return (
+    <article className={styles.stealthCard}>
+      <p className={styles.stealthLine}>
+        <span className={styles.stealthFile}>{file}</span>: Permission denied
+      </p>
+    </article>
+  );
+}
+
 export function CompanyCard({ company }: Props) {
   const [stats, setStats] = useState<CompanyStats | null>(null);
 
+  // Acquired companies: skip the live OSS-tracking fetch. Live stars/forks/
+  // contributors/downloads on a frozen repo (or one that's been merged into
+  // the acquirer) read as misleading. The static facts (license, language,
+  // firstCommit) still render from the company-level overrides, and the
+  // `(acq. X)` tag in the title carries the lifecycle context. Stealth
+  // companies skip too — they branch into StealthCard below either way,
+  // but skipping the fetch saves a needless GitHub round-trip.
+  const skipLiveFetch = !!company.acquiredBy || !!company.stealth;
+
   useEffect(() => {
+    if (skipLiveFetch) return;
     let cancelled = false;
     fetchCompanyStats(company.github, company.package).then((s) => {
       if (!cancelled) setStats(s);
@@ -237,10 +264,24 @@ export function CompanyCard({ company }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [company.github, company.package]);
+  }, [company.github, company.package, skipLiveFetch]);
 
-  // Does the project block have any chance of rendering anything?
-  const hasAnyProjectInfo = !!(company.github || company.package || company.firstCommit);
+  if (company.stealth) return <StealthCard company={company} />;
+
+  // Project block renders any combination of: live (stars/forks/contributors/
+  // downloads from `stats`) and static (license/language/firstCommit from
+  // `company`). Skip only when there's literally nothing to show.
+  const hasAnyProjectInfo = !!(
+    company.firstCommit ||
+    company.license ||
+    company.language ||
+    (!skipLiveFetch && (company.github || company.package))
+  );
+
+  // For acquired companies, pass `stats` as a synthesized "loaded with no
+  // live data" so the ProjectSection's loading flag flips off and the live
+  // <Stat> rows render as undefined → omitted, while static rows still show.
+  const effectiveStats = skipLiveFetch ? { repo: null, download: null } : stats;
 
   return (
     <article className={styles.card}>
@@ -248,7 +289,7 @@ export function CompanyCard({ company }: Props) {
       <Header company={company} />
       <MetadataGrid company={company} />
       {company.about ? <AboutSection about={company.about} /> : null}
-      {hasAnyProjectInfo ? <ProjectSection company={company} stats={stats} /> : null}
+      {hasAnyProjectInfo ? <ProjectSection company={company} stats={effectiveStats} /> : null}
     </article>
   );
 }

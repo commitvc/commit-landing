@@ -38,6 +38,7 @@ The 2025 edition featured the founders and CEOs of RedHat, HuggingFace, Mistral,
 
 https://raisesummit.com`;
 
-export const ABOUT_CONTACT = `Email    hey@commit.fund
-X        x.com/commitvc
-GitHub   github.com/commitvc`;
+export const ABOUT_CONTACT = `GitHub   https://github.com/commitvc
+LinkedIn https://www.linkedin.com/company/commitvc
+X        https://x.com/commitvc
+Email    hey@commit.fund`;

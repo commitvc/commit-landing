@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate, getAllSlugs, getPost } from '@/lib/blog';
+import { formatDate, getAllSlugs, getPost, sourceLabel } from '@/lib/blog';
 import {
   LOGO_IMAGE,
   ORG_ID,
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       type: 'article',
       title: post.title,
       description: post.description,
-      url: post.canonical ?? `https://commit.fund/blog/${slug}/`,
+      url: post.canonical ?? `${SITE_URL}/blog/${slug}/`,
       images: post.ogImage ? [post.ogImage] : undefined,
       authors: [post.author],
       publishedTime: post.date,
@@ -116,12 +116,12 @@ export default async function BlogPostPage({ params }: Params) {
           {post.author} — {formatDate(post.date)}
         </p>
         <MDX />
-        {post.substack ? (
+        {post.source ? (
           <div className={styles.originalLink}>
             <p>
               Originally published on{' '}
-              <a href={post.substack} target="_blank" rel="noopener noreferrer">
-                Substack
+              <a href={post.source} target="_blank" rel="noopener noreferrer">
+                {sourceLabel(post.source)}
               </a>
             </p>
           </div>

@@ -2,6 +2,7 @@
 
 import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
+import { Linkify } from '@/components/linkify/Linkify';
 import { COMPANIES } from '@/lib/companies';
 import type { FsDir, FsNode } from '@/lib/filesystem';
 import { TEAM } from '@/lib/team';
@@ -10,6 +11,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import styles from './FileTree.module.css';
 
+/** Pure formatter — kept local rather than imported from `@/lib/blog`,
+ *  since that module pulls in `node:fs` at module scope and would poison
+ *  the client bundle. Same output as `lib/blog.formatDate`. */
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
 type BlogPostSummary = {
   slug: string;
   title: string;
@@ -17,12 +27,6 @@ type BlogPostSummary = {
   author: string;
   date: string;
 };
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-}
 
 type Line = {
   key: string;
@@ -94,10 +98,16 @@ function readContent(root: FsDir, basePath: string, fullPath: string): string | 
   return node.type === 'file' ? node.content : null;
 }
 
-/** Team / companies have indexable static routes. Clicking those files in
- *  the tree should navigate there; other files (about, blog summaries) stay
- *  inline. Pre-commit companies live under /companies/pre-commit/<slug>/
- *  so the URL mirrors the tree's folder structure. */
+/** About files that have their own dedicated /about/<file>/ route. Legal is
+ *  intentionally excluded — its tree entry stays inline (with a link out to
+ *  the redirect page) so casual readers see the summary without leaving. */
+const ABOUT_ROUTED_FILES = new Set(['readme', 'projects', 'contact']);
+
+/** Team / companies / about have indexable static routes. Clicking those
+ *  files in the tree should navigate there; other files (legal, blog
+ *  summaries) stay inline. Pre-commit companies live under
+ *  /companies/pre-commit/<slug>/ so the URL mirrors the tree's folder
+ *  structure. */
 function staticRouteFor(fullPath: string): string | null {
   const team = fullPath.match(/^\/team\/([^/]+)\.txt$/);
   if (team) return `/team/${team[1]}/`;
@@ -105,6 +115,9 @@ function staticRouteFor(fullPath: string): string | null {
   if (preCommit) return `/companies/pre-commit/${preCommit[1]}/`;
   const company = fullPath.match(/^\/companies\/([^/]+)\.txt$/);
   if (company) return `/companies/${company[1]}/`;
+  const about = fullPath.match(/^\/about\/([^/]+)\.txt$/);
+  const aboutSlug = about?.[1];
+  if (aboutSlug && ABOUT_ROUTED_FILES.has(aboutSlug)) return `/about/${aboutSlug}/`;
   return null;
 }
 
@@ -119,6 +132,9 @@ function routeToFsPath(pathname: string | null): string | null {
   if (preCommit) return `/companies/pre-commit/${preCommit[1]}.txt`;
   const company = pathname.match(/^\/companies\/([^/]+)\/?$/);
   if (company) return `/companies/${company[1]}.txt`;
+  const about = pathname.match(/^\/about\/([^/]+)\/?$/);
+  const aboutSlug = about?.[1];
+  if (aboutSlug && ABOUT_ROUTED_FILES.has(aboutSlug)) return `/about/${aboutSlug}.txt`;
   return null;
 }
 
@@ -166,6 +182,15 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
       <div className={styles.tree}>
         {lines.map((line) => {
           const isSelected = !line.isDir && selected === line.fullPath;
+          // Stealth files are dimmed + italicised in the listing so visitors
+          // get a "different/locked" hint before clicking. Match against
+          // /companies/<slug>.txt and look up the slug's `stealth` flag.
+          const stealthSlugMatch = line.isDir
+            ? null
+            : line.fullPath.match(/^\/companies\/([^/]+)\.txt$/);
+          const isStealthFile =
+            !!stealthSlugMatch && !!COMPANIES.find((c) => c.slug === stealthSlugMatch[1])?.stealth;
+
           const onClick = () => {
             if (line.isDir) {
               setExpanded((e) => ({ ...e, [line.fullPath]: !e[line.fullPath] }));
@@ -195,7 +220,9 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
                   <span className={styles.dir}>{line.name}/</span>
                 </>
               ) : (
-                <span className={styles.file}>{line.name}</span>
+                <span className={`${styles.file} ${isStealthFile ? styles.fileStealth : ''}`}>
+                  {line.name}
+                </span>
               )}
             </button>
           );
@@ -273,46 +300,5 @@ function renderDetail(
     <div className={styles.textBlock}>
       <Linkify text={content} />
     </div>
-  );
-}
-
-function Linkify({ text }: { text: string }) {
-  const combined = /(https?:\/\/[^\s)]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
-  const parts: Array<string | { kind: 'url' | 'email'; value: string }> = [];
-  let last = 0;
-  for (const match of text.matchAll(combined)) {
-    const idx = match.index ?? 0;
-    if (idx > last) parts.push(text.slice(last, idx));
-    const val = match[0];
-    const isEmail = val.includes('@') && !val.startsWith('http');
-    parts.push({ kind: isEmail ? 'email' : 'url', value: val });
-    last = idx + val.length;
-  }
-  if (last < text.length) parts.push(text.slice(last));
-  return (
-    <>
-      {parts.map((p, i) =>
-        typeof p === 'string' ? (
-          // biome-ignore lint/suspicious/noArrayIndexKey: text segments derived from a stable split
-          <span key={i}>{p}</span>
-        ) : p.kind === 'email' ? (
-          // biome-ignore lint/suspicious/noArrayIndexKey: match index is stable
-          <a key={i} href={`mailto:${p.value}`} className="blue">
-            {p.value}
-          </a>
-        ) : (
-          <a
-            // biome-ignore lint/suspicious/noArrayIndexKey: match index is stable
-            key={i}
-            href={p.value}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="blue"
-          >
-            {p.value}
-          </a>
-        ),
-      )}
-    </>
   );
 }
