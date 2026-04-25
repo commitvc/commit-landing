@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Firework } from '@/components/firework/Firework';
+import { Linkify } from '@/components/linkify/Linkify';
 import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
 import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';
@@ -134,7 +135,16 @@ function renderFileAs(path: string, slug: string, content: string): ReactNode {
   if (/\/blog\//.test(path) && path.endsWith('.txt')) {
     return <BlogCard slug={slug} file={content} />;
   }
-  return <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{content}</pre>;
+  // Fallback for plain-text files (about/readme.txt, about/projects.txt,
+  // about/contact.txt, team/advisors/advisors.txt, …). Match the file-tree
+  // preview by running the body through <Linkify/> so emails and URLs are
+  // clickable here too — same content shouldn't render different links
+  // depending on whether the user `cat`-s it or clicks it in the sidebar.
+  return (
+    <div style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
+      <Linkify text={content} />
+    </div>
+  );
 }
 
 const ls: Command = {
