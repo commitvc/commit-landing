@@ -1,0 +1,24 @@
+/* Mirrors the inline viewer styling used by FileTree (see
+   components/file-tree/FileTree.module.css) so a clicked-from-tree readme
+   and a directly-deep-linked readme present the same way. */
+
+.viewer {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(192, 202, 245, 0.2);
+}
+
+.header {
+  color: var(--fg-muted-hover);
+  margin: 0.5rem 0 0.75rem 0;
+}
+
+.body {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 720px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  font-family: inherit;
+}

@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import { FileTree } from '@/components/file-tree/FileTree';
-import { buildFileSystem, type FsDir } from '@/lib/filesystem';
 import { breadcrumbJsonLd } from '@/lib/structured-data';
 
 export const metadata: Metadata = {
@@ -66,9 +64,11 @@ const aboutBreadcrumb = breadcrumbJsonLd([
   { name: 'About', url: '/about/' },
 ]);
 
+/** The file tree is rendered by [app/(chrome)/(tabs)/about/layout.tsx] so it
+ *  stays mounted as the user navigates between /about/readme/, /about/projects/,
+ *  and /about/contact/. This page only injects listing-specific JSON-LD + a
+ *  hidden semantic block for AI crawlers; both stop firing on detail routes. */
 export default function AboutPage() {
-  const fs = buildFileSystem([]);
-  const about = fs.contents.about as FsDir;
   return (
     <>
       <script
@@ -98,7 +98,6 @@ export default function AboutPage() {
           ))}
         </dl>
       </section>
-      <FileTree root={about} basePath="/about" />
     </>
   );
 }
