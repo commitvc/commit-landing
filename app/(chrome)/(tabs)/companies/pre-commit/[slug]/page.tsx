@@ -1,6 +1,6 @@
 import { CompanyCard } from '@/components/cards/CompanyCard';
 import { COMPANIES } from '@/lib/companies';
-import { breadcrumbJsonLd } from '@/lib/structured-data';
+import { SITE_URL, breadcrumbJsonLd } from '@/lib/structured-data';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -19,9 +19,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const company = PRE_COMMIT.find((c) => c.slug === slug);
   if (!company) return {};
   const title = `${company.company} — ${company.oneLiner}`;
+  // Prefer the SERP-friendly short version; fall back to the long `about`
+  // (Google will mid-sentence-truncate, but it's still shippable).
   const description =
-    company.about ?? `${company.company}: ${company.oneLiner}. Portfolio at >commit.`;
-  const url = `https://commit.fund/companies/pre-commit/${slug}/`;
+    company.seoDescription ??
+    company.about ??
+    `${company.company}: ${company.oneLiner}. Portfolio at >commit.`;
+  const url = `${SITE_URL}/companies/pre-commit/${slug}/`;
   return {
     title,
     description,
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title,
       description,
       url,
-      images: [`https://commit.fund${company.avatar}`],
+      images: [`${SITE_URL}${company.avatar}`],
     },
   };
 }
@@ -50,8 +54,8 @@ export default async function PreCommitCompanyPage({ params }: Params) {
     '@type': 'Organization',
     name: company.company,
     description: company.about ?? company.oneLiner,
-    url: `https://commit.fund/companies/pre-commit/${slug}/`,
-    logo: `https://commit.fund${company.avatar}`,
+    url: `${SITE_URL}/companies/pre-commit/${slug}/`,
+    logo: `${SITE_URL}${company.avatar}`,
     ...(sameAs.length ? { sameAs } : {}),
     ...(company.founders?.length
       ? {

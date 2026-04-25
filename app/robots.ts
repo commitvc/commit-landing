@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/structured-data';
 import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
@@ -51,6 +52,6 @@ export default function robots(): MetadataRoute.Robots {
       ...AI_BOTS.map((userAgent) => ({ userAgent, allow: '/' })),
       { userAgent: '*', allow: '/' },
     ],
-    sitemap: 'https://commit.fund/sitemap.xml',
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
