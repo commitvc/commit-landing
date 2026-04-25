@@ -1,12 +1,13 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { CompanyCard } from '@/components/cards/CompanyCard';
+import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Firework } from '@/components/firework/Firework';
 import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
 import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';
 import { decrypt } from './tea';
+import { TEAM } from './team';
 
 export type CommandContext = {
   fs: FsDir;
@@ -43,66 +44,19 @@ function Blue({ children, href }: { children: ReactNode; href: string }) {
   );
 }
 
-function parseKeyedText(text: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  let lastKey: string | null = null;
-  for (const raw of text.split('\n')) {
-    const line = raw.trim();
-    const idx = line.indexOf(':');
-    if (idx > 0 && idx < 30) {
-      const key = line.slice(0, idx).trim();
-      const value = line.slice(idx + 1).trim();
-      out[key] = value;
-      lastKey = key;
-    } else if (lastKey && line) {
-      out[lastKey] = `${out[lastKey]}\n${line}`;
-    }
-  }
-  return out;
-}
-
+/** Team members and companies are rendered by looking them up by slug and
+ *  delegating to the shared ProfileCard / CompanyCard components — same ones
+ *  used by the file-tree viewer, so `cat team/x.txt` / `cat companies/x.txt`
+ *  and the tree preview stay in sync. */
 function TeamProfileCard({ file }: { file: string }) {
-  const p = parseKeyedText(file);
-  const avatar = p.Avatar ? `/${p.Avatar.replace(/^\//, '')}` : undefined;
-  return (
-    <div className="terminal-profile">
-      {avatar ? (
-        <div className="terminal-profile-image">
-          <Image src={avatar} alt={`${p.Name ?? ''}'s portrait`} width={96} height={96} />
-        </div>
-      ) : null}
-      <div className="terminal-profile-data">
-        <span className="terminal-rule" />
-        <p>
-          <Yellow>
-            {p.Name}, {p.Role}
-          </Yellow>
-        </p>
-        <p>
-          <Yellow>{p.Location}</Yellow>
-        </p>
-        {p.Github ? (
-          <p>
-            <Blue href={p.Github}>{p.Github}</Blue>
-          </p>
-        ) : null}
-        {p.LinkedIn ? (
-          <p>
-            <Blue href={p.LinkedIn}>{p.LinkedIn}</Blue>
-          </p>
-        ) : null}
-        <span className="terminal-rule" />
-      </div>
-    </div>
-  );
+  const slug = file.match(/^slug:(.+)$/)?.[1]?.trim();
+  const member = slug ? TEAM.find((m) => m.slug === slug) : undefined;
+  if (!member) return null;
+  return <ProfileCard member={member} />;
 }
 
-/** Companies are rendered by looking them up in COMPANIES by slug and
- *  delegating to CompanyCard — same component used by the file-tree viewer,
- *  so the CLI's `cat companies/x.txt` and the tree preview stay in sync. */
 function CompanyProfileCard({ file }: { file: string }) {
-  const match = file.match(/^slug:(.+)$/);
-  const slug = match?.[1]?.trim();
+  const slug = file.match(/^slug:(.+)$/)?.[1]?.trim();
   const company = slug ? COMPANIES.find((c) => c.slug === slug) : undefined;
   if (!company) return null;
   return <CompanyCard company={company} />;

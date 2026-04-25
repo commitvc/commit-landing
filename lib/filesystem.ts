@@ -6,21 +6,16 @@ export type FsFile = { type: 'file'; content: string };
 export type FsDir = { type: 'directory'; contents: Record<string, FsNode> };
 export type FsNode = FsFile | FsDir;
 
+/** The file body is just the slug; the card is looked up against TEAM /
+ *  COMPANIES and rendered by the shared ProfileCard / CompanyCard components
+ *  in both the CLI's `cat` and the file-tree viewer. Keeps one source of
+ *  truth for the data — when ProfileCard adds new fields (tagline, focus,
+ *  description, etc.), the CLI picks them up automatically instead of
+ *  rendering a stale subset of a key:value text dump. */
 function fileContentsFromMember(m: (typeof TEAM)[number]): string {
-  const lines: string[] = [
-    `Name: ${m.name}`,
-    `Role: ${m.role}`,
-    `Location: ${m.location}`,
-    `Github: ${m.github}`,
-  ];
-  if (m.linkedin) lines.push(`LinkedIn: ${m.linkedin}`);
-  lines.push(`Avatar: ${m.avatar.replace(/^\//, '')}`);
-  return lines.join('\n');
+  return `slug:${m.slug}`;
 }
 
-/** The file body is just the slug; the card is looked up against COMPANIES
- *  and rendered by the CompanyCard component in both the CLI's `cat` and the
- *  file-tree viewer. Keeps one source of truth for the data. */
 function fileContentsFromCompany(c: (typeof COMPANIES)[number]): string {
   return `slug:${c.slug}`;
 }
