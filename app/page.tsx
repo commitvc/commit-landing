@@ -51,6 +51,10 @@ export default function HomePage() {
           <strong>Abel Samot</strong> (Partner), and <strong>Alessandro Ciffo</strong> (Tech Lead).
         </p>
         <p>
+          Active Fund I commitments to date: 3 — one announced (UMA — humanoid robotics), two
+          stealth (disclosure pending).
+        </p>
+        <p>
           Reach out at <a href="mailto:hey@commit.fund">hey@commit.fund</a>. Browse the full site at{' '}
           <a href="/about/">/about</a>, the portfolio at <a href="/companies/">/companies</a>,
           essays at <a href="/blog/">/blog</a>, and the team at <a href="/team/">/team</a>.

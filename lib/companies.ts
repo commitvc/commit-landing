@@ -64,6 +64,13 @@ export type Company = {
   /** The # about paragraph — describes what the company does. */
   about?: string;
 
+  /** Short, SERP/social-friendly version (~120-140 chars) used as `<meta
+   *  name="description">` and `og:description` on the company-detail page.
+   *  Falls back to `about` if absent — but `about` is typically 250-400
+   *  chars and gets mid-sentence-truncated by Google. Keep this tight,
+   *  factual, with the >commit relationship as a brief tag at the end. */
+  seoDescription?: string;
+
   /** The per-company ending of the intro paragraph, continuing
    *  "We're grateful to {names} for showing us …".
    *  Only set on pre-commit companies. */
@@ -71,6 +78,12 @@ export type Company = {
 
   /** Rendered as "(acq. Elastic)" next to the company name. */
   acquiredBy?: string;
+
+  /** Stealth investments. When `true`, the CompanyCard renders a single
+   *  `<filename>: Permission denied` line instead of the normal layout, the
+   *  page emits no Organization JSON-LD (we don't index a teaser as a real
+   *  entity), and the file shows muted in the file tree. */
+  stealth?: boolean;
 };
 
 export const COMPANIES: readonly Company[] = [
@@ -96,6 +109,8 @@ export const COMPANIES: readonly Company[] = [
     license: 'Apache-2.0',
     about:
       'Mastra is an opinionated TypeScript framework for building agents, workflows, RAG pipelines, and evals. It ships the primitives (memory, tools, tracing, voice) under a single API so teams can go from a notebook prototype to a production agent without reassembling the stack each time.',
+    seoDescription:
+      'TypeScript framework for AI agents, workflows, RAG, and evals. Backed by the >commit team before the fund.',
     thankInsight:
       'how an opinionated framework can define a category before it fully exists, and the power of building community conviction through great writing.',
   },
@@ -121,6 +136,8 @@ export const COMPANIES: readonly Company[] = [
     license: 'AGPL-3.0',
     about:
       'Twenty is an open-source CRM platform: a developer-first extensibility toolkit for composing customer and internal apps without vendor lock-in. It ships production-grade building blocks (data model, permissions, workflows, authentication), runs locally like normal software, and is AI-native via an MCP server so agents can iterate on the schema, layouts, and automation directly.',
+    seoDescription:
+      'Open-source CRM platform — developer-first, AI-native via MCP. Backed by the >commit team before the fund.',
     thankInsight:
       'how open source can redefine entire business-application categories by turning developer ergonomics and community momentum into a distribution engine.',
   },
@@ -141,6 +158,8 @@ export const COMPANIES: readonly Company[] = [
     firstCommit: '2024-08-10',
     about:
       'Better Auth is a framework-agnostic TypeScript authentication library that lives inside your app rather than behind a vendor API. It ships session management, social sign-on, two-factor, and organizations out of the box, and a plugin system that lets teams extend the auth layer instead of outgrowing it.',
+    seoDescription:
+      'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Backed by the >commit team before the fund.',
     thankInsight:
       'how to reimagine a crowded, vendor-dominated category by giving developers full ownership again — and that open source knows no borders.',
   },
@@ -164,6 +183,8 @@ export const COMPANIES: readonly Company[] = [
     license: 'FSL-1.1-ALv2',
     about:
       'Sourcebot is a self-hosted code understanding platform. It indexes every repository in an organization, answers natural-language questions across them, and powers AI-assisted search so teams can navigate large, multi-service codebases without rebuilding context every time.',
+    seoDescription:
+      'Self-hosted code understanding platform. Indexes every repo, answers natural-language questions across them. Backed by the >commit team before the fund.',
     thankInsight:
       'that code search and intelligence, built openly, can become essential infrastructure for the next generation of developer platforms.',
   },
@@ -189,6 +210,8 @@ export const COMPANIES: readonly Company[] = [
     language: 'Python',
     about:
       'pyannote turns real-world audio into structured, programmable intelligence — speaker diarization, voice identification, overlap detection, and real-time streaming — delivered through developer APIs and built on the widely-used pyannote.audio open-source toolkit.',
+    seoDescription:
+      'Speaker intelligence APIs — diarization, voice ID, real-time streaming. Built on pyannote.audio. Backed by the >commit team before the fund.',
     thankInsight:
       'that the most impactful open-source projects are often invisible to the end user, quietly powering entire ecosystems of voice and audio intelligence.',
   },
@@ -213,6 +236,8 @@ export const COMPANIES: readonly Company[] = [
     license: 'AGPL-3.0',
     about:
       'Pangolin is an identity-aware remote-access hub built for IT/OT, IoT, and engineering: a self-hosted reverse proxy and tunneled VPN that gives users secure, SSO-backed access to applications and infrastructure, with context-aware rules and a unified control plane.',
+    seoDescription:
+      'Identity-aware remote-access hub for IT/OT and IoT. Self-hosted reverse proxy + tunneled VPN. Backed by the >commit team before the fund.',
     thankInsight:
       'the remarkable scale of demand for open, self-hosted networking infrastructure that is privacy-first by design and not by marketing.',
   },
@@ -231,6 +256,8 @@ export const COMPANIES: readonly Company[] = [
     firstCommit: '2025-05-02',
     about:
       'White Circle is a control layer for AI applications — stress-testing models for jailbreaks and hallucinations, enforcing low-latency safeguards at runtime, and auto-patching vulnerabilities — so teams can ship LLM features with confidence.',
+    seoDescription:
+      'Control layer for AI applications — jailbreak and hallucination tests, runtime safeguards, auto-patching. Backed by the >commit team before the fund.',
     thankInsight:
       'how critical it is to observe and guardrail AI systems in the age of LLMs — and that community-driven benchmarks can define the standard.',
   },
@@ -253,8 +280,16 @@ export const COMPANIES: readonly Company[] = [
     acquiredBy: 'Elastic',
     firstCommit: '2023-02-04',
     license: 'MIT',
+    // `acquiredBy` skips the live api.github.com fetch (CompanyCard treats
+    // it as the lifecycle signal that live stars/forks/contributors are
+    // misleading). Without the fetch, `language` falls through to whatever
+    // is set here — bake the value GitHub reported when the project was
+    // active. Same pattern for graphcore below.
+    language: 'Python',
     about:
       'Keep is an open-source AIOps platform — a Swiss-knife for managing alerts and events at scale. It correlates noisy signals from monitoring tools, runs automated workflows across them, and ships with AI-powered deduplication so on-call teams see fewer pages and more signal.',
+    seoDescription:
+      'Open-source AIOps platform. Correlates alerts, automates workflows, AI-powered dedup. Acquired by Elastic. Backed by the >commit team before the fund.',
     thankInsight:
       'that even in a commoditized space, an MIT-licensed, community-rooted platform can monetize by solving real developer problems — and become a powerful path to acquisition.',
   },
@@ -276,6 +311,8 @@ export const COMPANIES: readonly Company[] = [
     license: 'MIT',
     about:
       'PandasAI makes data analysis conversational. It lets teams chat with SQL databases, datalakes, and local files (CSV, Parquet) using LLMs and RAG, delivering business-intelligence answers without writing SQL or Python.',
+    seoDescription:
+      'Conversational data analysis — chat with SQL, datalakes, and CSV/Parquet using LLMs and RAG. Backed by the >commit team before the fund.',
     thankInsight:
       'the compounding power of bringing AI capabilities to the libraries developers already live inside, turning existing ecosystems into launchpads for entirely new workflows.',
   },
@@ -296,10 +333,33 @@ export const COMPANIES: readonly Company[] = [
     ],
     acquiredBy: 'SoftBank',
     firstCommit: '2020-02-17',
+    license: 'MIT',
+    language: 'C++',
     about:
       'Graphcore builds Intelligence Processing Units (IPUs) — a new class of silicon purpose-built for machine intelligence — alongside an open toolchain that lets developers run PyTorch, TensorFlow, and custom models on IPU-accelerated infrastructure in the cloud.',
+    seoDescription:
+      'Intelligence Processing Units for machine intelligence. Open toolchain for PyTorch and TensorFlow. Acquired by SoftBank. Backed by Olivier before >commit.',
     thankInsight:
       'that in AI infrastructure, the openness of the toolchain and the strength of the developer community matter as much as the hardware itself.',
+  },
+  {
+    // Stealth Fund I investment — file teases the domain, identity disclosed
+    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
+    // no Organization JSON-LD is emitted for stealth slugs.
+    slug: 'inference',
+    company: 'Stealth',
+    oneLiner: 'AI inference stack',
+    folder: 'active',
+    avatar: '', // unused for stealth
+    stealth: true,
+  },
+  {
+    slug: 'specs',
+    company: 'Stealth',
+    oneLiner: 'Specifications framework',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
   },
   {
     slug: 'uma',
@@ -319,6 +379,8 @@ export const COMPANIES: readonly Company[] = [
     ],
     about:
       'UMA builds humanoid robots that combine human-level dexterity with a deep understanding of the physical world. The team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with decades of humanoid-robotics hardware experience to ship general-purpose machines that can take on everyday physical tasks.',
+    seoDescription:
+      'Humanoid robots with human-level dexterity. Team from DeepMind, Tesla Autopilot, and HuggingFace. >commit Fund I.',
   },
 ] as const;
 

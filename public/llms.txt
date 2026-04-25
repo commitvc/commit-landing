@@ -20,6 +20,8 @@
 ## Portfolio (>commit Fund I)
 
 - [UMA](https://commit.fund/companies/uma/): Humanoid robots with human-level dexterity. Team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with humanoid-robotics hardware experience.
+- [Stealth — AI inference stack](https://commit.fund/companies/inference/): Stealth Fund I investment. Identity disclosed at launch.
+- [Stealth — Specifications framework](https://commit.fund/companies/specs/): Stealth Fund I investment. Identity disclosed at launch.
 
 ## Pre-commit (companies the team backed before the fund)
 
@@ -55,6 +57,7 @@
 - Geography: Europe and the US
 - Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Alessandro Ciffo (Tech Lead)
 - Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
+- Active Fund I commitments: 3 (1 announced — UMA; 2 stealth — disclosure pending)
 - Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure
 
 ## Contact

@@ -11,7 +11,15 @@ export type TeamMember = {
   twitter?: string;
   website?: string;
   avatar: string;
+  /** Long-form bio — rendered in the page body and the Person JSON-LD's
+   *  `description`. Often 400-600 chars; can include hobbies + life context. */
   description?: string;
+  /** Short, SERP/social-friendly (~120 chars) — used as `<meta name=
+   *  "description">` and `og:description` on the team-detail page. Falls
+   *  back to `description` if absent, but `description` is too long for
+   *  SERPs and gets mid-sentence-truncated by Google. Keep this tight,
+   *  punchy, credibility-first; no hobbies. */
+  seoDescription?: string;
 };
 
 export const TEAM: readonly TeamMember[] = [
@@ -25,9 +33,11 @@ export const TEAM: readonly TeamMember[] = [
     github: 'https://github.com/abelsamot',
     linkedin: 'https://www.linkedin.com/in/abel-samot/',
     twitter: 'https://x.com/abel_samot',
-    avatar: '/team/abel.png',
+    avatar: '/team/Abel.png',
     description:
       "Abel is part of >commit's founding team. He started as an AI engineer in insurance, joined Red River West, grew into Head of Data, and built RAMP, the firm's sourcing brain, more or less from scratch. ISEP engineer in Business Intelligence with a Master's from ESSEC. Music lover, family cook, and DIY enthusiast.",
+    seoDescription:
+      "Partner at >commit. Built RAMP — Red River West's open-source sourcing brain — from scratch. ISEP engineer; ESSEC Master's.",
   },
   {
     slug: 'olivier',
@@ -42,6 +52,8 @@ export const TEAM: readonly TeamMember[] = [
     avatar: '/team/olivier.png',
     description:
       "Olivier is part of >commit's founding team. Spent a decade at Orange Labs before crossing to venture, where he co-founded C4 Ventures and backed companies like Graphcore, Riskified and Via (the last two IPO'd on NYSE). Engineer with a CIMA detour that still confuses people. French and British, with stops in South Africa, DC and London along the way. Used to play saxophone in a jazz band; the saxophone hasn't seen him in a while. Black belt in Judo, patisserie lover, and world traveler.",
+    seoDescription:
+      "Partner at >commit. Co-founded C4 Ventures; backed Graphcore, Riskified, and Via — the last two IPO'd on NYSE.",
   },
   {
     slug: 'max',
@@ -57,6 +69,8 @@ export const TEAM: readonly TeamMember[] = [
     avatar: '/team/max.png',
     description:
       "Max is part of >commit's founding team, after years on both sides of the table. He started Symolia, then Dashblock, a browser agent he took through Y Combinator (S19), before joining the VC world to back OSS and infra founders between Europe and the US. Graduated in civil engineering, though tech had him hooked long before the diploma did. He's lived in Brazil, the US, Hungary, and France. Climbs and plays handpan in theory. In practice, survives three kids.",
+    seoDescription:
+      'Partner at >commit. Founded Dashblock (Y Combinator S19, browser agents). Backs open-source and infrastructure founders.',
   },
   {
     slug: 'alessandro',
@@ -71,6 +85,8 @@ export const TEAM: readonly TeamMember[] = [
     avatar: '/team/alessandro.png',
     description:
       "Alessandro leads tech at >commit, building the data and AI tools behind the fund data pillar. Started in research at Bocconi's data-science lab, detoured through Amazon and co-founded Casify, an ML platform for Italian real-estate investors. Thesis on proteins for reasons that made sense at the time. Italian in Paris. Produces music, reads, and does calisthenics, in that order of priority. Bouldering and running semi marathons on the side.",
+    seoDescription:
+      'Tech lead at >commit. Builds the data and AI platform behind the fund. Bocconi research, ex-Amazon, co-founded Casify.',
   },
 ] as const;
 

@@ -172,3 +172,19 @@
     grid-template-columns: 7ch 1fr;
   }
 }
+
+/* Stealth card — one terminal-style line. The filename inherits the
+   regular `--fg` colour so it reads as the subject; the rest of the line
+   uses the muted-hover so it reads as a system message, not body copy. */
+.stealthCard {
+  padding: 0.5rem 0 1.5rem;
+}
+
+.stealthLine {
+  margin: 0;
+  color: var(--fg-muted-hover);
+}
+
+.stealthFile {
+  color: var(--fg);
+}
