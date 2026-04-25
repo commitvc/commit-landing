@@ -1,0 +1,4 @@
+# Default reviewers for everything in the repo. With branch protection set to
+# require 1 approval, ANY of these users can satisfy the review — useful so
+# nobody is a single point of failure when one of them is unavailable.
+*  @mxcrbn @abelsamot @olivierhuez @alessandro-ciffo

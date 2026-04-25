@@ -1,0 +1,74 @@
+version: 2
+
+updates:
+  # ── npm dependencies ─────────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 5
+    # Group routine updates into one PR per ecosystem-family to cut review
+    # noise. Major bumps stay separate (Dependabot still opens individual
+    # PRs for them) so they get the scrutiny they deserve.
+    groups:
+      types:
+        patterns:
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
+      next:
+        patterns:
+          - "next"
+          - "@next/*"
+          - "eslint-config-next"
+        update-types:
+          - "minor"
+          - "patch"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+        update-types:
+          - "minor"
+          - "patch"
+      mdx:
+        patterns:
+          - "@mdx-js/*"
+          - "@next/mdx"
+          - "remark*"
+          - "rehype*"
+          - "gray-matter"
+        update-types:
+          - "minor"
+          - "patch"
+      tooling:
+        patterns:
+          - "@biomejs/*"
+          - "typescript"
+          - "@playwright/*"
+          - "playwright*"
+          - "posthog-js"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # ── GitHub Actions ───────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"

@@ -59,17 +59,17 @@
 
 ### Content & Features
 - [ ] Add a manifesto
-- [ ] Write a GitHub README for the repo
+- [x] Write a GitHub README for the repo — done; `README.md` at repo root
 - [ ] Improve advisor tab (logos grid, tiered view) — details TBD
-- [ ] Add OSS data to portcos (GitHub stars, community metrics, etc.) — source TBD: live GitHub API vs internal data platform
-- [ ] Fix newsletter subscription and reactivate the email command
-- [ ] Update OG meta details (title, description, image)
-- [ ] Migrate PostHog to aggregated account (currently on ad-hoc account)
+- [x] Add OSS data to portcos (GitHub stars, community metrics, etc.) — done; `CompanyCard`'s `# project` block surfaces license, language, first commit, stars, contributors, and NPM/PYPI/Docker/GHCR pulls
+- [ ] Fix newsletter subscription and reactivate the email command — partial; `email` CLI command exists (`mailto:hey@commit.fund`); no newsletter signup form
+- [x] Update OG meta details (title, description, image) — done; root `app/layout.tsx` `openGraph` + per-route `metadata` exports
+- [x] Migrate PostHog to aggregated account (currently on ad-hoc account) — shipped (tracked outside this repo)
 
 ### UI / Polish
-- [ ] Mobile layout — full responsive pass (tab bar behavior, spacing)
-- [ ] Content margins: equalise left/right margins between shrunk and unshrunk navbar states
-- [ ] Active tab indicator: sliding red→gray dash underline with 0.3s animation (Option C collapse — neofetch collapses only on first tab click)
+- [x] Mobile layout — full responsive pass (tab bar behavior, spacing) — shipped piecemeal: mobile-only `WelcomeHeader` branch, NavBar overflow-x scroller with mobile mask, CompactHeader rendering
+- [~] ~~Content margins: equalise left/right margins between shrunk and unshrunk navbar states~~ — obsolete; route-based architecture replaced the shrunk/unshrunk navbar concept (separate `WelcomeHeader` and `CompactHeader` components, no shrunk state)
+- [~] ~~Active tab indicator: sliding red→gray dash underline with 0.3s animation (Option C collapse — neofetch collapses only on first tab click)~~ — partly shipped (sliding indicator with cubic-bezier transition is live), partly obsolete (Option C neofetch-collapse-on-first-click died with the route-based architecture)
 
 ### Superseded
 - [~] ~~ASCII box: add spaces around `+` corner symbols for equal horizontal & vertical spacing~~ — obsolete; the ASCII box is removed entirely by `terminal-chrome-polish`
