@@ -1,8 +1,16 @@
 'use client';
 
+import { useChrome } from '@/app/(chrome)/ChromeShell';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import styles from './NavBar.module.css';
 import { TABS, type TabId, activeTabFromPathname } from './tabs';
 
@@ -14,6 +22,12 @@ const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayout
 export function NavBar() {
   const pathname = usePathname() ?? '/';
   const active: TabId | null = activeTabFromPathname(pathname);
+  // Single source of truth for "did anything on this page scroll yet" — both
+  // LandingShell and ChromeShell publish into this context. The CSS reads
+  // `var(--dash-opacity)` and we set it on the outer container element here,
+  // so the dash-line visibility rule lives entirely inside this component.
+  const { scrolled } = useChrome();
+  const containerStyle = { ['--dash-opacity' as string]: scrolled ? 1 : 0 } as CSSProperties;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Partial<Record<TabId, HTMLAnchorElement | null>>>({});
@@ -61,12 +75,10 @@ export function NavBar() {
   }, [measure]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={containerStyle}>
       {/* Inner scroller for narrow viewports — keeps the dash line above
           (rendered as the outer container's ::after) outside the overflow
-          clipping context so it spans edge-to-edge regardless of width.
-          The active-tab indicator lives inside the scroller so it tracks
-          its tab when the nav scrolls horizontally. */}
+          clipping context so it spans edge-to-edge regardless of width. */}
       <div ref={containerRef} className={styles.scroller}>
         <nav className={styles.nav} aria-label="Primary">
           {TABS.map((tab) => {
@@ -86,14 +98,18 @@ export function NavBar() {
             );
           })}
         </nav>
-        {rect ? (
-          <span
-            aria-hidden
-            className={styles.indicator}
-            style={{ left: `${rect.left}px`, width: `${rect.width}px` }}
-          />
-        ) : null}
       </div>
+      {/* Indicator is a sibling of the scroller, inside the outer container,
+          so the mobile mask-image on .scroller doesn't fade it when the
+          active tab sits at the right edge (e.g. "About" on a phone).
+          Position is computed against the scroller's rect — see measure(). */}
+      {rect ? (
+        <span
+          aria-hidden
+          className={styles.indicator}
+          style={{ left: `${rect.left}px`, width: `${rect.width}px` }}
+        />
+      ) : null}
     </div>
   );
 }

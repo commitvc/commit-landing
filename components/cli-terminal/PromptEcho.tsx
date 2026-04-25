@@ -5,7 +5,7 @@ export function PromptEcho({ cwd, line }: { cwd: string; line: string }) {
   return (
     <div className={styles.promptLine}>
       <span className={styles.prompt}>user@commit.fund</span>
-      {path ? <span>:{path}</span> : null}
+      {path ? <span>{path}</span> : null}
       <span className={styles.promptSeparator}>&gt;</span>
       <span>{line}</span>
     </div>

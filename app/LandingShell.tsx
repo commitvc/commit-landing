@@ -1,25 +1,33 @@
 'use client';
 
+import { ChromeProvider, useChrome } from '@/app/(chrome)/ChromeShell';
 import { useCliState } from '@/components/cli-terminal/CliStateContext';
 import { CliTerminal } from '@/components/cli-terminal/CliTerminal';
 import { CompactHeader } from '@/components/compact-header/CompactHeader';
 import { WelcomeHeader } from '@/components/welcome-header/WelcomeHeader';
 import type { FsDir } from '@/lib/filesystem';
-import type { CSSProperties } from 'react';
 import { useCallback, useState } from 'react';
 
 type Props = { fs: FsDir };
 
 /**
  * Landing (`/`) shell: welcome animation header + the CLI scroll zone.
- * Uses `display: contents` on the wrapper so the `--dash-opacity` CSS var
- * reaches both the NavBar (inside WelcomeHeader) and any other consumer,
- * without introducing an extra layout box.
+ * Wraps children in the same `ChromeProvider` as the (chrome) layout so
+ * NavBar reads scroll state from a single context regardless of whether
+ * the page is the landing or a tab page.
  */
 export function LandingShell({ fs }: Props) {
+  return (
+    <ChromeProvider>
+      <LandingBody fs={fs} />
+    </ChromeProvider>
+  );
+}
+
+function LandingBody({ fs }: Props) {
   const { headerSwapped, landingNonce } = useCliState();
+  const { setScrolled } = useChrome();
   const [ready, setReady] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   // Reset `ready` when the user clicks the logo from an already-mounted
   // landing (same-route click doesn't remount this shell, so the boot would
   // otherwise stay skipped). Set-state-during-render keeps the commit in a
@@ -31,12 +39,6 @@ export function LandingShell({ fs }: Props) {
   }
 
   const onReady = useCallback(() => setReady(true), []);
-  const onScrolledChange = useCallback((s: boolean) => setScrolled(s), []);
-
-  const style = {
-    display: 'contents',
-    ['--dash-opacity' as string]: scrolled ? 1 : 0,
-  } as CSSProperties;
 
   // Default on `/` is the animated welcome header; the `header` command
   // swaps to the compact one. When switching back to welcome after the
@@ -48,13 +50,13 @@ export function LandingShell({ fs }: Props) {
   const showCli = showCompact || ready;
 
   return (
-    <div style={style}>
+    <>
       {showCompact ? (
         <CompactHeader />
       ) : (
         <WelcomeHeader key={landingNonce} onReady={onReady} skipBoot={ready} />
       )}
-      {showCli ? <CliTerminal fs={fs} onScrolledChange={onScrolledChange} /> : null}
-    </div>
+      {showCli ? <CliTerminal fs={fs} onScrolledChange={setScrolled} /> : null}
+    </>
   );
 }
