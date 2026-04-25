@@ -1,1 +1,15 @@
 .DS_Store
+.claude/worktrees/
+.claude/settings.local.json
+
+# Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env*.local

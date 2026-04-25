@@ -1,0 +1,32 @@
+.header {
+  flex: 0 0 auto;
+  /* Top padding leaves room for the RRW button (top: 20px); the logo's
+     negative margin-top (.logo) pulls the underscore row up to align with
+     the button's top edge. */
+  padding-top: 20px;
+  animation: headerIn 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.logo {
+  /* The first line of the ASCII art is `_ _`, so the visible glyphs sit
+     ~10px below the em-box top (underscore stroke near the baseline).
+     Pull the logo up so those underscores line up with the RRW button top. */
+  margin-top: -10px;
+}
+
+@keyframes headerIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    animation: none;
+  }
+}

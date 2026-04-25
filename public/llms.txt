@@ -1,0 +1,67 @@
+# >commit
+
+> Early-stage venture fund (part of Red River West) backing commercial open-source startups at pre-seed and seed across Europe and the US. Also known as: commit fund, commit VC.
+
+## About
+
+- [About >commit](https://commit.fund/about/): The fund's thesis on commercial open source, stage and check-size focus, decision process, and how it sits inside Red River West.
+- [Companies overview](https://commit.fund/companies/): Index of >commit's current portfolio plus the commercial open-source companies the team backed before the fund.
+- [Blog](https://commit.fund/blog/): Essays from the >commit team on commercial open source, AI infrastructure, licensing, and European tech sovereignty.
+- [Team overview](https://commit.fund/team/): The four people behind >commit — three partners and a tech lead.
+- [CLI](https://commit.fund/cli/): The site as an interactive shell — `>commit help` lists every command. Same content as the rest of the site, different surface.
+
+## Team
+
+- [Olivier Huez — Partner](https://commit.fund/team/olivier/): Co-founded C4 Ventures; backed Graphcore, Riskified, and Via (the latter two IPO'd on NYSE). Decade at Orange Labs before venture. French and British.
+- [Max Corbani — Partner](https://commit.fund/team/max/): Founded Symolia and Dashblock (Y Combinator S19, browser agent). Then VC backing OSS and infrastructure founders between Europe and the US.
+- [Abel Samot — Partner](https://commit.fund/team/abel/): Built RAMP, Red River West's sourcing/data brain, more or less from scratch. AI engineer background; ISEP + ESSEC.
+- [Alessandro Ciffo — Tech Lead](https://commit.fund/team/alessandro/): Builds the data and AI tools behind the fund's data pillar. Bocconi data-science research, then Amazon, then co-founded Casify (ML for Italian real-estate investors).
+
+## Portfolio (>commit Fund I)
+
+- [UMA](https://commit.fund/companies/uma/): Humanoid robots with human-level dexterity. Team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with humanoid-robotics hardware experience.
+
+## Pre-commit (companies the team backed before the fund)
+
+- [Mastra](https://commit.fund/companies/pre-commit/mastra/): Opinionated TypeScript framework for building AI agents, workflows, RAG pipelines, and evals. Ships memory, tools, tracing, and voice under one API. Founders: Sam Bhagwat, Shane Thomas, Abhi Aiyer.
+- [Twenty](https://commit.fund/companies/pre-commit/twenty/): Open-source CRM platform — a developer-first toolkit for composing customer apps without vendor lock-in. AI-native via an MCP server.
+- [Better Auth](https://commit.fund/companies/pre-commit/better-auth/): Framework-agnostic TypeScript authentication library that lives inside your app. Sessions, social sign-on, 2FA, organizations, plus a plugin system.
+- [Sourcebot](https://commit.fund/companies/pre-commit/sourcebot/): Self-hosted code understanding platform. Indexes every repo in an org and answers natural-language questions across them.
+- [pyannote](https://commit.fund/companies/pre-commit/pyannote/): Speaker intelligence APIs — diarization, voice ID, overlap detection, real-time streaming. Built on the widely-used pyannote.audio open-source toolkit.
+- [Pangolin](https://commit.fund/companies/pre-commit/pangolin/): Identity-aware remote-access hub for IT/OT and IoT. Self-hosted reverse proxy plus tunneled VPN with SSO and context-aware rules.
+- [White Circle](https://commit.fund/companies/pre-commit/whitecircle/): Control layer for AI applications — jailbreak/hallucination stress-testing, runtime safeguards, and auto-patching for LLM vulnerabilities.
+- [Keep](https://commit.fund/companies/pre-commit/keep/): Open-source AIOps platform. Correlates alerts across monitoring tools, runs automated workflows, and ships AI-powered deduplication.
+- [PandasAI](https://commit.fund/companies/pre-commit/pandasai/): Conversational data analysis — chat with SQL databases, datalakes, and local CSV/Parquet files using LLMs and RAG.
+- [Graphcore](https://commit.fund/companies/pre-commit/graphcore/): Intelligence Processing Units (IPUs) — silicon purpose-built for machine intelligence — with an open toolchain for PyTorch and TensorFlow.
+
+## Essays
+
+- [Why Does the Next Decade Belong to Open Source?](https://commit.fund/blog/next-decade/): Three forces (monetization parity, the AI race, and sovereignty) why open-source companies will dominate the 2030s the way cloud-native SaaS dominated the 2010s. ~2,600 words.
+- [The Browser Redefined: How AI is Remaking the Web's Front Door](https://commit.fund/blog/browser-redefined/): Generative AI is reshaping the browser market after 20 years of stagnation. Analysis of the new browser stack: engine, UI, agentic AI layer. ~2,800 words. Author: Olivier Huez.
+- [Open Source: Europe's key to digital sovereignty in the AI era](https://commit.fund/blog/europe-sovereignty/): Why open source is Europe's strategic lever to compete in AI against the US and China. Historical precedent and Europe's structural advantages.
+- [Project-Product Fit](https://commit.fund/blog/projet-product-fit/): How commercial open-source companies balance a free, community project against a monetizable product without breaking developer trust.
+- [From Project to Market](https://commit.fund/blog/project-to-market/): A visual framework for turning open-source projects into commercial products. The flywheel between project, community, product, and market.
+- [Putting a Value on Open Source Communities](https://commit.fund/blog/community-value/): A scoring model for OSS community value. Why size alone is misleading and what growth dynamics and engagement reveal instead.
+- [Open Source Software Licenses: How to choose the right one](https://commit.fund/blog/licenses/): Founder's guide to permissive, copyleft, and fair-code licenses. Real cases of companies that hit walls because of license choice.
+- [The Rise of Open-Source Startups in France](https://commit.fund/blog/french-coss/): France launched as many OSS startups in 2020-2023 as in the prior five years. The structural ecosystem reasons.
+
+## Key Facts
+
+- Name: >commit (also: commit, commit fund, commit VC)
+- Type: Early-stage venture capital fund
+- Parent: Part of Red River West
+- Stage focus: Pre-seed and seed
+- Thesis: Commercial open-source startups
+- Geography: Europe and the US
+- Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Alessandro Ciffo (Tech Lead)
+- Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
+- Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure
+
+## Contact
+
+- Website: https://commit.fund
+- Parent firm: https://redriverwest.com
+- LinkedIn: https://linkedin.com/company/red-river-west
+- Crunchbase: https://www.crunchbase.com/organization/red-river-west
+- Max on X: https://x.com/mxcrbn
+- Max on GitHub: https://github.com/mxcrbn

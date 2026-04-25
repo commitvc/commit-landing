@@ -1,0 +1,85 @@
+.header {
+  flex: 0 0 auto;
+  padding-top: 20px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    animation: none;
+  }
+}
+
+.boot {
+  color: var(--fg);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.neofetch {
+  margin-bottom: 1rem;
+}
+
+.neofetchLogo {
+  margin-bottom: 1rem;
+}
+
+.neofetchData {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.neofetchRule {
+  display: block;
+  height: 2px;
+  margin: 0.4rem 0;
+  color: var(--fg-muted);
+  background-image: repeating-linear-gradient(to right, currentColor 0 8px, transparent 8px 10px);
+}
+
+.tagline {
+  margin: 1rem 0;
+}
+
+.neofetchLinks {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 1ch;
+  align-items: baseline;
+  margin: 0;
+}
+
+.neofetchLinks a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.neofetchLinks a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.neofetchLinks a:not(:last-child)::after {
+  content: "·";
+  color: var(--fg-muted);
+  margin-left: 1ch;
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+  text-decoration: none;
+}
