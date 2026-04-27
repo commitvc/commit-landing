@@ -51,7 +51,7 @@ export const TEAM: readonly TeamMember[] = [
     twitter: 'https://x.com/olivierhuez',
     avatar: '/team/olivier.png',
     description:
-      "Olivier is part of >commit's founding team. Spent a decade at Orange  before crossing to venture, where he co-founded C4 Ventures and backed companies like Graphcore, Riskified and Via (the last two IPO'd on NYSE). General Partner at Red River West; Polytechnique Engineer whho grabbed an accountancy degree along the way (confuses people at times). French and British, lived in Pretoria, Washington DC and London, now sharing his time between Geneva and Paris. Plays the saxophone in a band. Black belt in Judo, the dojo hasn't seen him in a while, patisserie lover, and world traveler.",
+      "Olivier is part of >commit's founding team. Spent a decade at Orange and then as CFO of two startups before crossing to venture, where he co-founded C4 Ventures and backed companies like Graphcore, Riskified and Via (the last two IPO'd on NYSE). General Partner at Red River West; Polytechnique Engineer whho grabbed an accountancy degree along the way (confuses people at times). French and British, lived in Pretoria, Washington DC and London, now sharing his time between Geneva and Paris. Plays the saxophone in a band. Black belt in Judo, the dojo hasn't seen him in a while, patisserie lover, and world traveler.",
     seoDescription:
       "Partner at >commit. Co-founded C4 Ventures; backed Graphcore, Riskified, and Via — the last two IPO'd on NYSE.",
   },
