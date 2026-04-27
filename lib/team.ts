@@ -44,7 +44,7 @@ export const TEAM: readonly TeamMember[] = [
     name: 'Olivier Huez',
     role: 'Partner',
     focus: 'Hardware · Cybersecurity · AI',
-    languages: 'C · C++',
+    languages: 'Java · Javascript',
     location: 'Geneva, Switzerland 🇨🇭',
     github: 'https://github.com/olivierhuez',
     linkedin: 'https://www.linkedin.com/in/olivierhuez/',
