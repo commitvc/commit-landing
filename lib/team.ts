@@ -35,7 +35,7 @@ export const TEAM: readonly TeamMember[] = [
     twitter: 'https://x.com/abel_samot',
     avatar: '/team/Abel.png',
     description:
-      "Abel is part of >commit's founding team. He started as an AI engineer in insurance, joined Red River West, grew into Head of Data, and built RAMP, the firm's sourcing brain, more or less from scratch. ISEP engineer in Business Intelligence with a Master's from ESSEC. Music lover, family cook, and DIY enthusiast.",
+      "Abel is a founding partner at >commit. He started coding and building projects at a young age, before becoming an AI engineer deploying deep learning models (BERT, etc.) in large enterprises. He later spent six years at Red River West investing in infrastructure software, while building the data team and the firm's data platform. He holds engineering and business degrees. A music lover, pianist and DJ in his spare time, as well as a cooking and running enthusiast, his passion for new technologies is matched by a deep interest in history.",
     seoDescription:
       "Partner at >commit. Built RAMP — Red River West's open-source sourcing brain — from scratch. ISEP engineer; ESSEC Master's.",
   },
@@ -84,7 +84,7 @@ export const TEAM: readonly TeamMember[] = [
     website: 'https://aleciffo.com',
     avatar: '/team/alessandro.png',
     description:
-      "Alessandro leads tech at >commit, building the data and AI tools behind the fund data pillar. Started in research at Bocconi's data-science lab, detoured through Amazon and co-founded Casify, an ML platform for Italian real-estate investors. Thesis on proteins for reasons that made sense at the time. Italian in Paris. Produces music, reads, and does calisthenics, in that order of priority. Bouldering and running semi marathons on the side.",
+      "Alessandro leads tech at >commit, building the data and AI tools behind the fund data pillar. Started in research at Bocconi's data-science lab, detoured through Amazon and co-founded Casify, an ML platform for Italian real-estate investors. Italian in Paris. Produces music, reads, and does calisthenics. Bouldering and running semi marathons on the side.",
     seoDescription:
       'Tech lead at >commit. Builds the data and AI platform behind the fund. Bocconi research, ex-Amazon, co-founded Casify.',
   },
