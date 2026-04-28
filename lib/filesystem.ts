@@ -42,7 +42,7 @@ function teamDirectory(): FsDir {
       'advisors.txt': {
         type: 'file',
         content:
-          ">commit is supported by a team of advisors who are passionate about open source.<br>They're all founders or executives who built and scaled commercial open source companies, or CTOs and technical leaders at Global 2000 enterprises.<br><br>Examples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.",
+          ">commit is supported by a team of advisors who are passionate about open source.\nThey're all founders or executives who built and scaled commercial open source companies, or CTOs and technical leaders at Global 2000 enterprises.\n\nExamples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.",
       },
     },
   };
