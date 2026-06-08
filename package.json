@@ -16,7 +16,7 @@
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^16.2.6",
-    "@types/mdx": "^2.0.13",
+    "@types/mdx": "^2.0.14",
     "gray-matter": "^4.0.3",
     "next": "^16.2.6",
     "posthog-js": "^1.376.6",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.2",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.0.0",
     "typescript": "^6.0.3"
