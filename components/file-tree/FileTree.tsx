@@ -201,6 +201,12 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
               router.push(route);
               return;
             }
+            // For inline files: if we're currently on a routed page, navigate back
+            // to the base path first so the inline content can render. Without this,
+            // routedSelection blocks inlineContent from showing.
+            if (routedSelection) {
+              router.push(basePath);
+            }
             setLocalSelected(line.fullPath);
           };
           return (
