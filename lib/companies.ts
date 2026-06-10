@@ -362,6 +362,14 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
+    slug: 'training-data',
+    company: 'Stealth',
+    oneLiner: 'Training data infrastructure',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
     slug: 'uma',
     company: 'UMA',
     oneLiner: 'Intelligent robots that enhance quality of life for everyone',
