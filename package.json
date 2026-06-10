@@ -18,7 +18,7 @@
     "@next/mdx": "^16.2.6",
     "@types/mdx": "^2.0.14",
     "gray-matter": "^4.0.3",
-    "next": "^16.2.6",
+    "next": "^16.2.9",
     "posthog-js": "^1.382.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
