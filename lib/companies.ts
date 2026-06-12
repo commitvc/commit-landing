@@ -362,12 +362,28 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
-    slug: 'training-data',
-    company: 'Stealth',
-    oneLiner: 'Training data infrastructure',
+    slug: 'macrodata',
+    company: 'Macrodata Labs',
+    oneLiner: 'Every strong model starts with great data',
     folder: 'active',
-    avatar: '',
-    stealth: true,
+    avatar: '/companies/macrodata.png',
+    website: 'https://macrodata.co',
+    github: 'https://github.com/macrodata-labs/refiner',
+    docs: 'https://macrodata.co/docs',
+    discord: 'https://discord.gg/S8kZtmBR2x',
+    huggingface: 'https://huggingface.co/macrodata',
+    package: 'pypi:macrodata-refiner',
+    stage: 'Pre-seed',
+    location: 'Paris',
+    founders: [
+      { name: 'Guilherme Penedo', short: 'Guilherme' },
+      { name: 'Hynek Kydlíček', short: 'Hynek' },
+    ],
+    firstCommit: '2026-01-12',
+    about:
+      'Macrodata Labs builds training-data infrastructure for physical AI. Its open-source framework, Refiner, turns raw multimodal robotics data (trajectories, camera feeds, audio, language) into high-quality training datasets, running locally for development and scaling to an elastic serverless cloud with a single command. Built by the team behind FineWeb, the largest open LLM pre-training datasets.',
+    seoDescription:
+      'Training data infrastructure for physical AI. Open-source Refiner framework, by the creators of FineWeb. >commit Fund I.',
   },
   {
     slug: 'uma',
