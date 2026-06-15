@@ -362,6 +362,14 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
+    slug: 'agent-mux',
+    company: 'Stealth',
+    oneLiner: 'The Code Editor for AI Agents',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
     slug: 'macrodata',
     company: 'Macrodata Labs',
     oneLiner: 'Every strong model starts with great data',
