@@ -343,25 +343,6 @@ export const COMPANIES: readonly Company[] = [
       'that in AI infrastructure, the openness of the toolchain and the strength of the developer community matter as much as the hardware itself.',
   },
   {
-    // Stealth Fund I investment — file teases the domain, identity disclosed
-    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
-    // no Organization JSON-LD is emitted for stealth slugs.
-    slug: 'inference',
-    company: 'Stealth',
-    oneLiner: 'AI inference stack',
-    folder: 'active',
-    avatar: '', // unused for stealth
-    stealth: true,
-  },
-  {
-    slug: 'specs',
-    company: 'Stealth',
-    oneLiner: 'Specifications framework',
-    folder: 'active',
-    avatar: '',
-    stealth: true,
-  },
-  {
     slug: 'macrodata',
     company: 'Macrodata Labs',
     oneLiner: 'Every strong model starts with great data',
@@ -405,6 +386,25 @@ export const COMPANIES: readonly Company[] = [
       'UMA builds humanoid robots that combine human-level dexterity with a deep understanding of the physical world. The team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with decades of humanoid-robotics hardware experience to ship general-purpose machines that can take on everyday physical tasks.',
     seoDescription:
       'Humanoid robots with human-level dexterity. Team from DeepMind, Tesla Autopilot, and HuggingFace. >commit Fund I.',
+  },
+  {
+    // Stealth Fund I investment — file teases the domain, identity disclosed
+    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
+    // no Organization JSON-LD is emitted for stealth slugs.
+    slug: 'inference',
+    company: 'Stealth',
+    oneLiner: 'AI inference stack',
+    folder: 'active',
+    avatar: '', // unused for stealth
+    stealth: true,
+  },
+  {
+    slug: 'specs',
+    company: 'Stealth',
+    oneLiner: 'Specifications framework',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
   },
 ] as const;
 
