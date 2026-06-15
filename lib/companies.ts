@@ -416,8 +416,24 @@ export const COMPANIES: readonly Company[] = [
   },
 ] as const;
 
+/** Portfolio display order: public companies before stealth, then
+ *  alphabetical by slug within each group. The COMPANIES array stays in the
+ *  order entries were added (readability + minimal diffs when a new
+ *  investment lands); anything that *renders* the portfolio derives its order
+ *  from this comparator rather than array position, so a new company slots
+ *  into the right place automatically. Mirrors `compareFileEntries` in
+ *  lib/filesystem, which applies the same rule to the file-tree / CLI `ls`. */
+export function byPortfolioOrder(a: Company, b: Company): number {
+  const sa = a.stealth ? 1 : 0;
+  const sb = b.stealth ? 1 : 0;
+  if (sa !== sb) return sa - sb;
+  return a.slug.localeCompare(b.slug);
+}
+
 export const PRE_COMMIT_COMPANIES = COMPANIES.filter((c) => c.folder === 'pre-commit');
-export const ACTIVE_COMPANIES = COMPANIES.filter((c) => c.folder === 'active');
+export const ACTIVE_COMPANIES = COMPANIES.filter((c) => c.folder === 'active').sort(
+  byPortfolioOrder,
+);
 
 /** Format a list of founder short names with Oxford comma:
  *   ["Sam"]                     → "Sam"

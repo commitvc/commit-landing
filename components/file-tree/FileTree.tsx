@@ -7,7 +7,7 @@ import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Linkify } from '@/components/linkify/Linkify';
 import { COMPANIES } from '@/lib/companies';
-import type { FsDir, FsNode } from '@/lib/filesystem';
+import { compareFileEntries, type FsDir, type FsNode } from '@/lib/filesystem';
 import { TEAM } from '@/lib/team';
 import styles from './FileTree.module.css';
 
@@ -58,7 +58,7 @@ function buildLines(
     .sort((a, b) => a[0].localeCompare(b[0]));
   const files = entries
     .filter(([, v]) => v.type === 'file')
-    .sort((a, b) => a[0].localeCompare(b[0]));
+    .sort((a, b) => compareFileEntries(a[0], b[0], childPath));
   const sorted = [...dirs, ...files];
   sorted.forEach(([name, item], i) => {
     const isLast = i === sorted.length - 1;

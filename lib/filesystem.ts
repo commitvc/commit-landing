@@ -172,14 +172,42 @@ export function isDirectory(root: FsDir, path: string): boolean {
   return node !== null && node.type === 'directory';
 }
 
-/** Directories first (alphabetical), then files (alphabetical) — matches the
- *  ordering used by the file-tree sidebar so `ls` and the tree show the same
- *  shape for the same directory. Visibility filtering (e.g. the tree hiding
- *  `private/`) is handled in the renderers, not here. */
+/** Stealth rank for a file's full path: 1 for a stealth company file
+ *  (/companies/<slug>.txt whose slug is flagged stealth), else 0. Lets the
+ *  portfolio listing order public companies before stealth ones. Any
+ *  non-company file ranks 0, so other directories stay plain-alphabetical. */
+function companyStealthRank(fullPath: string): number {
+  const m = fullPath.match(/^\/companies\/([^/]+)\.txt$/);
+  if (!m) return 0;
+  return COMPANIES.find((c) => c.slug === m[1])?.stealth ? 1 : 0;
+}
+
+/** Sort comparator for file entries within a directory: public companies
+ *  before stealth, then alphabetical within each group. `pathOf` maps an
+ *  entry name to its full filesystem path so the stealth check can scope to
+ *  /companies/. Shared by `listDirectory` (CLI `ls`) and the file-tree
+ *  sidebar so both render the same order. */
+export function compareFileEntries(
+  aName: string,
+  bName: string,
+  pathOf: (name: string) => string,
+): number {
+  const ra = companyStealthRank(pathOf(aName));
+  const rb = companyStealthRank(pathOf(bName));
+  if (ra !== rb) return ra - rb;
+  return aName.localeCompare(bName);
+}
+
+/** Directories first (alphabetical), then files (public companies before
+ *  stealth, alphabetical within each group) — matches the ordering used by
+ *  the file-tree sidebar so `ls` and the tree show the same shape for the
+ *  same directory. Visibility filtering (e.g. the tree hiding `private/`) is
+ *  handled in the renderers, not here. */
 export function listDirectory(root: FsDir, path: string): string[] {
   const node = getNode(root, path);
   if (!node || node.type !== 'directory') return [];
   const entries = Object.entries(node.contents);
+  const childPath = (name: string) => (path === '/' ? `/${name}` : `${path}/${name}`);
   const dirs = entries
     .filter(([, v]) => v.type === 'directory')
     .map(([name]) => name)
@@ -187,7 +215,7 @@ export function listDirectory(root: FsDir, path: string): string[] {
   const files = entries
     .filter(([, v]) => v.type === 'file')
     .map(([name]) => name)
-    .sort((a, b) => a.localeCompare(b));
+    .sort((a, b) => compareFileEntries(a, b, childPath));
   return [...dirs, ...files];
 }
 
