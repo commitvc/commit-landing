@@ -343,6 +343,33 @@ export const COMPANIES: readonly Company[] = [
       'that in AI infrastructure, the openness of the toolchain and the strength of the developer community matter as much as the hardware itself.',
   },
   {
+    // Stealth Fund I investment — file teases the domain, identity disclosed
+    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
+    // no Organization JSON-LD is emitted for stealth slugs.
+    slug: 'inference',
+    company: 'Stealth',
+    oneLiner: 'AI inference stack',
+    folder: 'active',
+    avatar: '', // unused for stealth
+    stealth: true,
+  },
+  {
+    slug: 'specs',
+    company: 'Stealth',
+    oneLiner: 'Specifications framework',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
+    slug: 'agent-mux',
+    company: 'Stealth',
+    oneLiner: 'The Code Editor for AI Agents',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
     slug: 'macrodata',
     company: 'Macrodata Labs',
     oneLiner: 'Every strong model starts with great data',
@@ -387,29 +414,26 @@ export const COMPANIES: readonly Company[] = [
     seoDescription:
       'Humanoid robots with human-level dexterity. Team from DeepMind, Tesla Autopilot, and HuggingFace. >commit Fund I.',
   },
-  {
-    // Stealth Fund I investment — file teases the domain, identity disclosed
-    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
-    // no Organization JSON-LD is emitted for stealth slugs.
-    slug: 'inference',
-    company: 'Stealth',
-    oneLiner: 'AI inference stack',
-    folder: 'active',
-    avatar: '', // unused for stealth
-    stealth: true,
-  },
-  {
-    slug: 'specs',
-    company: 'Stealth',
-    oneLiner: 'Specifications framework',
-    folder: 'active',
-    avatar: '',
-    stealth: true,
-  },
 ] as const;
 
+/** Portfolio display order: public companies before stealth, then
+ *  alphabetical by slug within each group. The COMPANIES array stays in the
+ *  order entries were added (readability + minimal diffs when a new
+ *  investment lands); anything that *renders* the portfolio derives its order
+ *  from this comparator rather than array position, so a new company slots
+ *  into the right place automatically. Mirrors `compareFileEntries` in
+ *  lib/filesystem, which applies the same rule to the file-tree / CLI `ls`. */
+export function byPortfolioOrder(a: Company, b: Company): number {
+  const sa = a.stealth ? 1 : 0;
+  const sb = b.stealth ? 1 : 0;
+  if (sa !== sb) return sa - sb;
+  return a.slug.localeCompare(b.slug);
+}
+
 export const PRE_COMMIT_COMPANIES = COMPANIES.filter((c) => c.folder === 'pre-commit');
-export const ACTIVE_COMPANIES = COMPANIES.filter((c) => c.folder === 'active');
+export const ACTIVE_COMPANIES = COMPANIES.filter((c) => c.folder === 'active').sort(
+  byPortfolioOrder,
+);
 
 /** Format a list of founder short names with Oxford comma:
  *   ["Sam"]                     → "Sam"

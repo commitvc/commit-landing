@@ -51,8 +51,8 @@ export default function HomePage() {
           <strong>Abel Samot</strong> (Partner), and <strong>Alessandro Ciffo</strong> (Tech Lead).
         </p>
         <p>
-          Active Fund I commitments to date: 3 — one announced (UMA — humanoid robotics), two
-          stealth (disclosure pending).
+          Active Fund I commitments to date: 5 — two announced (UMA — humanoid robotics, Macrodata
+          Labs — training-data infrastructure), three stealth (disclosure pending).
         </p>
         <p>
           Reach out at <a href="mailto:hey@commit.fund">hey@commit.fund</a>. Browse the full site at{' '}
