@@ -88,6 +88,19 @@ export const TEAM: readonly TeamMember[] = [
     seoDescription:
       'Tech lead at >commit. Builds the data and AI platform behind the fund. Bocconi research, ex-Amazon, co-founded Casify.',
   },
+  {
+    slug: 'thomas',
+    name: 'Thomas Saudemont',
+    role: 'Data Engineer',
+    focus: '',
+    languages: '',
+    location: 'Paris, France 🇫🇷',
+    github: 'https://github.com/0xthomass',
+    linkedin: 'https://www.linkedin.com/in/thomas-saudemont/',
+    avatar: '/team/thomas.png',
+    description: '',
+    seoDescription: '',
+  },
 ] as const;
 
 export const ADVISORS_TEXT =
