@@ -92,14 +92,14 @@ export const TEAM: readonly TeamMember[] = [
     slug: 'thomas',
     name: 'Thomas Saudemont',
     role: 'Data Engineer',
-    focus: '',
+    focus: 'Data · AI ·',
     languages: '',
     location: 'Paris, France 🇫🇷',
     github: 'https://github.com/0xthomass',
     linkedin: 'https://www.linkedin.com/in/thomas-saudemont/',
     avatar: '/team/thomas.png',
-    description: '',
-    seoDescription: '',
+    description: 'Thomas is a Data/AI Engineer at >commit',
+    seoDescription: 'Data/AI Engineer at >commit. ',
   },
 ] as const;
 
