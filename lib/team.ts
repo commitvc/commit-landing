@@ -73,22 +73,6 @@ export const TEAM: readonly TeamMember[] = [
       'Partner at >commit. Founded Dashblock (Y Combinator S19, browser agents). Backs open-source and infrastructure founders.',
   },
   {
-    slug: 'alessandro',
-    name: 'Alessandro Ciffo',
-    role: 'Tech Lead',
-    focus: 'Data · AI · Infra',
-    languages: 'Python · TypeScript',
-    location: 'Paris, France 🇫🇷',
-    github: 'https://github.com/alessandro-ciffo',
-    linkedin: 'https://www.linkedin.com/in/alessandro-ciffo-4b7710191/',
-    website: 'https://aleciffo.com',
-    avatar: '/team/alessandro.png',
-    description:
-      "Alessandro leads tech at >commit, building the data and AI tools behind the fund data pillar. Started in research at Bocconi's data-science lab, detoured through Amazon and co-founded Casify, an ML platform for Italian real-estate investors. Italian in Paris. Produces music, reads, and does calisthenics. Bouldering and running semi marathons on the side.",
-    seoDescription:
-      'Tech lead at >commit. Builds the data and AI platform behind the fund. Bocconi research, ex-Amazon, co-founded Casify.',
-  },
-  {
     slug: 'thomas',
     name: 'Thomas Saudemont',
     role: 'Data Engineer',

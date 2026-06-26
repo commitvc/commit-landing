@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { ADVISORS } from '@/lib/advisors';
 import { getAllPosts } from '@/lib/blog';
 import { COMPANIES } from '@/lib/companies';
 import { SITE_URL } from '@/lib/structured-data';
@@ -46,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
     priority: 0.6,
   }));
+  const advisorEntries: MetadataRoute.Sitemap = ADVISORS.map((advisor) => ({
+    url: url(`/team/advisors/${advisor.slug}`),
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }));
   const companyEntries: MetadataRoute.Sitemap = COMPANIES.map((c) => ({
     url: url(
       c.folder === 'pre-commit' ? `/companies/pre-commit/${c.slug}` : `/companies/${c.slug}`,
@@ -54,5 +61,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
     priority: 0.6,
   }));
-  return [...staticEntries, ...postEntries, ...teamEntries, ...companyEntries];
+  return [...staticEntries, ...postEntries, ...teamEntries, ...advisorEntries, ...companyEntries];
 }

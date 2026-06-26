@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
+import { ADVISORS } from '@/lib/advisors';
 import { breadcrumbJsonLd, teamItemList } from '@/lib/structured-data';
 import { TEAM } from '@/lib/team';
 
 export const metadata: Metadata = {
   title: 'Team',
-  description: 'The team behind >commit — partners and tech lead.',
+  description: 'The team behind >commit — partners, data, and advisors.',
   alternates: { canonical: '/team' },
 };
 
@@ -34,8 +35,8 @@ export default function TeamPage() {
       <section className="sr-only" aria-label="The >commit team">
         <h1>The &gt;commit team</h1>
         <p>
-          {TEAM.length} people: three partners and a tech lead who together founded &gt;commit
-          inside the Red River West family.
+          {TEAM.length} people working on &gt;commit inside the Red River West family, supported by
+          advisors with deep open-source and company-building experience.
         </p>
         <ul>
           {TEAM.map((m) => (
@@ -45,6 +46,21 @@ export default function TeamPage() {
               </a>{' '}
               — {m.role}
               {m.focus ? ` (focus: ${m.focus})` : ''}. {m.description}
+            </li>
+          ))}
+        </ul>
+        <h2>Advisors</h2>
+        <p>
+          &gt;commit is supported by advisors who are passionate about open source and company
+          building.
+        </p>
+        <ul>
+          {ADVISORS.map((advisor) => (
+            <li key={advisor.slug}>
+              <a href={`/team/advisors/${advisor.slug}/`}>
+                <strong>{advisor.name}</strong>
+              </a>{' '}
+              — {advisor.role}. {advisor.description}
             </li>
           ))}
         </ul>

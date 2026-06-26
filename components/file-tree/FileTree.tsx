@@ -6,6 +6,7 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Linkify } from '@/components/linkify/Linkify';
+import { ADVISORS } from '@/lib/advisors';
 import { COMPANIES } from '@/lib/companies';
 import { compareFileEntries, type FsDir, type FsNode } from '@/lib/filesystem';
 import { TEAM } from '@/lib/team';
@@ -109,6 +110,8 @@ const ABOUT_ROUTED_FILES = new Set(['readme', 'projects', 'contact']);
  *  /companies/pre-commit/<slug>/ so the URL mirrors the tree's folder
  *  structure. */
 function staticRouteFor(fullPath: string): string | null {
+  const advisor = fullPath.match(/^\/team\/advisors\/([^/]+)\.txt$/);
+  if (advisor) return `/team/advisors/${advisor[1]}/`;
   const team = fullPath.match(/^\/team\/([^/]+)\.txt$/);
   if (team) return `/team/${team[1]}/`;
   const preCommit = fullPath.match(/^\/companies\/pre-commit\/([^/]+)\.txt$/);
@@ -258,6 +261,11 @@ function renderDetail(
   if (/^\/team\/[^/]+\.txt$/.test(path)) {
     const m = TEAM.find((x) => x.slug === slug);
     if (m) return <ProfileCard member={m} />;
+  }
+
+  if (/^\/team\/advisors\/[^/]+\.txt$/.test(path)) {
+    const advisor = ADVISORS.find((x) => x.slug === slug);
+    if (advisor) return <ProfileCard member={advisor} />;
   }
 
   if (/^\/companies\//.test(path) && path.endsWith('.txt')) {
