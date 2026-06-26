@@ -76,7 +76,7 @@ export const TEAM: readonly TeamMember[] = [
     slug: 'thomas',
     name: 'Thomas Saudemont',
     role: 'Tech Lead',
-    focus: 'Data · AI · Infra',
+    focus: 'Data · AI · Cybersecurity',
     languages: 'Python · Rust',
     location: 'Paris, France 🇫🇷',
     github: 'https://github.com/0xthomass',
