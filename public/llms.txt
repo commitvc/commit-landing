@@ -19,7 +19,7 @@
 
 ## Advisors
 
-- [Mark Porter — Advisor](https://commit.fund/team/advisors/mark-porter/): Advisor to >commit, supporting open-source and infrastructure founders with operating experience.
+- [Mark Porter — Technical advisor](https://commit.fund/team/advisors/mark-porter/): Technical advisor to >commit, supporting open-source and infrastructure founders with operating experience.
 
 ## Portfolio (>commit Fund I)
 
