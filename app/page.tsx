@@ -48,7 +48,7 @@ export default function HomePage() {
         </p>
         <p>
           The team: <strong>Olivier Huez</strong> (Partner), <strong>Max Corbani</strong> (Partner),{' '}
-          <strong>Abel Samot</strong> (Partner), and <strong>Thomas Saudemont</strong> (Tech Lead).
+          <strong>Abel Samot</strong> (Partner), and <strong>Thomas Saudemont</strong> (tech lead).
         </p>
         <p>
           Active Fund I commitments to date: 5 — two announced (UMA — humanoid robotics, Macrodata

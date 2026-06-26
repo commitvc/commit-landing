@@ -26,7 +26,7 @@ const FAQ: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'Who is on the >commit team?',
-    a: 'Olivier Huez, Max Corbani, and Abel Samot are partners; Thomas Saudemont is Tech Lead. Together they form the >commit team.',
+    a: 'Olivier Huez, Max Corbani, and Abel Samot are partners; Thomas Saudemont is the tech lead. Together they form the >commit team.',
   },
   {
     q: 'How is >commit related to Red River West?',
