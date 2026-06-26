@@ -135,7 +135,10 @@ export function tokenize(input: string): string[] {
 }
 
 function renderFileAs(path: string, slug: string, content: string): ReactNode {
-  if (/\/team\/advisors\/[^/]+\.txt$/.test(path)) return <AdvisorProfileCard file={content} />;
+  const advisor = path.match(/\/team\/advisors\/([^/]+)\.txt$/);
+  if (advisor && ADVISORS.some((item) => item.slug === advisor[1])) {
+    return <AdvisorProfileCard file={content} />;
+  }
   if (/(\/team\/)[^/]+\.txt$/.test(path)) return <TeamProfileCard file={content} />;
   if (/\/companies\//.test(path) && path.endsWith('.txt')) {
     return <CompanyProfileCard file={content} />;

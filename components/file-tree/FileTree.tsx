@@ -111,7 +111,9 @@ const ABOUT_ROUTED_FILES = new Set(['readme', 'projects', 'contact']);
  *  structure. */
 function staticRouteFor(fullPath: string): string | null {
   const advisor = fullPath.match(/^\/team\/advisors\/([^/]+)\.txt$/);
-  if (advisor) return `/team/advisors/${advisor[1]}/`;
+  if (advisor && ADVISORS.some((item) => item.slug === advisor[1])) {
+    return `/team/advisors/${advisor[1]}/`;
+  }
   const team = fullPath.match(/^\/team\/([^/]+)\.txt$/);
   if (team) return `/team/${team[1]}/`;
   const preCommit = fullPath.match(/^\/companies\/pre-commit\/([^/]+)\.txt$/);
@@ -129,6 +131,10 @@ function staticRouteFor(fullPath: string): string | null {
  *  re-highlight the selected file as the URL changes. */
 function routeToFsPath(pathname: string | null): string | null {
   if (!pathname) return null;
+  const advisor = pathname.match(/^\/team\/advisors\/([^/]+)\/?$/);
+  if (advisor && ADVISORS.some((item) => item.slug === advisor[1])) {
+    return `/team/advisors/${advisor[1]}.txt`;
+  }
   const team = pathname.match(/^\/team\/([^/]+)\/?$/);
   if (team) return `/team/${team[1]}.txt`;
   const preCommit = pathname.match(/^\/companies\/pre-commit\/([^/]+)\/?$/);
