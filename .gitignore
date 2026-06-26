@@ -13,6 +13,10 @@ next-env.d.ts
 test-results/
 playwright-report/
 
+# Local generation scratch
+.cache/
+tmp/
+
 # Env
 .env
 .env.local
