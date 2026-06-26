@@ -5,7 +5,7 @@ import { TEAM } from '@/lib/team';
 
 export const metadata: Metadata = {
   title: 'Team',
-  description: 'The team behind >commit — partners, data, and advisors.',
+  description: 'The team behind >commit — partners, tech leadership, and advisors.',
   alternates: { canonical: '/team' },
 };
 

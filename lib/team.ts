@@ -35,7 +35,7 @@ export const TEAM: readonly TeamMember[] = [
     twitter: 'https://x.com/abel_samot',
     avatar: '/team/Abel.png',
     description:
-      "Abel is a founding partner at >commit. He started coding and building projects at a young age, before becoming an AI engineer deploying deep learning models (BERT, etc.) in large enterprises. He later spent six years at Red River West investing in infrastructure software, while building the data team and the firm's data platform. He holds engineering and business degrees. A music lover, pianist and DJ in his spare time, as well as a cooking and running enthusiast, his passion for new technologies is matched by a deep interest in history.",
+      "Abel is part of >commit's founding team. He started coding and building projects at a young age, before becoming an AI engineer deploying deep learning models (BERT, etc.) in large enterprises. He later spent six years at Red River West investing in infrastructure software, while building the data team and the firm's data platform. He holds engineering and business degrees. A music lover, pianist and DJ in his spare time, as well as a cooking and running enthusiast, his passion for new technologies is matched by a deep interest in history.",
     seoDescription:
       "Partner at >commit. Built RAMP — Red River West's open-source sourcing brain — from scratch. ISEP engineer; ESSEC Master's.",
   },
@@ -75,15 +75,15 @@ export const TEAM: readonly TeamMember[] = [
   {
     slug: 'thomas',
     name: 'Thomas Saudemont',
-    role: 'Data Engineer',
+    role: 'Tech Lead',
     focus: 'Data · AI ·',
     languages: '',
     location: 'Paris, France 🇫🇷',
     github: 'https://github.com/0xthomass',
     linkedin: 'https://www.linkedin.com/in/thomas-saudemont/',
     avatar: '/team/thomas.png',
-    description: 'Thomas is a Data/AI Engineer at >commit',
-    seoDescription: 'Data/AI Engineer at >commit. ',
+    description: 'Thomas is Tech Lead at >commit.',
+    seoDescription: 'Tech Lead at >commit.',
   },
 ] as const;
 
