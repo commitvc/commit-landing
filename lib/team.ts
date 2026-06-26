@@ -82,7 +82,8 @@ export const TEAM: readonly TeamMember[] = [
     github: 'https://github.com/0xthomass',
     linkedin: 'https://www.linkedin.com/in/thomas-saudemont/',
     avatar: '/team/thomas.png',
-    description: 'Thomas is the tech lead at >commit.',
+    description:
+      'Thomas leads tech at >commit, building the data and AI tools that power the fund’s sourcing and research. Before that, he contributed to open-source blockchain initiatives and worked at the French Ministry of the Armed Forces’ Cyber Defense Command, COMCYBER. He holds an engineering degree in software cybersecurity and spent over two years studying across Canada and Estonia. Curious by default, Thomas likes trying to understand complex adaptive systems, from biology to financial markets. When not deep in data, code or rabbit holes, he is usually wishing he was closer to a surfboard.',
     seoDescription: 'The tech lead at >commit.',
   },
 ] as const;
