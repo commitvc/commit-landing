@@ -35,8 +35,8 @@ export default function TeamPage() {
       <section className="sr-only" aria-label="The >commit team">
         <h1>The &gt;commit team</h1>
         <p>
-          {TEAM.length} people working on &gt;commit inside the Red River West family, supported by
-          advisors with deep open-source and company-building experience.
+          {TEAM.length} people: three partners and a tech lead who together founded &gt;commit
+          inside the Red River West family.
         </p>
         <ul>
           {TEAM.map((m) => (
