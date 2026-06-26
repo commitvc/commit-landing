@@ -15,7 +15,7 @@
 - [Olivier Huez — Partner](https://commit.fund/team/olivier/): Co-founded C4 Ventures; backed Graphcore, Riskified, and Via (the latter two IPO'd on NYSE). Decade at Orange Labs before venture. French and British.
 - [Max Corbani — Partner](https://commit.fund/team/max/): Founded Symolia and Dashblock (Y Combinator S19, browser agent). Then VC backing OSS and infrastructure founders between Europe and the US.
 - [Abel Samot — Partner](https://commit.fund/team/abel/): Built RAMP, Red River West's sourcing/data brain, more or less from scratch. AI engineer background; ISEP + ESSEC.
-- [Thomas Saudemont — tech lead](https://commit.fund/team/thomas/): The tech lead at >commit.
+- [Thomas Saudemont — tech lead](https://commit.fund/team/thomas/): Tech Lead at >commit.
 
 ## Advisors
 
@@ -59,7 +59,7 @@
 - Stage focus: Pre-seed and seed
 - Thesis: Commercial open-source startups
 - Geography: Europe and the US
-- Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Thomas Saudemont (tech lead)
+- Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Thomas Saudemont (Tech Lead)
 - Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
 - Active Fund I commitments: 3 (1 announced — UMA; 2 stealth — disclosure pending)
 - Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure
