@@ -7,7 +7,7 @@
 - [About >commit](https://commit.fund/about/): The fund's thesis on commercial open source, stage and check-size focus, decision process, and how it sits inside Red River West.
 - [Companies overview](https://commit.fund/companies/): Index of >commit's current portfolio plus the commercial open-source companies the team backed before the fund.
 - [Blog](https://commit.fund/blog/): Essays from the >commit team on commercial open source, AI infrastructure, licensing, and European tech sovereignty.
-- [Team overview](https://commit.fund/team/): The four people behind >commit — three partners and a tech lead.
+- [Team overview](https://commit.fund/team/): The >commit team — three partners and a tech lead.
 - [CLI](https://commit.fund/cli/): The site as an interactive shell — `>commit help` lists every command. Same content as the rest of the site, different surface.
 
 ## Team
@@ -15,7 +15,11 @@
 - [Olivier Huez — Partner](https://commit.fund/team/olivier/): Co-founded C4 Ventures; backed Graphcore, Riskified, and Via (the latter two IPO'd on NYSE). Decade at Orange Labs before venture. French and British.
 - [Max Corbani — Partner](https://commit.fund/team/max/): Founded Symolia and Dashblock (Y Combinator S19, browser agent). Then VC backing OSS and infrastructure founders between Europe and the US.
 - [Abel Samot — Partner](https://commit.fund/team/abel/): Built RAMP, Red River West's sourcing/data brain, more or less from scratch. AI engineer background; ISEP + ESSEC.
-- [Alessandro Ciffo — Tech Lead](https://commit.fund/team/alessandro/): Builds the data and AI tools behind the fund's data pillar. Bocconi data-science research, then Amazon, then co-founded Casify (ML for Italian real-estate investors).
+- [Thomas Saudemont — tech lead](https://commit.fund/team/thomas/): Tech Lead at >commit.
+
+## Advisors
+
+- [Mark Porter — Technical advisor](https://commit.fund/team/advisors/mark-porter/): Technical advisor to >commit, supporting open-source and infrastructure founders with operating experience.
 
 ## Portfolio (>commit Fund I)
 
@@ -55,7 +59,7 @@
 - Stage focus: Pre-seed and seed
 - Thesis: Commercial open-source startups
 - Geography: Europe and the US
-- Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Alessandro Ciffo (Tech Lead)
+- Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Thomas Saudemont (Tech Lead)
 - Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
 - Active Fund I commitments: 3 (1 announced — UMA; 2 stealth — disclosure pending)
 - Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure

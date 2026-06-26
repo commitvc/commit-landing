@@ -1,4 +1,5 @@
 import { ABOUT_CONTACT, ABOUT_PROJECTS, ABOUT_README } from './about';
+import { ADVISORS } from './advisors';
 import { COMPANIES } from './companies';
 import { TEAM } from './team';
 
@@ -14,6 +15,10 @@ export type FsNode = FsFile | FsDir;
  *  rendering a stale subset of a key:value text dump. */
 function fileContentsFromMember(m: (typeof TEAM)[number]): string {
   return `slug:${m.slug}`;
+}
+
+function fileContentsFromAdvisor(a: (typeof ADVISORS)[number]): string {
+  return `slug:${a.slug}`;
 }
 
 function fileContentsFromCompany(c: (typeof COMPANIES)[number]): string {
@@ -44,6 +49,12 @@ function teamDirectory(): FsDir {
         content:
           ">commit is supported by a team of advisors who are passionate about open source.\nThey're all founders or executives who built and scaled commercial open source companies, or CTOs and technical leaders at Global 2000 enterprises.\n\nExamples include: Mozilla, Supabase, Hugging Face, Sentry, Nginx, Cesium, Suse, Airbyte, Sonar, DBT Labs, MongoDB and many others.",
       },
+      ...Object.fromEntries(
+        ADVISORS.map((a) => [
+          `${a.slug}.txt`,
+          { type: 'file' as const, content: fileContentsFromAdvisor(a) },
+        ]),
+      ),
     },
   };
   return { type: 'directory', contents };

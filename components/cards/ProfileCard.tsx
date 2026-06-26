@@ -2,10 +2,24 @@
 
 import Image from 'next/image';
 import { useLayoutEffect, useRef, useState } from 'react';
-import type { TeamMember } from '@/lib/team';
 import styles from './ProfileCard.module.css';
 
-export function ProfileCard({ member }: { member: TeamMember }) {
+type ProfilePerson = {
+  name: string;
+  role: string;
+  tagline?: string;
+  focus?: string;
+  languages?: string;
+  location?: string;
+  github?: string;
+  linkedin?: string;
+  twitter?: string;
+  website?: string;
+  avatar: string;
+  description?: string;
+};
+
+export function ProfileCard({ member }: { member: ProfilePerson }) {
   const textRef = useRef<HTMLDivElement>(null);
   const [avatarSize, setAvatarSize] = useState(120);
 
@@ -30,9 +44,11 @@ export function ProfileCard({ member }: { member: TeamMember }) {
             <div className={styles.tagline}>{member.tagline ?? member.role}</div>
           </div>
           <div className={styles.links}>
-            <a href={member.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
+            {member.github ? (
+              <a href={member.github} target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+            ) : null}
             {member.linkedin ? (
               <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
                 LinkedIn

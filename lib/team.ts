@@ -73,20 +73,18 @@ export const TEAM: readonly TeamMember[] = [
       'Partner at >commit. Founded Dashblock (Y Combinator S19, browser agents). Backs open-source and infrastructure founders.',
   },
   {
-    slug: 'alessandro',
-    name: 'Alessandro Ciffo',
+    slug: 'thomas',
+    name: 'Thomas Saudemont',
     role: 'Tech Lead',
     focus: 'Data · AI · Infra',
-    languages: 'Python · TypeScript',
+    languages: 'Python · Rust',
     location: 'Paris, France 🇫🇷',
-    github: 'https://github.com/alessandro-ciffo',
-    linkedin: 'https://www.linkedin.com/in/alessandro-ciffo-4b7710191/',
-    website: 'https://aleciffo.com',
-    avatar: '/team/alessandro.png',
+    github: 'https://github.com/0xthomass',
+    linkedin: 'https://www.linkedin.com/in/thomas-saudemont/',
+    avatar: '/team/thomas.png',
     description:
-      "Alessandro leads tech at >commit, building the data and AI tools behind the fund data pillar. Started in research at Bocconi's data-science lab, detoured through Amazon and co-founded Casify, an ML platform for Italian real-estate investors. Italian in Paris. Produces music, reads, and does calisthenics. Bouldering and running semi marathons on the side.",
-    seoDescription:
-      'Tech lead at >commit. Builds the data and AI platform behind the fund. Bocconi research, ex-Amazon, co-founded Casify.',
+      'Thomas leads tech at >commit, building the data and AI tools that power the fund’s sourcing and research. Before that, he contributed to open-source blockchain initiatives and worked at the French Ministry of the Armed Forces’ Cyber Defense Command, COMCYBER. He holds an engineering degree in software cybersecurity and spent over two years studying across Canada and Estonia. Curious by default, Thomas likes trying to understand complex adaptive systems, from biology to financial markets. When not deep in data, code or rabbit holes, he is usually wishing he was closer to a surfboard.',
+    seoDescription: 'The tech lead at >commit.',
   },
 ] as const;
 

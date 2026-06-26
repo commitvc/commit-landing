@@ -4,6 +4,7 @@ import { CompanyCard } from '@/components/cards/CompanyCard';
 import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Firework } from '@/components/firework/Firework';
 import { Linkify } from '@/components/linkify/Linkify';
+import { ADVISORS } from './advisors';
 import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
 import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';
@@ -54,6 +55,13 @@ function TeamProfileCard({ file }: { file: string }) {
   const member = slug ? TEAM.find((m) => m.slug === slug) : undefined;
   if (!member) return null;
   return <ProfileCard member={member} />;
+}
+
+function AdvisorProfileCard({ file }: { file: string }) {
+  const slug = file.match(/^slug:(.+)$/)?.[1]?.trim();
+  const advisor = slug ? ADVISORS.find((a) => a.slug === slug) : undefined;
+  if (!advisor) return null;
+  return <ProfileCard member={advisor} />;
 }
 
 function CompanyProfileCard({ file }: { file: string }) {
@@ -127,6 +135,7 @@ export function tokenize(input: string): string[] {
 }
 
 function renderFileAs(path: string, slug: string, content: string): ReactNode {
+  if (/\/team\/advisors\/[^/]+\.txt$/.test(path)) return <AdvisorProfileCard file={content} />;
   if (/(\/team\/)[^/]+\.txt$/.test(path)) return <TeamProfileCard file={content} />;
   if (/\/companies\//.test(path) && path.endsWith('.txt')) {
     return <CompanyProfileCard file={content} />;
