@@ -14,7 +14,7 @@ assets/team-originals/team/Abel.png
 assets/team-originals/team/max.png
 assets/team-originals/team/olivier.png
 assets/team-originals/team/thomas.png
-assets/team-originals/advisors/mark-porter.png
+assets/team-originals/team/mark-porter.png
 assets/team-originals/raw/abel.png
 assets/team-originals/raw/mark.png
 assets/team-originals/raw/thomas.png
@@ -91,7 +91,7 @@ assets/team-originals/raw/mark.png
 Generate the committed asset:
 
 ```bash
-node scripts/generate-team-ascii.mjs --person mark --out public/advisors/mark-porter.png
+node scripts/generate-team-ascii.mjs --person mark --out public/team/mark-porter.png
 ```
 
 Mark source prep:

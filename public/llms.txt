@@ -7,7 +7,7 @@
 - [About >commit](https://commit.fund/about/): The fund's thesis on commercial open source, stage and check-size focus, decision process, and how it sits inside Red River West.
 - [Companies overview](https://commit.fund/companies/): Index of >commit's current portfolio plus the commercial open-source companies the team backed before the fund.
 - [Blog](https://commit.fund/blog/): Essays from the >commit team on commercial open source, AI infrastructure, licensing, and European tech sovereignty.
-- [Team overview](https://commit.fund/team/): The >commit team — three partners and a tech lead.
+- [Team overview](https://commit.fund/team/): The >commit team — partners, a tech lead and a technical advisor.
 - [CLI](https://commit.fund/cli/): The site as an interactive shell — `>commit help` lists every command. Same content as the rest of the site, different surface.
 
 ## Team
@@ -16,10 +16,7 @@
 - [Max Corbani — Partner](https://commit.fund/team/max/): Founded Symolia and Dashblock (Y Combinator S19, browser agent). Then VC backing OSS and infrastructure founders between Europe and the US.
 - [Abel Samot — Partner](https://commit.fund/team/abel/): Built RAMP, Red River West's sourcing/data brain, more or less from scratch. AI engineer background; ISEP + ESSEC.
 - [Thomas Saudemont — tech lead](https://commit.fund/team/thomas/): Tech Lead at >commit.
-
-## Advisors
-
-- [Mark Porter — Technical advisor](https://commit.fund/team/advisors/mark-porter/): Technical advisor to >commit, supporting open-source and infrastructure founders with operating experience.
+- [Mark Porter — Technical advisor](https://commit.fund/team/mark/): Advises >commit and its portfolio founders on technical and management topics. 30+ years building software; former CTO at dbt Labs, MongoDB and Grab, and General Manager at AWS. Caltech engineer.
 
 ## Portfolio (>commit Fund I)
 
