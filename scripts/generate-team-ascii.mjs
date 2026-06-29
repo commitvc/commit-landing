@@ -61,7 +61,7 @@ const RECIPES = {
   },
   mark: {
     input: 'assets/team-originals/raw/mark.png',
-    out: 'public/advisors/mark-porter.png',
+    out: 'public/team/mark-porter.png',
     sourceAddPercent: 6,
     sourceScale: 900,
     sourceResizeMode: 'contain',
@@ -104,7 +104,7 @@ function printHelp() {
   console.log(`Usage:
   node scripts/generate-team-ascii.mjs --person thomas --out public/team/thomas.png
   node scripts/generate-team-ascii.mjs --person abel --out public/team/Abel.png
-  node scripts/generate-team-ascii.mjs --person mark --out public/advisors/mark-porter.png
+  node scripts/generate-team-ascii.mjs --person mark --out public/team/mark-porter.png
   node scripts/generate-team-ascii.mjs --person mark --source-resize-mode contain --source-scale 860 --bg '#140202' --columns 180 --out tmp/mark.png
 
 The script prepares the source portrait, runs the GEOM ASCII generator from

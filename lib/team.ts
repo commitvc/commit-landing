@@ -86,6 +86,23 @@ export const TEAM: readonly TeamMember[] = [
       'Thomas leads tech at >commit, building the data and AI tools that power the fund’s sourcing and research. Before that, he contributed to open-source blockchain initiatives and worked at the French Ministry of the Armed Forces’ Cyber Defense Command, COMCYBER. He holds an engineering degree in cybersecurity and spent over two years studying across Canada and Estonia. Curious by default, Thomas enjoys trying to understand complex adaptive systems, from biology to financial markets. Past the rabbit holes, he is usually wishing he was closer to a surfboard.',
     seoDescription: 'The tech lead at >commit.',
   },
+  {
+    slug: 'mark',
+    name: 'Mark Porter',
+    role: 'Technical advisor',
+    focus: 'Databases · Distributed Systems · AI',
+    languages: 'Rust · Python',
+    location: 'Roaming 🌍',
+    github: 'https://github.com/marklovestech',
+    linkedin: 'https://www.linkedin.com/in/marklovestech/',
+    twitter: 'https://x.com/MarkLovesTech',
+    website: 'https://marklovestech.com',
+    avatar: '/team/mark-porter.png',
+    description:
+      "Mark advises >commit and its portfolio founders on technical and management topics. He's been coding since 16, starting on a 4K machine with BASIC and Z80 assembly, and has spent 30+ years building software and fixing broken architectures and teams. Mark served as CTO at dbt Labs, MongoDB and Grab, and as General Manager at AWS, where he ran RDS, Aurora and Postgres across some of the largest fleets on earth. A Caltech engineer, he's also sat on the boards of GitLab, MariaDB and Splyt. He's a husband and dad of five and a half grown kids who's now back in the editor pretty much every day thanks to AI.",
+    seoDescription:
+      'Technical advisor to >commit, guiding founders on technical and management topics after 30+ years building software and leading engineering teams.',
+  },
 ] as const;
 
 export const ADVISORS_TEXT =
