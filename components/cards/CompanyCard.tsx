@@ -239,6 +239,7 @@ function StealthCard({ company }: Props) {
       <p className={styles.stealthLine}>
         <span className={styles.stealthFile}>{file}</span>: Permission denied
       </p>
+      <p className={styles.stealthHint}># stealth investment — disclosure pending</p>
     </article>
   );
 }
