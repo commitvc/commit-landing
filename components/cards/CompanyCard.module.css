@@ -188,3 +188,10 @@
 .stealthFile {
   color: var(--fg);
 }
+
+/* Shell-style comment beneath the denied line — dimmer than the error so it
+   reads as an aside, not a second error. */
+.stealthHint {
+  margin: 0.25rem 0 0;
+  color: var(--fg-muted);
+}
