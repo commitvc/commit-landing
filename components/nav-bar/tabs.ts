@@ -9,8 +9,8 @@ export type Tab = {
 export const TABS: readonly Tab[] = [
   { id: 'cli', label: 'CLI', href: '/cli' },
   { id: 'companies', label: 'Companies', href: '/companies' },
-  { id: 'blog', label: 'Blog', href: '/blog' },
   { id: 'team', label: 'Team', href: '/team' },
+  { id: 'blog', label: 'Blog', href: '/blog' },
   { id: 'about', label: 'About', href: '/about' },
 ] as const;
 
