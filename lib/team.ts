@@ -89,7 +89,7 @@ export const TEAM: readonly TeamMember[] = [
   {
     slug: 'mark',
     name: 'Mark Porter',
-    role: 'Technical advisor',
+    role: 'Technical Advisor',
     focus: 'Databases · Distributed Systems · AI · Operational Excellence',
     languages: 'C · Swift · Rust · Enterprise Culture',
     location: 'Roaming 🌍',
