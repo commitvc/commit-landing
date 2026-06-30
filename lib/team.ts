@@ -90,8 +90,8 @@ export const TEAM: readonly TeamMember[] = [
     slug: 'mark',
     name: 'Mark Porter',
     role: 'Technical advisor',
-    focus: 'Databases · Distributed Systems · AI',
-    languages: 'Rust · Python',
+    focus: 'Databases · Distributed Systems · AI · Operational Excellence',
+    languages: 'C · Swift · Rust · Enterprise Culture',
     location: 'Roaming 🌍',
     github: 'https://github.com/marklovestech',
     linkedin: 'https://www.linkedin.com/in/marklovestech/',
@@ -99,7 +99,7 @@ export const TEAM: readonly TeamMember[] = [
     website: 'https://marklovestech.com',
     avatar: '/team/mark-porter.png',
     description:
-      "Mark advises >commit and its portfolio founders on technical and management topics. He's been coding since 16, starting on a 4K machine with BASIC and Z80 assembly, and has spent 30+ years building software and fixing broken architectures and teams. Mark served as CTO at dbt Labs, MongoDB and Grab, and as General Manager at AWS, where he ran RDS, Aurora and Postgres across some of the largest fleets on earth. A Caltech engineer, he's also sat on the boards of GitLab, MariaDB and Splyt. He's a husband and dad of five and a half grown kids who's now back in the editor pretty much every day thanks to AI.",
+      "Mark advises >commit and its portfolio founders on technical and management topics. He's been coding since 11, professionally since 16, starting on a 4K machine with BASIC and Z80 assembly, and has spent 30+ years building software and fixing broken architectures and teams. Mark served as CTO at dbt Labs, MongoDB, and Grab, and as General Manager at AWS, where he ran RDS, Aurora, and PostgreSQL across some of the largest fleets on earth. A Caltech engineer, he's also sat on the boards of GitLab, Super, MariaDB, and MongoDB. He's a husband and dad of six grown kids who's now back in the editor pretty much every day.",
     seoDescription:
       'Technical advisor to >commit, guiding founders on technical and management topics after 30+ years building software and leading engineering teams.',
   },
