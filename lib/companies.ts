@@ -343,15 +343,29 @@ export const COMPANIES: readonly Company[] = [
       'that in AI infrastructure, the openness of the toolchain and the strength of the developer community matter as much as the hardware itself.',
   },
   {
-    // Stealth Fund I investment — file teases the domain, identity disclosed
-    // at launch. CompanyCard renders just `inference.txt: Permission denied`;
-    // no Organization JSON-LD is emitted for stealth slugs.
-    slug: 'inference',
-    company: 'Stealth',
-    oneLiner: 'AI inference stack',
+    // Disclosed at launch (TechCrunch, 2026-07-08). Slug is the company name
+    // now that it's public (`zml.txt`, /companies/zml/); the old stealth
+    // /companies/inference/ path 301s here via a redirect stub route.
+    slug: 'zml',
+    company: 'ZML',
+    oneLiner: 'Production inference stack decoupling AI from proprietary hardware',
     folder: 'active',
-    avatar: '', // unused for stealth
-    stealth: true,
+    avatar: '/companies/zml.png',
+    website: 'https://zml.ai',
+    github: 'https://github.com/zml/zml',
+    docs: 'https://docs.zml.ai',
+    discord: 'https://discord.gg/6y72SN2E7H',
+    package: 'docker:zmlai/llmd',
+    stage: 'Seed',
+    location: 'Paris',
+    founders: [{ name: 'Steeve Morin', short: 'Steeve' }],
+    firstCommit: '2024-09-17',
+    license: 'Apache-2.0',
+    language: 'Zig',
+    about:
+      'ZML is a production inference stack that decouples AI workloads from proprietary hardware. From a single codebase it compiles large language models — Llama, Gemma, Qwen, Mistral — to run at peak speed across NVIDIA, AMD, Google TPU, Intel, and Apple Metal, letting teams mix accelerators, break vendor lock-in, and cut inference cost and energy. Its LLMD inference server, built on Zig, MLIR, and OpenXLA, launched free in 2026.',
+    seoDescription:
+      'Production inference stack that runs LLMs at peak speed across NVIDIA, AMD, TPU, Intel, and Apple chips. >commit Fund I.',
   },
   {
     slug: 'specs',
