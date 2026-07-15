@@ -19,7 +19,7 @@
     "@types/mdx": "^2.0.14",
     "gray-matter": "^4.0.3",
     "next": "^16.2.10",
-    "posthog-js": "^1.395.0",
+    "posthog-js": "^1.402.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rehype-autolink-headings": "^7.1.0",
@@ -29,7 +29,7 @@
     "remark-mdx-frontmatter": "^5.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
+    "@biomejs/biome": "^2.5.4",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
