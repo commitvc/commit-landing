@@ -108,7 +108,7 @@ export const TEAM: readonly TeamMember[] = [
     name: 'Renaud Deraison',
     role: 'Technical Advisor',
     focus: 'Cybersecurity · Vulnerability Management · Developer Tooling',
-    languages: 'C · Nessus · TypeScript',
+    languages: 'C · NASL · TypeScript',
     location: 'New York, USA 🇺🇸',
     github: 'https://github.com/rderaison',
     linkedin: 'https://www.linkedin.com/in/rderaison/',
