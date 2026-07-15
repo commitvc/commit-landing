@@ -33,7 +33,7 @@ export const TEAM: readonly TeamMember[] = [
     github: 'https://github.com/abelsamot',
     linkedin: 'https://www.linkedin.com/in/abel-samot/',
     twitter: 'https://x.com/abel_samot',
-    avatar: '/team/Abel.png',
+    avatar: '/team/abel.png',
     description:
       "Abel is a founding partner at >commit. He started coding and building projects at a young age, before becoming an AI engineer deploying deep learning models (BERT, etc.) in large enterprises. He later spent six years at Red River West investing in infrastructure software, while building the data team and the firm's data platform. He holds engineering and business degrees. A music lover, pianist and DJ in his spare time, as well as a cooking and running enthusiast, his passion for new technologies is matched by a deep interest in history.",
     seoDescription:
@@ -97,11 +97,26 @@ export const TEAM: readonly TeamMember[] = [
     linkedin: 'https://www.linkedin.com/in/marklovestech/',
     twitter: 'https://x.com/MarkLovesTech',
     website: 'https://marklovestech.com',
-    avatar: '/team/mark-porter.png',
+    avatar: '/team/mark.png',
     description:
       "Mark advises >commit and its portfolio founders on technical and management topics. He's been coding since 11, professionally since 16, starting on a 4K machine with BASIC and Z80 assembly, and has spent 30+ years building software and fixing broken architectures and teams. Mark served as CTO at dbt Labs, MongoDB, and Grab, and as General Manager at AWS, where he ran RDS, Aurora, and PostgreSQL across some of the largest fleets on earth. A Caltech engineer, he's also sat on the boards of GitLab, Super, MariaDB, and MongoDB. He's a husband and dad of six grown kids who's now back in the editor pretty much every day.",
     seoDescription:
       'Technical advisor to >commit, guiding founders on technical and management topics after 30+ years building software and leading engineering teams.',
+  },
+  {
+    slug: 'renaud',
+    name: 'Renaud Deraison',
+    role: 'Technical Advisor',
+    focus: 'Cybersecurity · Vulnerability Management · Developer Tooling',
+    languages: 'C · NASL · TypeScript',
+    location: 'New York, USA 🇺🇸',
+    github: 'https://github.com/rderaison',
+    linkedin: 'https://www.linkedin.com/in/rderaison/',
+    avatar: '/team/renaud.png',
+    description:
+      "Renaud advises >commit and its portfolio founders on technical and management topics. He is the creator of Nessus, the vulnerability scanner he first shipped at 17 and that became the de facto standard used across the security world. In 2002 he co-founded Tenable (NASDAQ: TENB), where he served as CTO & CPO, and helped grow it into one of the defining companies in cybersecurity, through to its IPO. Along the way he designed NASL, the scripting language behind Nessus, authored several patents in network scanning and security, and sat on the CVE editorial board. Since stepping back from Tenable, he's stayed close to the field as a board member, advisor and an angel backing security founders.",
+    seoDescription:
+      'Technical advisor to >commit. Creator of Nessus; co-founded Tenable (NASDAQ: TENB), serving as CTO & CPO through to its IPO.',
   },
 ] as const;
 
