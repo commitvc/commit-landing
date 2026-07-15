@@ -2,7 +2,6 @@ queue_rules:
   - name: default
     queue_conditions:
       - "check-success=build"
-      - "#approved-reviews-by>=1"
       - "-conflict"
       - "-draft"
     merge_conditions:
@@ -10,10 +9,9 @@ queue_rules:
     merge_method: squash
 
 pull_request_rules:
-  - name: auto-merge approved + green
+  - name: auto-merge green
     conditions:
       - base=main
-      - "#approved-reviews-by>=1"
       - "check-success=build"
       - -conflict
       - -draft
