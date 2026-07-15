@@ -2,17 +2,27 @@ queue_rules:
   - name: default
     queue_conditions:
       - "check-success=build"
+      - "#changes-requested-reviews-by=0"
+      - or: &owner_approved
+          - "approved-reviews-by=abelsamot"
+          - "approved-reviews-by=olivierhuez"
+          - "approved-reviews-by=0xthomass"
+          - "approved-reviews-by=mxcrbn"
       - "-conflict"
       - "-draft"
     merge_conditions:
       - "check-success=build"
+      - "#changes-requested-reviews-by=0"
+      - or: *owner_approved
     merge_method: squash
 
 pull_request_rules:
-  - name: auto-merge green
+  - name: auto-merge owner-approved + green
     conditions:
       - base=main
       - "check-success=build"
+      - "#changes-requested-reviews-by=0"
+      - or: *owner_approved
       - -conflict
       - -draft
     actions:
