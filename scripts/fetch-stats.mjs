@@ -261,6 +261,16 @@ ${entries.join('\n')}
 }
 
 async function main() {
+  // The e2e suite builds the site through Playwright's `webServer`, so a plain
+  // CI run would fire this twice — once for the test build, once for the real
+  // one. That doubles the API calls and, worse, the first pass eats the
+  // pypistats quota so the second gets 429s. The tests assert the *shape* of
+  // the stats, never specific values, so they're happy with committed numbers.
+  if (process.env.SKIP_STATS_REFRESH) {
+    console.log('[fetch-stats] SKIP_STATS_REFRESH set — using the committed values.');
+    return;
+  }
+
   const { COMPANIES } = await import(resolve(ROOT, 'lib/companies.ts'));
   const previous = await readPrevious();
 
@@ -331,6 +341,20 @@ async function main() {
   }
 
   writeFileSync(OUT_PATH, serialize(stats, new Date().toISOString().slice(0, 10)), 'utf8');
+
+  // Hand the output to biome rather than trying to match its formatter by hand
+  // (it unquotes identifier-safe keys, but not ones like 'better-auth', and
+  // wraps long object literals). Keeping the file formatted means `pnpm lint`
+  // can cover it like any other source file instead of needing an exclusion.
+  try {
+    execFileSync('pnpm', ['exec', 'biome', 'format', '--write', OUT_PATH], {
+      stdio: 'ignore',
+      cwd: ROOT,
+    });
+  } catch {
+    console.warn('[fetch-stats] Could not run biome on the output — `pnpm lint` may flag it.');
+  }
+
   console.log(
     `[fetch-stats] Wrote ${Object.keys(stats).length} companies to lib/stats.generated.ts` +
       `${fellBack ? ` (${fellBack} value(s) kept from the previous file)` : ''}`,

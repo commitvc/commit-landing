@@ -47,7 +47,14 @@ jobs:
 
       - run: pnpm exec playwright install --with-deps chromium
 
+      # Playwright's webServer builds the site, which would trigger the stats
+      # refresh a second time — doubling API calls, and letting the test pass
+      # consume the pypistats quota that the real build then needs. The tests
+      # assert the shape of the stats, not their values, so committed numbers
+      # are exactly right here.
       - run: pnpm test:e2e
+        env:
+          SKIP_STATS_REFRESH: '1'
 
       # `prebuild` refreshes lib/stats.generated.ts. The token lifts the GitHub
       # API budget from 60 req/hour (unauthenticated, and one run needs ~29) to

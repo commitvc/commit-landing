@@ -15,14 +15,14 @@ import type { CompanyStats } from './github-stats';
 export const BAKED_STATS: Record<string, CompanyStats> = {
   atuin: {
     repo: {
-      stars: 31_018,
+      stars: 31_019,
       forks: 918,
-      openIssues: 376,
+      openIssues: 375,
       contributors: 316,
       license: 'MIT',
       language: 'Rust',
     },
-    download: { kind: 'gh-releases', count: 1_386_130, period: 'total' },
+    download: { kind: 'gh-releases', count: 1_386_151, period: 'total' },
   },
   'better-auth': {
     repo: {
@@ -48,9 +48,9 @@ export const BAKED_STATS: Record<string, CompanyStats> = {
   },
   mastra: {
     repo: {
-      stars: 26_908,
-      forks: 2_562,
-      openIssues: 632,
+      stars: 26_910,
+      forks: 2_563,
+      openIssues: 631,
       contributors: 591,
       language: 'TypeScript',
     },
@@ -62,7 +62,7 @@ export const BAKED_STATS: Record<string, CompanyStats> = {
   },
   pangolin: {
     repo: { stars: 21_985, forks: 742, openIssues: 101, contributors: 106, language: 'TypeScript' },
-    download: { kind: 'docker', count: 3_677_970, period: 'total' },
+    download: { kind: 'docker', count: 3_678_003, period: 'total' },
   },
   pyannote: {
     repo: {
@@ -77,17 +77,17 @@ export const BAKED_STATS: Record<string, CompanyStats> = {
   },
   sourcebot: {
     repo: { stars: 3_655, forks: 331, openIssues: 166, contributors: 54, language: 'TypeScript' },
-    download: { kind: 'ghcr', count: 650_862, period: 'total' },
+    download: { kind: 'ghcr', count: 650_879, period: 'total' },
   },
   twenty: {
     repo: {
-      stars: 54_244,
+      stars: 54_246,
       forks: 8_342,
       openIssues: 141,
       contributors: 704,
       language: 'TypeScript',
     },
-    download: { kind: 'docker', count: 1_897_795, period: 'total' },
+    download: { kind: 'docker', count: 1_897_845, period: 'total' },
   },
   whitecircle: {
     repo: {
