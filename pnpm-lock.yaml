@@ -16,10 +16,10 @@ importers:
         version: 3.1.1
       '@mdx-js/react':
         specifier: ^3.1.0
-        version: 3.1.1(@types/react@19.2.17)(react@19.2.7)
+        version: 3.1.1(@types/react@19.2.18)(react@19.2.8)
       '@next/mdx':
         specifier: ^16.2.12
-        version: 16.2.12(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.17)(react@19.2.7))
+        version: 16.2.12(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.18)(react@19.2.8))
       '@types/mdx':
         specifier: ^2.0.14
         version: 2.0.14
@@ -28,16 +28,16 @@ importers:
         version: 4.0.3
       next:
         specifier: ^16.2.12
-        version: 16.2.12(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 16.2.12(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       posthog-js:
         specifier: ^1.402.2
         version: 1.402.2
       react:
-        specifier: ^19.2.7
-        version: 19.2.7
+        specifier: ^19.2.8
+        version: 19.2.8
       react-dom:
-        specifier: ^19.2.7
-        version: 19.2.7(react@19.2.7)
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -64,11 +64,11 @@ importers:
         specifier: ^26.1.1
         version: 26.1.1
       '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
+        specifier: ^19.2.18
+        version: 19.2.18
       '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.2.3(@types/react@19.2.17)
+        specifier: ^19.2.4
+        version: 19.2.4(@types/react@19.2.18)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -389,13 +389,13 @@ packages:
   '@types/node@26.1.1':
     resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
 
-  '@types/react-dom@19.2.3':
-    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
+  '@types/react-dom@19.2.4':
+    resolution: {integrity: sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw==}
     peerDependencies:
       '@types/react': ^19.2.0
 
-  '@types/react@19.2.17':
-    resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -846,13 +846,13 @@ packages:
   query-selector-shadow-dom@1.0.1:
     resolution: {integrity: sha512-lT5yCqEBgfoMYpf3F2xQRK7zEr1rhIIZuceDK6+xRkJQ4NMbHTwXqk4NkwDwQMNqXgG9r9fyHnzwNVs6zV5KRw==}
 
-  react-dom@19.2.7:
-    resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
+  react-dom@19.2.8:
+    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
     peerDependencies:
-      react: ^19.2.7
+      react: ^19.2.8
 
-  react@19.2.7:
-    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
+  react@19.2.8:
+    resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
     engines: {node: '>=0.10.0'}
 
   recma-build-jsx@1.0.0:
@@ -1192,20 +1192,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/react@3.1.1(@types/react@19.2.17)(react@19.2.7)':
+  '@mdx-js/react@3.1.1(@types/react@19.2.18)(react@19.2.8)':
     dependencies:
       '@types/mdx': 2.0.14
-      '@types/react': 19.2.17
-      react: 19.2.7
+      '@types/react': 19.2.18
+      react: 19.2.8
 
   '@next/env@16.2.12': {}
 
-  '@next/mdx@16.2.12(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.17)(react@19.2.7))':
+  '@next/mdx@16.2.12(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.18)(react@19.2.8))':
     dependencies:
       source-map: 0.7.6
     optionalDependencies:
       '@mdx-js/loader': 3.1.1
-      '@mdx-js/react': 3.1.1(@types/react@19.2.17)(react@19.2.7)
+      '@mdx-js/react': 3.1.1(@types/react@19.2.18)(react@19.2.8)
 
   '@next/swc-darwin-arm64@16.2.12':
     optional: true
@@ -1274,11 +1274,11 @@ snapshots:
     dependencies:
       undici-types: 8.3.0
 
-  '@types/react-dom@19.2.3(@types/react@19.2.17)':
+  '@types/react-dom@19.2.4(@types/react@19.2.18)':
     dependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.2.18
 
-  '@types/react@19.2.17':
+  '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
 
@@ -1967,16 +1967,16 @@ snapshots:
 
   nanoid@3.3.16: {}
 
-  next@16.2.12(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  next@16.2.12(@opentelemetry/api@1.9.1)(@playwright/test@1.61.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@next/env': 16.2.12
       '@swc/helpers': 0.5.15
       baseline-browser-mapping: 2.11.4
       caniuse-lite: 1.0.30001806
       postcss: 8.5.23
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-      styled-jsx: 5.1.6(react@19.2.7)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      styled-jsx: 5.1.6(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.2.12
       '@next/swc-darwin-x64': 16.2.12
@@ -2038,12 +2038,12 @@ snapshots:
 
   query-selector-shadow-dom@1.0.1: {}
 
-  react-dom@19.2.7(react@19.2.7):
+  react-dom@19.2.8(react@19.2.8):
     dependencies:
-      react: 19.2.7
+      react: 19.2.8
       scheduler: 0.27.0
 
-  react@19.2.7: {}
+  react@19.2.8: {}
 
   recma-build-jsx@1.0.0:
     dependencies:
@@ -2223,10 +2223,10 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.7
 
-  styled-jsx@5.1.6(react@19.2.7):
+  styled-jsx@5.1.6(react@19.2.8):
     dependencies:
       client-only: 0.0.1
-      react: 19.2.7
+      react: 19.2.8
 
   toml@3.0.0: {}
 
