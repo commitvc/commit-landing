@@ -13,6 +13,8 @@
  * which is the same graceful fallback as any other missing metric.
  */
 export const CONTAINER_PULLS: Record<string, number> = {
-  // Scraped 2026-04-25 from github.com/sourcebot-dev/sourcebot/pkgs/container/sourcebot
-  'sourcebot-dev/sourcebot': 412_574,
+  // Scraped 2026-08-04 from github.com/sourcebot-dev/sourcebot/pkgs/container/sourcebot
+  // (was 412_574 on 2026-04-25 — a ~58% understatement after 3 months, which is
+  // the argument for automating this rather than remembering to bump it).
+  'sourcebot-dev/sourcebot': 650_814,
 };
