@@ -155,11 +155,17 @@ export const COMPANIES: readonly Company[] = [
     stage: 'Seed',
     location: 'San Francisco',
     founders: [{ name: 'Bereket Engida', short: 'Bereket' }],
+    acquiredBy: 'Vercel',
     firstCommit: '2024-08-10',
+    // `acquiredBy` skips the live api.github.com fetch, so `license` and
+    // `language` no longer come from GitHub — bake them (same pattern as keep
+    // and graphcore above). Values as GitHub reported them at acquisition.
+    license: 'MIT',
+    language: 'TypeScript',
     about:
       'Better Auth is a framework-agnostic TypeScript authentication library that lives inside your app rather than behind a vendor API. It ships session management, social sign-on, two-factor, and organizations out of the box, and a plugin system that lets teams extend the auth layer instead of outgrowing it.',
     seoDescription:
-      'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Backed by the >commit team before the fund.',
+      'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Acquired by Vercel. Backed by the >commit team before the fund.',
     thankInsight:
       'how to reimagine a crowded, vendor-dominated category by giving developers full ownership again — and that open source knows no borders.',
   },
