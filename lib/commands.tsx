@@ -7,7 +7,14 @@ import { Linkify } from '@/components/linkify/Linkify';
 import { ADVISORS } from './advisors';
 import { COMPANIES } from './companies';
 import type { FsDir } from './filesystem';
-import { getNode, isDirectory, listDirectory, readFile, resolvePath } from './filesystem';
+import {
+  getNode,
+  isDirectory,
+  isStealthCompanyFile,
+  listDirectory,
+  readFile,
+  resolvePath,
+} from './filesystem';
 import { decrypt } from './tea';
 import { TEAM } from './team';
 import { toggleTheme } from './theme';
@@ -175,10 +182,13 @@ const ls: Command = {
         {entries.map((name) => {
           const childPath = resolvePath(resolved, name);
           const dir = isDirectory(ctx.fs, childPath);
+          // Stealth company files get the faded green the file-tree sidebar
+          // uses, so `ls companies/` reads the same as the tree view.
+          const fileClass = isStealthCompanyFile(childPath) ? 'green-faded' : 'green';
           return (
             <div key={name}>
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <span className={dir ? 'blue' : 'green'}>{name}</span>
+              <span className={dir ? 'blue' : fileClass}>{name}</span>
             </div>
           );
         })}
