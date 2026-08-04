@@ -1,7 +1,7 @@
 # commit-landing
 
 The source for [commit.fund](https://commit.fund). Next.js 15 App Router, static
-export, deployed to GitHub Pages.
+export, deployed by Vercel.
 
 ## Develop
 
@@ -18,7 +18,7 @@ Node is pinned to 22 via `.nvmrc`. Package manager is pnpm.
 pnpm lint           # Biome
 pnpm typecheck      # tsc --noEmit
 pnpm test:e2e       # Playwright smoke tests (builds + serves locally)
-pnpm build          # produces out/ for deploy
+pnpm build          # static export to out/
 ```
 
 All four run in CI on every push.
@@ -58,9 +58,18 @@ Shared chrome in [`components/`](components):
 
 ## Deploy
 
-Push to `main` → GitHub Actions runs lint + typecheck + Playwright + `pnpm build`,
-then uploads `out/` to GitHub Pages via `actions/deploy-pages`.
-`public/CNAME` keeps the custom domain attached.
+Vercel (project `commit-landing`, team `red-river-west`) builds and serves the
+site: a preview per PR, production on `main`. Domains — apex 308s to
+`www.commit.fund` — are configured in Vercel, not in the repo.
+
+GitHub Actions only validates: [`ci.yml`](.github/workflows/ci.yml) runs
+lint + typecheck + Playwright + `pnpm build` on every push and PR, and
+publishes nothing. A green Actions run therefore does *not* mean the deploy
+landed — check the Vercel commit status for that.
+
+Portfolio stats are baked in at build time by `scripts/fetch-stats.mjs`, so
+they only move when a build runs; the checked-in `lib/stats.generated.ts` is
+the fallback.
 
 ## Specs
 
