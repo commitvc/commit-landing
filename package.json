@@ -20,8 +20,8 @@
     "gray-matter": "^4.0.3",
     "next": "^16.2.12",
     "posthog-js": "^1.402.2",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-frontmatter": "^5.0.0",
@@ -32,8 +32,8 @@
     "@biomejs/biome": "^2.5.4",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "typescript": "^6.0.3"
   },
   "pnpm": {
