@@ -132,6 +132,25 @@ test('the theme is published to both localStorage and a cookie', async ({ page, 
   expect(await page.evaluate(() => localStorage.getItem('commit-theme'))).toBe('light');
 });
 
+test('a choice made on insights wins over the one stored here', async ({ page }) => {
+  // The case that actually happens: someone has used `theme` here, so they have
+  // a localStorage value, and then switches on insights.commit.fund — which
+  // writes only the shared cookie. Reading localStorage first would mask that
+  // for exactly the returning visitors most likely to notice.
+  await page.goto('/cli/');
+  await page.evaluate(() => {
+    localStorage.setItem('commit-theme', 'dark');
+    // biome-ignore lint/suspicious/noDocumentCookie: stands in for what insights.commit.fund writes on the apex.
+    document.cookie = 'commit-theme=light; path=/';
+  });
+  await page.reload();
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  // And the stale local copy is brought back into line rather than left to win
+  // again the moment the cookie expires.
+  expect(await page.evaluate(() => localStorage.getItem('commit-theme'))).toBe('light');
+});
+
 /** Resolve a custom property to a canonical `rgba()` string by letting the
  *  browser parse it as a real colour. Reading the property directly returns
  *  whatever serialization the engine chose (Chrome hands back `#2820386b`

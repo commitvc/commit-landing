@@ -14,13 +14,19 @@ import '../styles/globals.css';
 // Absence of a stored value is meaningful: it leaves `data-theme` unset so the
 // prefers-color-scheme path in globals.css decides.
 //
-// localStorage first, then the `.commit.fund` cookie of the same name — that's
-// how a choice made on insights.commit.fund reaches us, since localStorage
-// can't cross the subdomain boundary. A cookie-sourced value is copied into
-// localStorage so the two stay in step. See lib/theme.ts for the write side.
+// The `.commit.fund` cookie first, then localStorage of the same name. The
+// cookie is the only store the sibling subdomains share, so it is the only one
+// that can carry a choice made on insights.commit.fund — and reading it first is
+// what makes that choice win here. localStorage is the fallback for a visitor
+// who picked a theme before the cookie existed, and a cookie value is copied
+// into it so the two stay in step. See lib/theme.ts for the write side.
+//
+// Reading localStorage first looks equivalent and is not: our own flips write
+// both stores, so a returning visitor always has a localStorage value, and it
+// would mask every later choice the cookie brings back from insights.
 const THEME_BOOTSTRAP = `(function(){try{var k=${JSON.stringify(
   THEME_STORAGE_KEY,
-)};var t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){var m=document.cookie.match('(?:^|; )'+k+'=(light|dark)');t=m&&m[1];if(t){try{localStorage.setItem(k,t)}catch(e){}}}if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})();`;
+)};var m=document.cookie.match('(?:^|; )'+k+'=(light|dark)');var t=m&&m[1];if(t){try{localStorage.setItem(k,t)}catch(e){}}else{t=localStorage.getItem(k)}if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})();`;
 
 // Shared OG/Twitter image. Canonical 1200×630 PNG so every unfurling
 // platform (Twitter `summary_large_image`, Facebook, LinkedIn, iMessage,
