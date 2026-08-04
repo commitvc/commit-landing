@@ -43,21 +43,37 @@ export function NavBar() {
     if (!container || !activeEl) return;
     const containerRect = container.getBoundingClientRect();
     const elRect = activeEl.getBoundingClientRect();
-    // The dash pattern is 8px dash + 2px gap, anchored to the viewport via
-    // background-attachment: fixed. To avoid cropped dashes at the indicator
-    // edges — and to stay perfectly aligned with the full nav underline —
-    // snap the viewport-left down to the nearest 10k and the viewport-right
-    // up to the nearest 10k+8, then grow the indicator outward to fit.
+    // The dash pattern is DASH px on / (PERIOD - DASH) px off, painted against
+    // the viewport via background-attachment: fixed — the same grid as the
+    // full-width nav dash line (.container::after). For the active-tab dashes to
+    // sit exactly on top of that line (no doubled/offset dashes), the indicator's
+    // left edge must land on a PERIOD boundary and its width must be a whole
+    // number of periods plus one DASH, so the right edge ends flush with a dash.
+    //
+    // Within those constraints, centre the underline on the label. Snapping each
+    // edge independently (the previous approach) let the left/right bleed drift
+    // apart by up to ~9px, so some tabs — notably "Insights" — read as off-centre.
+    // Instead: pick the smallest valid width that covers the label plus BLEED on
+    // both sides, then choose the grid-aligned left edge whose resulting centre is
+    // closest to the label's. Trying that width and the next-larger one lands the
+    // indicator centre within PERIOD/4 of the label centre for every tab.
     const BLEED = 6;
     const PERIOD = 10;
     const DASH = 8;
-    const vpLeftTarget = elRect.left - BLEED;
-    const vpRightTarget = elRect.right + BLEED;
-    const vpLeft = Math.floor(vpLeftTarget / PERIOD) * PERIOD;
-    const vpRight = Math.ceil((vpRightTarget - DASH) / PERIOD) * PERIOD + DASH;
+    const labelCenter = (elRect.left + elRect.right) / 2;
+    const minWidth = elRect.right - elRect.left + 2 * BLEED;
+    const minPeriods = Math.ceil((minWidth - DASH) / PERIOD);
+    let best: { vpLeft: number; width: number; offset: number } | null = null;
+    for (const periods of [minPeriods, minPeriods + 1]) {
+      const width = periods * PERIOD + DASH;
+      const vpLeft = Math.round((labelCenter - width / 2) / PERIOD) * PERIOD;
+      const offset = Math.abs(vpLeft + width / 2 - labelCenter);
+      if (!best || offset < best.offset) best = { vpLeft, width, offset };
+    }
+    if (!best) return;
     setRect({
-      left: vpLeft - containerRect.left,
-      width: vpRight - vpLeft,
+      left: best.vpLeft - containerRect.left,
+      width: best.width,
     });
   }, [active]);
 
