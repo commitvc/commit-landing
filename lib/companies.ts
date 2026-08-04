@@ -79,6 +79,18 @@ export type Company = {
   /** Rendered as "(acq. Elastic)" next to the company name. */
   acquiredBy?: string;
 
+  /** Only meaningful alongside `acquiredBy`. By default an acquisition freezes
+   *  the card: CompanyCard skips the live GitHub/registry fetch, because on a
+   *  repo that's been archived or merged into the acquirer, live
+   *  stars/forks/contributors read as misleading (see keep, graphcore).
+   *
+   *  Set this when the project stays independently alive under the acquirer
+   *  and the live numbers are still the true story — better-auth is the case
+   *  that prompted it. Decide per acquisition rather than by default; if you
+   *  set this, drop any baked `license`/`language` overrides so the live
+   *  values come through. */
+  keepLiveStats?: boolean;
+
   /** Stealth investments. When `true`, the CompanyCard renders a single
    *  `<filename>: Permission denied` line instead of the normal layout, the
    *  page emits no Organization JSON-LD (we don't index a teaser as a real
@@ -155,11 +167,18 @@ export const COMPANIES: readonly Company[] = [
     stage: 'Seed',
     location: 'San Francisco',
     founders: [{ name: 'Bereket Engida', short: 'Bereket' }],
+    acquiredBy: 'Vercel',
+    // Unlike keep and graphcore, better-auth stays independently alive under
+    // Vercel — the repo is unarchived and still shipping, and the adoption
+    // numbers are the most impressive part of the story. So keep the live
+    // fetch, and no baked license/language overrides: GitHub reports MIT and
+    // TypeScript correctly here.
+    keepLiveStats: true,
     firstCommit: '2024-08-10',
     about:
       'Better Auth is a framework-agnostic TypeScript authentication library that lives inside your app rather than behind a vendor API. It ships session management, social sign-on, two-factor, and organizations out of the box, and a plugin system that lets teams extend the auth layer instead of outgrowing it.',
     seoDescription:
-      'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Backed by the >commit team before the fund.',
+      'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Acquired by Vercel. Backed by the >commit team before the fund.',
     thankInsight:
       'how to reimagine a crowded, vendor-dominated category by giving developers full ownership again — and that open source knows no borders.',
   },
@@ -280,11 +299,12 @@ export const COMPANIES: readonly Company[] = [
     acquiredBy: 'Elastic',
     firstCommit: '2023-02-04',
     license: 'MIT',
-    // `acquiredBy` skips the live api.github.com fetch (CompanyCard treats
-    // it as the lifecycle signal that live stars/forks/contributors are
-    // misleading). Without the fetch, `language` falls through to whatever
-    // is set here — bake the value GitHub reported when the project was
-    // active. Same pattern for graphcore below.
+    // No `keepLiveStats` here, so `acquiredBy` freezes the card and skips the
+    // live api.github.com fetch — the right default for a repo that's been
+    // absorbed by the acquirer, where live stars/contributors mislead. Without
+    // the fetch, `language` falls through to whatever is set here, so bake the
+    // value GitHub reported while the project was active. Same for graphcore
+    // below; better-auth is the counter-example that opts back in.
     language: 'Python',
     about:
       'Keep is an open-source AIOps platform — a Swiss-knife for managing alerts and events at scale. It correlates noisy signals from monitoring tools, runs automated workflows across them, and ships with AI-powered deduplication so on-call teams see fewer pages and more signal.',

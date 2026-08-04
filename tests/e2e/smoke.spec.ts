@@ -11,6 +11,7 @@ const TABS = [
   { path: '/companies/', label: 'Companies' },
   { path: '/blog/', label: 'Blog' },
   { path: '/team/', label: 'Team' },
+  { path: '/insights/', label: 'Insights' },
   { path: '/about/', label: 'About' },
 ];
 
@@ -72,6 +73,82 @@ test('terminal ls lists top-level directories', async ({ page }) => {
   await expect(output).toContainText('team');
   await expect(output).toContainText('companies');
   await expect(output).toContainText('blog');
+});
+
+test('theme command flips the theme and survives a reload', async ({ page }) => {
+  await page.goto('/cli/');
+  const root = page.locator('html');
+  const input = page.locator('input[aria-label="Terminal command input"]');
+  await expect(input).toBeEnabled({ timeout: 10_000 });
+
+  // No explicit override until the user asks for one — the prefers-color-scheme
+  // path in globals.css owns the initial look.
+  await expect(root).not.toHaveAttribute('data-theme', /.+/);
+
+  // Playwright's default colorScheme is light, so the effective starting theme
+  // is light and the first flip must land on dark.
+  await input.focus();
+  await page.keyboard.type('theme');
+  await page.keyboard.press('Enter');
+  await expect(root).toHaveAttribute('data-theme', 'dark');
+
+  // The choice is persisted, so a full reload must not flash back.
+  await page.reload();
+  await expect(root).toHaveAttribute('data-theme', 'dark');
+
+  // And flipping again returns to light rather than sticking.
+  await expect(input).toBeEnabled({ timeout: 10_000 });
+  await input.focus();
+  await page.keyboard.type('theme');
+  await page.keyboard.press('Enter');
+  await expect(root).toHaveAttribute('data-theme', 'light');
+});
+
+/** Resolve a custom property to a canonical `rgba()` string by letting the
+ *  browser parse it as a real colour. Reading the property directly returns
+ *  whatever serialization the engine chose (Chrome hands back `#2820386b`
+ *  for an alpha rgba), which is not stable enough to assert on. */
+async function resolveVar(page: import('@playwright/test').Page, name: string): Promise<string> {
+  return page.evaluate((prop) => {
+    const probe = document.createElement('div');
+    probe.style.color = getComputedStyle(document.documentElement).getPropertyValue(prop);
+    document.body.appendChild(probe);
+    const out = getComputedStyle(probe).color;
+    probe.remove();
+    return out;
+  }, name);
+}
+
+test('file-tree guide colours follow the theme', async ({ page }) => {
+  // Regression guard for the RRW retheme: these four were hardcoded Tokyo
+  // Night rgba() literals in FileTree.module.css. At the dark alphas they
+  // resolve to near-invisible on the light ground, which would have left the
+  // tree guides, expand arrows and stealth files unreadable on Companies,
+  // Team, Blog and About — four of the six tabs.
+  const VARS = ['--fg-faint', '--fg-dim', '--rule-faint', '--green-faded'];
+  await page.goto('/companies/');
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  const dark = await Promise.all(VARS.map((v) => resolveVar(page, v)));
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+  const light = await Promise.all(VARS.map((v) => resolveVar(page, v)));
+
+  // Every one must actually change between themes — a value left hardcoded
+  // would report identical colours here.
+  for (const [i, name] of VARS.entries()) {
+    expect(light[i], `${name} must differ between themes`).not.toBe(dark[i]);
+  }
+
+  // And on light they must be built on the dark ink, not the pale dark-theme
+  // ink that would wash out. DarkBlueRiver is rgb(40, 32, 56).
+  expect(light[0]).toContain('40, 32, 56');
+  expect(light[1]).toContain('40, 32, 56');
+  expect(light[2]).toContain('40, 32, 56');
 });
 
 test('/about/legal serves a redirect page with a visible fallback link', async ({ request }) => {
