@@ -104,6 +104,34 @@ test('theme command flips the theme and survives a reload', async ({ page }) => 
   await expect(root).toHaveAttribute('data-theme', 'light');
 });
 
+test('the theme is published to both localStorage and a cookie', async ({ page, context }) => {
+  await page.goto('/cli/');
+  const input = page.locator('input[aria-label="Terminal command input"]');
+  await expect(input).toBeEnabled({ timeout: 10_000 });
+  await input.focus();
+  await page.keyboard.type('theme');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+  // localStorage is what our own reloads read; the cookie is what the sibling
+  // subdomains (insights) read, since localStorage can't cross origins. Both
+  // must carry the same value after a single flip.
+  expect(await page.evaluate(() => localStorage.getItem('commit-theme'))).toBe('dark');
+  const cookie = (await context.cookies()).find((c) => c.name === 'commit-theme');
+  expect(cookie?.value).toBe('dark');
+
+  // A cookie set by another *.commit.fund host is honoured on a cold load,
+  // and mirrored into localStorage so the two don't drift.
+  await page.evaluate(() => {
+    localStorage.removeItem('commit-theme');
+    // biome-ignore lint/suspicious/noDocumentCookie: stands in for the cookie another subdomain would have set.
+    document.cookie = 'commit-theme=light; path=/';
+  });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  expect(await page.evaluate(() => localStorage.getItem('commit-theme'))).toBe('light');
+});
+
 /** Resolve a custom property to a canonical `rgba()` string by letting the
  *  browser parse it as a real colour. Reading the property directly returns
  *  whatever serialization the engine chose (Chrome hands back `#2820386b`
