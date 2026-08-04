@@ -183,14 +183,20 @@ export function isDirectory(root: FsDir, path: string): boolean {
   return node !== null && node.type === 'directory';
 }
 
-/** Stealth rank for a file's full path: 1 for a stealth company file
- *  (/companies/<slug>.txt whose slug is flagged stealth), else 0. Lets the
- *  portfolio listing order public companies before stealth ones. Any
+/** True for a stealth company file (/companies/<slug>.txt whose slug is
+ *  flagged stealth). Shared by the file-tree sidebar and the CLI `ls` so both
+ *  paint stealth entries in the same faded green. */
+export function isStealthCompanyFile(fullPath: string): boolean {
+  const m = fullPath.match(/^\/companies\/([^/]+)\.txt$/);
+  if (!m) return false;
+  return !!COMPANIES.find((c) => c.slug === m[1])?.stealth;
+}
+
+/** Stealth rank for a file's full path: 1 for a stealth company file, else 0.
+ *  Lets the portfolio listing order public companies before stealth ones. Any
  *  non-company file ranks 0, so other directories stay plain-alphabetical. */
 function companyStealthRank(fullPath: string): number {
-  const m = fullPath.match(/^\/companies\/([^/]+)\.txt$/);
-  if (!m) return 0;
-  return COMPANIES.find((c) => c.slug === m[1])?.stealth ? 1 : 0;
+  return isStealthCompanyFile(fullPath) ? 1 : 0;
 }
 
 /** Sort comparator for file entries within a directory: public companies
