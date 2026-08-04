@@ -1,15 +1,80 @@
-/* Mount point for the dashboard iframe. Fills the scrollable content zone so
-   the embed can just be width/height 100% with no border — no layout change
-   needed when it replaces the placeholder below. */
-.frame {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 12rem;
-  margin-top: 1rem;
+/* Marketing + login page for Insights, the >commit platform. Type scale and
+   rhythm follow CompanyCard so this page reads as the same template family:
+   yellow `#`-style section headings, 720px measure. */
+.page {
+  max-width: 720px;
+  padding: 0.5rem 0 2rem;
+  line-height: 1.6;
 }
 
-.pending {
-  color: var(--fg-muted);
+/* First visible line — the h1 above it is sr-only, so this carries no top margin. */
+.tagline {
+  color: var(--fg);
   margin: 0;
+}
+
+.lede {
+  color: var(--fg-muted-hover);
+  margin: 0.5rem 0 0 0;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.sectionHeading {
+  color: var(--yellow);
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0 0 0.4rem 0;
+}
+
+.section p {
+  margin: 0;
+}
+
+/* CTA — outlined in RedRiver, filling on hover. White on RedRiver is the
+   brand-book pairing, so the hover text colour is deliberately not themed. */
+.ctaRow {
+  margin-top: 2.5rem;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 1ch;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  color: var(--red);
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  background: var(--red);
+  color: #fff;
+}
+
+.cta .arrow {
+  transition: transform 160ms ease;
+}
+
+.cta:hover .arrow,
+.cta:focus-visible .arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .cta .arrow {
+    transition: none;
+  }
+  .cta:hover .arrow,
+  .cta:focus-visible .arrow {
+    transform: none;
+  }
 }
