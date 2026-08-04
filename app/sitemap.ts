@@ -13,6 +13,7 @@ const STATIC_PATHS = [
   '/companies',
   '/blog',
   '/team',
+  '/insights',
   '/about',
   '/about/readme',
   '/about/projects',
