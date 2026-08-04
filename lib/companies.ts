@@ -14,8 +14,8 @@ export type Founder = {
  *   'npm:<pkg>'              — npmjs.org (last-month downloads)
  *   'pypi:<pkg>'             — pypistats.org (recent monthly)
  *   'docker:<owner>/<img>'   — Docker Hub (pull_count)
- *   'ghcr:<owner>/<repo>'    — GitHub Container Registry (scraped at build time
- *                              into lib/container-pulls.generated.ts)
+ *   'ghcr:<owner>/<repo>'    — GitHub Container Registry (HTML-only, no JSON
+ *                              API — scraped by scripts/fetch-stats.mjs)
  *   'gh-releases:<owner>/<repo>' — cumulative downloads across all release
  *                              assets. Use for tools shipped as prebuilt
  *                              binaries (install script / Homebrew / direct

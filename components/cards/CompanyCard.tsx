@@ -6,12 +6,18 @@ import { type Company, formatFounderShortNames } from '@/lib/companies';
 import {
   type CompanyStats,
   downloadLabel,
-  fetchCompanyStats,
   formatNumber,
+  refreshCompanyStats,
 } from '@/lib/github-stats';
+import { BAKED_STATS } from '@/lib/stats.generated';
 import styles from './CompanyCard.module.css';
 
 type Props = { company: Company };
+
+/** Build-time stats for a slug, or an empty pair when none were baked. */
+function bakedFor(slug: string): CompanyStats {
+  return BAKED_STATS[slug] ?? { repo: null, download: null };
+}
 
 /** "2024-08-06" → "Aug 2024" — how the `# project` block shows first commit. */
 function formatMonthYear(iso: string): string {
@@ -245,7 +251,10 @@ function StealthCard({ company }: Props) {
 }
 
 export function CompanyCard({ company }: Props) {
-  const [stats, setStats] = useState<CompanyStats | null>(null);
+  // Seeded from the build-time values rather than null, so the first render —
+  // including the static HTML a crawler sees — already contains real numbers.
+  // The effect below only ever refreshes them.
+  const [stats, setStats] = useState<CompanyStats | null>(() => bakedFor(company.slug));
 
   // Acquired companies default to freezing the card: live stars/forks/
   // contributors/downloads on a repo that's been archived or merged into the
@@ -264,13 +273,15 @@ export function CompanyCard({ company }: Props) {
   useEffect(() => {
     if (skipLiveFetch) return;
     let cancelled = false;
-    fetchCompanyStats(company.github, company.package).then((s) => {
+    // Re-read inside the effect rather than closing over a derived object, so
+    // the dep array stays on primitives instead of a fresh identity per render.
+    refreshCompanyStats(bakedFor(company.slug), company.github, company.package).then((s) => {
       if (!cancelled) setStats(s);
     });
     return () => {
       cancelled = true;
     };
-  }, [company.github, company.package, skipLiveFetch]);
+  }, [company.slug, company.github, company.package, skipLiveFetch]);
 
   if (company.stealth) return <StealthCard company={company} />;
 

@@ -5,6 +5,13 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Portfolio stats are baked into the bundle at build time (see
+  # scripts/fetch-stats.mjs), so without a periodic rebuild they'd only move
+  # when someone happens to push. Redeploy daily to keep stars / downloads
+  # current. Nothing is committed by this — the numbers are re-fetched into the
+  # build output, and the checked-in file stays the fallback.
+  schedule:
+    - cron: '17 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -42,23 +49,29 @@ jobs:
 
       - run: pnpm test:e2e
 
+      # `prebuild` refreshes lib/stats.generated.ts. The token lifts the GitHub
+      # API budget from 60 req/hour (unauthenticated, and one run needs ~29) to
+      # 5000 — without it the refresh mostly falls back to committed values.
       - run: pnpm build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Pages artifact only matters for the deploy job, which only runs on
-      # push-to-main. Skip the artifact upload on PR runs to save a few
-      # seconds and keep the artifact tab clean.
-      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      # Pages artifact only matters for the deploy job. Skip the artifact
+      # upload on PR runs to save a few seconds and keep the artifact tab clean.
+      - if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v6
 
-      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./out
 
   deploy:
-    # Only deploy from main, never from a PR head — PR runs validate the
-    # build but must not publish.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Never from a PR head — PR runs validate the build but must not publish.
+    # `push` covers merges; `schedule` is the daily stats refresh; and
+    # `workflow_dispatch` lets a deploy be triggered by hand. All three only
+    # ever run against main, which the ref check enforces.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

@@ -1,60 +1,35 @@
 /**
- * Client-side fetchers for the stats surfaced in the `# project` block of a
- * CompanyCard: GitHub repo facts (stars, forks, contributors, license,
- * primary language) and downloads/pulls from npm / PyPI / Docker Hub / GHCR.
+ * Stats for the `# project` block of a CompanyCard.
  *
- * All values are fetched live from the browser so numbers stay fresh, with
- * a 1-hour sessionStorage cache so flipping between company files in the
- * same visit doesn't re-hit every API. GHCR pulls are the one exception —
- * github.com has no public JSON endpoint for container pulls (HTML-only),
- * so those are scraped at build time into lib/container-pulls.generated.ts.
+ * TWO LAYERS
  *
- * CORS strategy:
- *  - api.github.com  — allows cross-origin reads. Direct fetch.
- *  - api.npmjs.org   — allows cross-origin reads. Direct fetch.
- *  - pypistats.org   — blocks cross-origin. Routed through CORS_PROXY.
- *  - hub.docker.com  — blocks cross-origin. Routed through CORS_PROXY.
+ * 1. Baked (lib/stats.generated.ts, written by scripts/fetch-stats.mjs at build
+ *    time). This is the baseline every render starts from, so real numbers are
+ *    present in the static HTML — which matters because the previous
+ *    fetch-on-mount approach left every stat invisible to Google and to AI
+ *    search, and invisible without JS.
  *
- * The site ships as a static export (next.config.mjs `output: 'export'`),
- * so we can't run an own-hosted /api/* proxy at request time. The CORS
- * proxy below is a third-party dependency — see SELF-HOSTING note.
+ * 2. Live refresh, client-side, for the endpoints that allow cross-origin
+ *    reads. Purely additive: anything that fails keeps its baked value, so the
+ *    worst case is numbers as fresh as the last deploy rather than no numbers.
+ *
+ * WHY THERE IS NO CORS PROXY ANY MORE
+ *
+ * pypistats.org and hub.docker.com block cross-origin reads, so the browser
+ * used to reach them through a public CORS proxy. That proxy went down more
+ * than once — most recently returning 521 while six companies silently showed
+ * no downloads row at all, because the failure path renders nothing.
+ *
+ * CORS is a browser restriction, not a network one, so the build-time fetcher
+ * reaches those endpoints directly and the proxy is simply gone. The trade-off
+ * is deliberate: docker pulls and pypi downloads are as fresh as the last
+ * build, which for cumulative counts on a marketing page is not a meaningful
+ * loss, and is strictly better than the intermittent nothing it replaces.
+ *
+ * Refreshable in the browser: api.github.com and api.npmjs.org (both send
+ * permissive CORS headers). Baked-only: pypi, docker, and ghcr — the last has
+ * no JSON API at all and is scraped at build time.
  */
-import { CONTAINER_PULLS } from './container-pulls.generated';
-
-/**
- * Public CORS proxy used for endpoints that block cross-origin browser
- * reads (pypistats.org, hub.docker.com). codetabs is a free service that
- * forwards the request from a server and returns the body with permissive
- * CORS headers — no API key, no signup. The trailing slash on `/v1/proxy/`
- * skips a 301 that would otherwise show up on every request.
- *
- * Trade-offs:
- *  - Third-party dependency. If codetabs is down or rate-limited, download
- *    counts gracefully render as "no stat" (same UX as a GHCR package
- *    without a baked count) — see the catch in fetchDownload below.
- *  - Free CORS proxies historically tighten policies over time
- *    (corsproxy.io did so in 2025). Worth periodically verifying.
- *
- * Self-hosting upgrade path: deploy a ~30-line Cloudflare Worker (free
- * tier: 100k req/day, dwarfs portfolio-page traffic) and swap the constant
- * below. Worker template:
- *
- *   export default {
- *     async fetch(req) {
- *       const target = new URL(req.url).searchParams.get('url');
- *       if (!target) return new Response('missing ?url=', { status: 400 });
- *       const upstream = await fetch(target, { headers: { Accept: 'application/json' } });
- *       return new Response(upstream.body, {
- *         status: upstream.status,
- *         headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': upstream.headers.get('Content-Type') ?? 'application/json' },
- *       });
- *     },
- *   };
- *
- * Then `const CORS_PROXY = 'https://your-worker.workers.dev/?url='`.
- */
-const CORS_PROXY = 'https://api.codetabs.com/v1/proxy/?quest=';
-const viaProxy = (url: string) => `${CORS_PROXY}${encodeURIComponent(url)}`;
 
 export type RepoStats = {
   stars: number;
@@ -82,7 +57,12 @@ export type CompanyStats = {
   download: DownloadStat | null;
 };
 
-const CACHE_KEY_PREFIX = 'cmp-stats:v2:';
+/** Sources the browser can reach directly. Everything else stays baked. */
+function isLiveRefreshable(pkg: string): boolean {
+  return pkg.startsWith('npm:') || pkg.startsWith('gh-releases:');
+}
+
+const CACHE_KEY_PREFIX = 'cmp-stats:v3:';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 
 type CacheEntry = { ts: number; data: CompanyStats };
@@ -179,48 +159,14 @@ async function npmLastMonth(name: string): Promise<number | null> {
   return typeof json.downloads === 'number' ? json.downloads : null;
 }
 
-async function pypiLastMonth(name: string): Promise<number | null> {
-  // pypistats.org blocks cross-origin. Route through CORS_PROXY.
-  const res = await fetch(
-    viaProxy(`https://pypistats.org/api/packages/${encodeURIComponent(name)}/recent`),
-  );
-  if (!res.ok) return null;
-  const json = (await res.json()) as { data?: { last_month?: number } };
-  return typeof json.data?.last_month === 'number' ? json.data.last_month : null;
-}
-
-async function dockerPullCount(name: string): Promise<number | null> {
-  // hub.docker.com blocks cross-origin. Route through CORS_PROXY.
-  const res = await fetch(viaProxy(`https://hub.docker.com/v2/repositories/${name}/`));
-  if (!res.ok) return null;
-  const json = (await res.json()) as { pull_count?: number };
-  return typeof json.pull_count === 'number' ? json.pull_count : null;
-}
-
-/**
- * Cumulative download count across every release asset on a repo.
- *
- * The right signal for a tool distributed as prebuilt binaries — an install
- * script, Homebrew, or a direct download — rather than through a language
- * registry. For a Rust CLI in particular, crates.io only sees `cargo install`
- * and undercounts badly (Atuin: ~5k/90d on crates.io vs ~1.4M release-asset
- * downloads), so prefer this for CLIs and keep a registry ref for libraries,
- * where the registry genuinely is the distribution channel.
- *
- * One request: `per_page=100` covers the release list for any repo with <=100
- * releases, and each release embeds its assets, so there's no per-asset
- * round-trip. Repos past 100 releases would undercount — the `Link: rel="next"`
- * check below surfaces that rather than silently reporting a partial total.
- */
+/** Cumulative downloads across every release asset. See the note in
+ *  scripts/fetch-stats.mjs for why this beats a language registry for CLIs. */
 async function ghReleaseDownloads(repo: string): Promise<number | null> {
-  // api.github.com allows cross-origin reads — direct fetch.
   const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=100`);
   if (!res.ok) return null;
-  if (res.headers.get('link')?.includes('rel="next"')) {
-    // More than 100 releases: summing this page alone would understate the
-    // total. Report nothing rather than a wrong number.
-    return null;
-  }
+  // >100 releases would make this a partial sum — report nothing rather than a
+  // number that is quietly too low.
+  if (res.headers.get('link')?.includes('rel="next"')) return null;
   const json = (await res.json()) as Array<{ assets?: Array<{ download_count?: number }> }>;
   if (!Array.isArray(json)) return null;
   let total = 0;
@@ -232,28 +178,12 @@ async function ghReleaseDownloads(repo: string): Promise<number | null> {
   return total > 0 ? total : null;
 }
 
-async function fetchDownload(pkg: string): Promise<DownloadStat | null> {
+async function refreshDownload(pkg: string): Promise<DownloadStat | null> {
   try {
-    if (pkg.startsWith('ghcr:')) {
-      // GHCR has no JSON endpoint — count is baked at build time.
-      const name = pkg.slice(5);
-      const count = CONTAINER_PULLS[name];
-      return typeof count === 'number' ? { kind: 'ghcr', count, period: 'total' } : null;
-    }
     if (pkg.startsWith('npm:')) {
       const count = await npmLastMonth(pkg.slice(4));
       return count != null ? { kind: 'npm', count, period: 'month' } : null;
     }
-    if (pkg.startsWith('pypi:')) {
-      const count = await pypiLastMonth(pkg.slice(5));
-      return count != null ? { kind: 'pypi', count, period: 'month' } : null;
-    }
-    if (pkg.startsWith('docker:')) {
-      const count = await dockerPullCount(pkg.slice(7));
-      return count != null ? { kind: 'docker', count, period: 'total' } : null;
-    }
-    // Checked after 'ghcr:' — both start with "gh", so ordering matters only
-    // in that neither prefix is a prefix of the other. Kept last for clarity.
     if (pkg.startsWith('gh-releases:')) {
       const count = await ghReleaseDownloads(pkg.slice(12));
       return count != null ? { kind: 'gh-releases', count, period: 'total' } : null;
@@ -264,19 +194,30 @@ async function fetchDownload(pkg: string): Promise<DownloadStat | null> {
   }
 }
 
-/** Fetch everything we need for a CompanyCard's `# project` block. */
-export async function fetchCompanyStats(githubUrl?: string, pkg?: string): Promise<CompanyStats> {
+/**
+ * Refresh what the browser can reach, falling back to `baked` field by field.
+ *
+ * Never returns less than it was given: a failed refresh yields the baked
+ * value, so the card can only ever get *fresher*, never emptier.
+ */
+export async function refreshCompanyStats(
+  baked: CompanyStats,
+  githubUrl?: string,
+  pkg?: string,
+): Promise<CompanyStats> {
   const cacheKey = `${githubUrl ?? ''}|${pkg ?? ''}`;
   const cached = readCache(cacheKey);
   if (cached) return cached;
 
-  // Both fetches kick off in parallel — repo from api.github.com, downloads
-  // from npm / pypistats / Docker Hub (the latter two via the CORS proxy).
   const [repo, download] = await Promise.all([
     githubUrl ? fetchRepo(githubUrl) : Promise.resolve(null),
-    pkg ? fetchDownload(pkg) : Promise.resolve(null),
+    pkg && isLiveRefreshable(pkg) ? refreshDownload(pkg) : Promise.resolve(null),
   ]);
-  const stats: CompanyStats = { repo, download };
+
+  const stats: CompanyStats = {
+    repo: repo ?? baked.repo,
+    download: download ?? baked.download,
+  };
   writeCache(cacheKey, stats);
   return stats;
 }
