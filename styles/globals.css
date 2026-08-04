@@ -1,23 +1,127 @@
+/* ── Red River West palette ─────────────────────────────────────────────────
+   RedRiver (#E63424) and DarkBlueRiver (#282038) are brand-book colours;
+   PurpleRiver1 (#E9E6FF) is the dark-theme ink. --blue, --green and --yellow
+   have NO brand-book source — the book contains no blue, green or amber — and
+   are deliberate additions tuned to RRW's desaturated register, because the
+   CLI needs them for directories, files and neofetch labels.
+
+   Light-theme values are declared once as --l-* source variables and mapped
+   onto the live names by the two light selectors below, so the explicit
+   override and the OS-preference path can never drift apart.
+
+   Only the HUE transfers between themes — the alpha ramp does not. The .38
+   muted alpha that measures ~3.1:1 on the dark canvas falls to ~2.2:1 on the
+   light one, so every muted/faint alpha is raised in the light set rather
+   than find-and-replaced. */
 :root {
-  --bg: #313445;
-  /* Tokyo Night palette — fg + accents share a single hue family so they
-     read as one cohesive system. Alpha values used for muted variants stay
-     identical to before so the hierarchy is preserved. */
-  --fg: #c0caf5;
-  --fg-muted: rgba(192, 202, 245, 0.38);
-  --fg-muted-hover: rgba(192, 202, 245, 0.6);
-  --red: #e06c75;
-  --yellow: #e0af68;
-  --blue: #7aa2f7;
-  --green: #9ece6a;
-  --purple: #bb9af7;
+  /* Light-theme source values. Mapped below — never consume a --l-* directly. */
+  --l-bg: #faf9fb;
+  --l-fg: #282038; /* DarkBlueRiver */
+  --l-fg-muted: rgba(40, 32, 56, 0.5);
+  --l-fg-muted-hover: rgba(40, 32, 56, 0.7);
+  --l-red: #e63424; /* RedRiver — brand constant, unchanged across themes */
+  --l-yellow: #a8641a;
+  --l-blue: #1f5fae;
+  --l-green: #1e7a50;
+  --l-purple: #5b51c7;
+  --l-surface: rgba(40, 32, 56, 0.05);
+  --l-surface-strong: rgba(40, 32, 56, 0.09);
+  --l-fg-faint: rgba(40, 32, 56, 0.42);
+  --l-fg-dim: rgba(40, 32, 56, 0.62);
+  --l-rule-faint: rgba(40, 32, 56, 0.28);
+  --l-green-faded: rgba(30, 122, 80, 0.72);
+
+  /* Live palette — dark is the default and the brand's primary look. */
+  --bg: #1e1829;
+  --fg: #e9e6ff; /* PurpleRiver1 */
+  --fg-muted: rgba(233, 230, 255, 0.38);
+  --fg-muted-hover: rgba(233, 230, 255, 0.6);
+  --red: #e63424; /* RedRiver — prompt, ASCII logo, RRW button. Chrome only. */
+  --yellow: #e6c84f;
+  --blue: #4c93e0; /* links, ls directories */
+  --green: #52c48c; /* ls files */
+  --purple: #9c93f0; /* command echo */
+
+  /* Surface tints and faint inks. These were hardcoded Tokyo Night rgba()
+     literals in FileTree.module.css / about/[file]/page.module.css; at those
+     alphas they vanish on a light ground, so they are variables now. */
+  --surface: rgba(233, 230, 255, 0.05); /* image placeholder, row hover */
+  --surface-strong: rgba(233, 230, 255, 0.08); /* selected row */
+  --fg-faint: rgba(233, 230, 255, 0.3); /* file-tree guide characters */
+  --fg-dim: rgba(233, 230, 255, 0.5); /* file-tree expand arrows */
+  --rule-faint: rgba(233, 230, 255, 0.2); /* inline viewer dashed rule */
+  --green-faded: rgba(82, 196, 140, 0.55); /* stealth company file */
+
   --nav-gap: 2rem;
   --content-max: 100%;
+
+  /* Lets the UA theme scrollbars and form controls to match. */
+  color-scheme: dark;
+}
+
+/* Explicit override to light, in both directions, set by the `theme` command
+   on <html data-theme>. */
+:root[data-theme="light"] {
+  --bg: var(--l-bg);
+  --fg: var(--l-fg);
+  --fg-muted: var(--l-fg-muted);
+  --fg-muted-hover: var(--l-fg-muted-hover);
+  --red: var(--l-red);
+  --yellow: var(--l-yellow);
+  --blue: var(--l-blue);
+  --green: var(--l-green);
+  --purple: var(--l-purple);
+  --surface: var(--l-surface);
+  --surface-strong: var(--l-surface-strong);
+  --fg-faint: var(--l-fg-faint);
+  --fg-dim: var(--l-fg-dim);
+  --rule-faint: var(--l-rule-faint);
+  --green-faded: var(--l-green-faded);
+  color-scheme: light;
+}
+
+/* OS preference, unless the user explicitly pinned dark. Dark therefore stays
+   the default whenever the OS expresses no preference. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: var(--l-bg);
+    --fg: var(--l-fg);
+    --fg-muted: var(--l-fg-muted);
+    --fg-muted-hover: var(--l-fg-muted-hover);
+    --red: var(--l-red);
+    --yellow: var(--l-yellow);
+    --blue: var(--l-blue);
+    --green: var(--l-green);
+    --purple: var(--l-purple);
+    --surface: var(--l-surface);
+    --surface-strong: var(--l-surface-strong);
+    --fg-faint: var(--l-fg-faint);
+    --fg-dim: var(--l-fg-dim);
+    --rule-faint: var(--l-rule-faint);
+    --green-faded: var(--l-green-faded);
+    color-scheme: light;
+  }
 }
 
 * {
   font-family: var(--font-meslo), "MesloLGS NF", Menlo, Consolas, monospace;
   box-sizing: border-box;
+}
+
+/* Theme-switch easing. `data-theme-transition` is set on <html> by the `theme`
+   command for the length of the flip only, then removed — see lib/theme.ts.
+   Keeping it momentary matters: a permanent global colour transition would
+   animate on first paint and would also override the nav indicator's own
+   left/width transition for the whole session. The reduced-motion block below
+   neutralises this with its `transition-duration` override. */
+:root[data-theme-transition] *,
+:root[data-theme-transition] *::before,
+:root[data-theme-transition] *::after {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 html,
@@ -112,7 +216,7 @@ a {
   height: 96px;
   border-radius: 4px;
   overflow: hidden;
-  background: rgba(192, 202, 245, 0.05);
+  background: var(--surface);
 }
 
 .terminal-profile-image img {

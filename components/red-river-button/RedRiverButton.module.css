@@ -59,7 +59,8 @@
     padding: 8px 24px;
     height: 50px;
     box-sizing: border-box;
-    background: #e63625;
+    background: var(--red);
+    /* White on RedRiver is the brand-book pairing — must NOT follow the theme. */
     color: #fff;
     text-decoration: none;
     font-size: 0.85rem;

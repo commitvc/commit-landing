@@ -24,22 +24,22 @@
 }
 
 .item:hover {
-  background: rgba(192, 202, 245, 0.05);
+  background: var(--surface);
 }
 
 .selected {
-  background: rgba(192, 202, 245, 0.08);
+  background: var(--surface-strong);
 }
 
 .prefix {
-  color: rgba(192, 202, 245, 0.3);
+  color: var(--fg-faint);
 }
 
 .toggle {
   display: inline-block;
   width: 1.2em;
   text-align: center;
-  color: rgba(192, 202, 245, 0.5);
+  color: var(--fg-dim);
 }
 
 .dir {
@@ -59,7 +59,7 @@
    "different / not yet readable" without shifting hue away from the rest
    of the tree. Hover/selected still works (the file is a real route). */
 .fileStealth {
-  color: rgba(158, 206, 106, 0.55);
+  color: var(--green-faded);
 }
 
 .viewer {
@@ -68,7 +68,7 @@
 }
 
 .viewer:not(:empty) {
-  border-top: 1px dashed rgba(192, 202, 245, 0.2);
+  border-top: 1px dashed var(--rule-faint);
 }
 
 .viewerHeader {
