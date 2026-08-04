@@ -166,6 +166,12 @@ a {
   color: var(--green);
 }
 
+/* Faded green for stealth company entries in `ls` — same treatment the
+   file-tree sidebar gives them (.fileStealth), so both listings agree. */
+.green-faded {
+  color: var(--green-faded);
+}
+
 .purple {
   color: var(--purple);
 }

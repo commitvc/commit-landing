@@ -151,6 +151,71 @@ test('file-tree guide colours follow the theme', async ({ page }) => {
   expect(light[2]).toContain('40, 32, 56');
 });
 
+/** Name → computed colour for every `*.txt` entry in a listing. The CLI's `ls`
+ *  and the file-tree sidebar both render one <span> per entry, so one helper
+ *  reads either — `scope` picks which listing. */
+async function txtEntryColours(
+  page: import('@playwright/test').Page,
+  scope: string,
+): Promise<Record<string, string>> {
+  const entries = await page
+    .locator(`${scope} span`)
+    .evaluateAll((els) =>
+      els
+        .map((el): [string, string] => [el.textContent ?? '', getComputedStyle(el).color])
+        .filter(([name]) => name.endsWith('.txt')),
+    );
+  return Object.fromEntries(entries);
+}
+
+test('CLI ls and the file-tree paint stealth companies alike, in both themes', async ({ page }) => {
+  // `ls companies` and the Companies tree list the same files, so they must
+  // agree on which ones read as stealth: --green-faded for stealth, --green
+  // for live. Both colours are theme-mapped, hence the loop — the CLI class
+  // (`.green-faded` in globals.css) and the tree's (`.fileStealth`) are
+  // separate declarations that could drift on either ground.
+  for (const theme of ['dark', 'light'] as const) {
+    const setTheme = (t: string) => {
+      document.documentElement.dataset.theme = t;
+    };
+
+    await page.goto('/companies/');
+    await page.evaluate(setTheme, theme);
+    const green = await resolveVar(page, '--green');
+    const greenFaded = await resolveVar(page, '--green-faded');
+    expect(greenFaded, `--green-faded must differ from --green on ${theme}`).not.toBe(green);
+
+    const tree = await txtEntryColours(page, 'button');
+    expect(Object.keys(tree).length, `tree files on ${theme}`).toBeGreaterThan(0);
+
+    await page.goto('/cli/');
+    await page.evaluate(setTheme, theme);
+    const input = page.locator('input[aria-label="Terminal command input"]');
+    await expect(input).toBeEnabled({ timeout: 10_000 });
+    await input.focus();
+    await page.keyboard.type('ls companies');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.ls-output')).toBeVisible();
+    const cli = await txtEntryColours(page, '.ls-output');
+
+    // Same set of files in both listings, or the per-name comparison below
+    // would silently skip whatever the CLI dropped.
+    expect(Object.keys(cli).sort(), `listings must match on ${theme}`).toEqual(
+      Object.keys(tree).sort(),
+    );
+
+    for (const [name, colour] of Object.entries(cli)) {
+      expect(colour, `${name} must match the tree on ${theme}`).toBe(tree[name]);
+      expect([green, greenFaded], `${name} must be a company green on ${theme}`).toContain(colour);
+    }
+
+    // Both states have to be represented, else the parity assertions pass
+    // vacuously the day everything is one colour.
+    expect(Object.values(cli), `some stealth entry on ${theme}`).toContain(greenFaded);
+    expect(Object.values(cli), `some live entry on ${theme}`).toContain(green);
+  }
+});
+
 test('portfolio stats are in the served HTML, not just fetched client-side', async ({
   request,
 }) => {
