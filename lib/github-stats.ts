@@ -67,13 +67,13 @@ export type RepoStats = {
   language?: string;
 };
 
-export type DownloadKind = 'npm' | 'pypi' | 'docker' | 'ghcr';
+export type DownloadKind = 'npm' | 'pypi' | 'docker' | 'ghcr' | 'gh-releases';
 
 export type DownloadStat = {
   kind: DownloadKind;
   count: number;
-  /** Per-month for npm/pypi, cumulative for docker/ghcr. Used to pick the
-   *  right trailing label ("/mo" vs nothing) at the render site. */
+  /** Per-month for npm/pypi, cumulative for docker/ghcr/gh-releases. Used to
+   *  pick the right trailing label ("/mo" vs nothing) at the render site. */
   period: 'month' | 'total';
 };
 
@@ -197,6 +197,41 @@ async function dockerPullCount(name: string): Promise<number | null> {
   return typeof json.pull_count === 'number' ? json.pull_count : null;
 }
 
+/**
+ * Cumulative download count across every release asset on a repo.
+ *
+ * The right signal for a tool distributed as prebuilt binaries — an install
+ * script, Homebrew, or a direct download — rather than through a language
+ * registry. For a Rust CLI in particular, crates.io only sees `cargo install`
+ * and undercounts badly (Atuin: ~5k/90d on crates.io vs ~1.4M release-asset
+ * downloads), so prefer this for CLIs and keep a registry ref for libraries,
+ * where the registry genuinely is the distribution channel.
+ *
+ * One request: `per_page=100` covers the release list for any repo with <=100
+ * releases, and each release embeds its assets, so there's no per-asset
+ * round-trip. Repos past 100 releases would undercount — the `Link: rel="next"`
+ * check below surfaces that rather than silently reporting a partial total.
+ */
+async function ghReleaseDownloads(repo: string): Promise<number | null> {
+  // api.github.com allows cross-origin reads — direct fetch.
+  const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=100`);
+  if (!res.ok) return null;
+  if (res.headers.get('link')?.includes('rel="next"')) {
+    // More than 100 releases: summing this page alone would understate the
+    // total. Report nothing rather than a wrong number.
+    return null;
+  }
+  const json = (await res.json()) as Array<{ assets?: Array<{ download_count?: number }> }>;
+  if (!Array.isArray(json)) return null;
+  let total = 0;
+  for (const release of json) {
+    for (const asset of release.assets ?? []) {
+      if (typeof asset.download_count === 'number') total += asset.download_count;
+    }
+  }
+  return total > 0 ? total : null;
+}
+
 async function fetchDownload(pkg: string): Promise<DownloadStat | null> {
   try {
     if (pkg.startsWith('ghcr:')) {
@@ -216,6 +251,12 @@ async function fetchDownload(pkg: string): Promise<DownloadStat | null> {
     if (pkg.startsWith('docker:')) {
       const count = await dockerPullCount(pkg.slice(7));
       return count != null ? { kind: 'docker', count, period: 'total' } : null;
+    }
+    // Checked after 'ghcr:' — both start with "gh", so ordering matters only
+    // in that neither prefix is a prefix of the other. Kept last for clarity.
+    if (pkg.startsWith('gh-releases:')) {
+      const count = await ghReleaseDownloads(pkg.slice(12));
+      return count != null ? { kind: 'gh-releases', count, period: 'total' } : null;
     }
     return null;
   } catch {
@@ -257,5 +298,7 @@ export function downloadLabel(kind: DownloadKind): string {
       return 'DOCKER PULLS';
     case 'ghcr':
       return 'GHCR PULLS';
+    case 'gh-releases':
+      return 'RELEASE DOWNLOADS';
   }
 }
