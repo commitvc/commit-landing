@@ -13,9 +13,14 @@ import '../styles/globals.css';
 // script — next/script defers, which is exactly the flash we're avoiding.
 // Absence of a stored value is meaningful: it leaves `data-theme` unset so the
 // prefers-color-scheme path in globals.css decides.
-const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem(${JSON.stringify(
+//
+// localStorage first, then the `.commit.fund` cookie of the same name — that's
+// how a choice made on insights.commit.fund reaches us, since localStorage
+// can't cross the subdomain boundary. A cookie-sourced value is copied into
+// localStorage so the two stay in step. See lib/theme.ts for the write side.
+const THEME_BOOTSTRAP = `(function(){try{var k=${JSON.stringify(
   THEME_STORAGE_KEY,
-)});if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})();`;
+)};var t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){var m=document.cookie.match('(?:^|; )'+k+'=(light|dark)');t=m&&m[1];if(t){try{localStorage.setItem(k,t)}catch(e){}}}if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})();`;
 
 // Shared OG/Twitter image. Canonical 1200×630 PNG so every unfurling
 // platform (Twitter `summary_large_image`, Facebook, LinkedIn, iMessage,
