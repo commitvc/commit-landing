@@ -1,0 +1,15 @@
+/* Mount point for the dashboard iframe. Fills the scrollable content zone so
+   the embed can just be width/height 100% with no border — no layout change
+   needed when it replaces the placeholder below. */
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  margin-top: 1rem;
+}
+
+.pending {
+  color: var(--fg-muted);
+  margin: 0;
+}
