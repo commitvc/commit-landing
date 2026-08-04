@@ -8,7 +8,12 @@ import { ProfileCard } from '@/components/cards/ProfileCard';
 import { Linkify } from '@/components/linkify/Linkify';
 import { ADVISORS } from '@/lib/advisors';
 import { COMPANIES } from '@/lib/companies';
-import { compareFileEntries, type FsDir, type FsNode } from '@/lib/filesystem';
+import {
+  compareFileEntries,
+  type FsDir,
+  type FsNode,
+  isStealthCompanyFile,
+} from '@/lib/filesystem';
 import { TEAM } from '@/lib/team';
 import styles from './FileTree.module.css';
 
@@ -191,14 +196,10 @@ export function FileTree({ root, basePath, blogPosts }: Props) {
       <div className={styles.tree}>
         {lines.map((line) => {
           const isSelected = !line.isDir && selected === line.fullPath;
-          // Stealth files are dimmed + italicised in the listing so visitors
-          // get a "different/locked" hint before clicking. Match against
-          // /companies/<slug>.txt and look up the slug's `stealth` flag.
-          const stealthSlugMatch = line.isDir
-            ? null
-            : line.fullPath.match(/^\/companies\/([^/]+)\.txt$/);
-          const isStealthFile =
-            !!stealthSlugMatch && !!COMPANIES.find((c) => c.slug === stealthSlugMatch[1])?.stealth;
+          // Stealth files are dimmed in the listing so visitors get a
+          // "different/locked" hint before clicking. Same check the CLI `ls`
+          // runs, so the two listings paint them identically.
+          const isStealthFile = !line.isDir && isStealthCompanyFile(line.fullPath);
 
           const onClick = () => {
             if (line.isDir) {
