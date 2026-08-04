@@ -151,6 +151,46 @@ test('file-tree guide colours follow the theme', async ({ page }) => {
   expect(light[2]).toContain('40, 32, 56');
 });
 
+test('portfolio stats are in the served HTML, not just fetched client-side', async ({
+  request,
+}) => {
+  // The point of baking stats at build time (scripts/fetch-stats.mjs): these
+  // numbers used to be fetched on mount, so the served markup carried the
+  // STARS / CONTRIBUTORS labels with no values — invisible to Google, to AI
+  // search, and to anyone without JS. Assert against the raw HTML rather than
+  // the rendered page, so a regression to client-only fetching fails here.
+  const res = await request.get('/companies/pre-commit/atuin/');
+  expect(res.status()).toBe(200);
+  const html = await res.text();
+
+  // Labels alone are not enough — that was exactly the broken state.
+  expect(html).toContain('STARS');
+  expect(html).toContain('RELEASE DOWNLOADS');
+
+  // A formatted stat value must be present. formatNumber renders e.g. "31k"
+  // or "1.4M", so match the shape rather than a number that moves daily.
+  expect(html).toMatch(/>\s*\d+(\.\d+)?[kM]\s*</);
+});
+
+test('acquired companies with frozen stats show no live numbers', async ({ request }) => {
+  // keep has `acquiredBy` and no `keepLiveStats`, so the card is frozen: static
+  // facts only, no stars/contributors. Worth guarding explicitly — baking stats
+  // at build time made it newly possible to reintroduce live numbers here by
+  // accident, since the values now exist in the bundle either way.
+  const res = await request.get('/companies/pre-commit/keep/');
+  expect(res.status()).toBe(200);
+  const html = await res.text();
+
+  // React splits `(acq. {company.acquiredBy})` across text nodes, so the
+  // rendered markup isn't the contiguous string "(acq. Elastic)".
+  expect(html).toMatch(/\(acq\.\s*(<!--[^>]*-->)?\s*Elastic/);
+
+  // The frozen card keeps its static facts but must expose no live metric.
+  expect(html).toContain('LICENSE');
+  expect(html).not.toContain('STARS');
+  expect(html).not.toContain('CONTRIBUTORS');
+});
+
 test('/about/legal serves a redirect page with a visible fallback link', async ({ request }) => {
   // The page does an immediate `window.location.replace(...)` (with a
   // <noscript> meta-refresh fallback), so any browser visit redirects

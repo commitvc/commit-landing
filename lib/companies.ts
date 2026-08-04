@@ -11,13 +11,25 @@ export type Founder = {
  * stat. The prefix picks the registry; the body is the identifier used by that
  * registry's API.
  *
- *   'npm:<pkg>'            — npmjs.org (last-month downloads)
- *   'pypi:<pkg>'           — pypistats.org (recent monthly)
- *   'docker:<owner>/<img>' — Docker Hub (pull_count)
- *   'ghcr:<owner>/<repo>'  — GitHub Container Registry (scraped at build time
- *                            into lib/container-pulls.generated.ts)
+ *   'npm:<pkg>'              — npmjs.org (last-month downloads)
+ *   'pypi:<pkg>'             — pypistats.org (recent monthly)
+ *   'docker:<owner>/<img>'   — Docker Hub (pull_count)
+ *   'ghcr:<owner>/<repo>'    — GitHub Container Registry (HTML-only, no JSON
+ *                              API — scraped by scripts/fetch-stats.mjs)
+ *   'gh-releases:<owner>/<repo>' — cumulative downloads across all release
+ *                              assets. Use for tools shipped as prebuilt
+ *                              binaries (install script / Homebrew / direct
+ *                              download) rather than through a registry — a
+ *                              Rust or Go CLI, typically. A language registry
+ *                              would only see the fraction who install that
+ *                              way; see the note on ghReleaseDownloads.
  */
-export type PackageRef = `npm:${string}` | `pypi:${string}` | `docker:${string}` | `ghcr:${string}`;
+export type PackageRef =
+  | `npm:${string}`
+  | `pypi:${string}`
+  | `docker:${string}`
+  | `ghcr:${string}`
+  | `gh-releases:${string}`;
 
 export type Company = {
   slug: string;
@@ -181,6 +193,32 @@ export const COMPANIES: readonly Company[] = [
       'Framework-agnostic TypeScript auth that lives inside your app. Sessions, social sign-on, 2FA, plugins. Acquired by Vercel. Backed by the >commit team before the fund.',
     thankInsight:
       'how to reimagine a crowded, vendor-dominated category by giving developers full ownership again — and that open source knows no borders.',
+  },
+  {
+    slug: 'atuin',
+    company: 'Atuin',
+    oneLiner: 'Making your terminal magical',
+    folder: 'pre-commit',
+    avatar: '/companies/pre-commit/atuin.png',
+    website: 'https://atuin.sh',
+    github: 'https://github.com/atuinsh/atuin',
+    docs: 'https://docs.atuin.sh',
+    discord: 'https://discord.gg/Fq8bJSKPHh',
+    // Release assets, not crates.io. Atuin is installed via its script,
+    // Homebrew or a distro package — `cargo install atuin` is a small slice, so
+    // crates.io reads ~5k/90d against ~1.4M actual binary downloads.
+    package: 'gh-releases:atuinsh/atuin',
+    stage: 'Seed',
+    location: 'San Francisco',
+    founders: [{ name: 'Ellie Huxtable', short: 'Ellie' }],
+    firstCommit: '2020-10-04',
+    // No license/language overrides — GitHub reports MIT and Rust correctly.
+    about:
+      'Atuin replaces your shell history with a searchable SQLite database, then syncs it between machines with end-to-end encryption. It records the context around every command — exit code, duration, directory, session — so history becomes something you can actually query, and ships a self-hostable server for anyone who would rather keep their own data.',
+    seoDescription:
+      'Shell history as a searchable, end-to-end encrypted, syncable database. Self-hostable. Backed by the >commit team before the fund.',
+    thankInsight:
+      "that a side project she started to scratch her own itch can build an enormous community long before it's a business — and that building in the open is the way to earn developer trust.",
   },
   {
     slug: 'sourcebot',
