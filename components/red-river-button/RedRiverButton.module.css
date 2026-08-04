@@ -4,7 +4,13 @@
   top: 20px;
   right: 20px;
   z-index: 1000;
-  border-radius: 1rem;
+  /* Same 4px radius as the company logos / profile pictures. The PNG is a
+     full-bleed red rectangle, so the padding is filled with the identical
+     brand red — it just gives the artwork room to breathe inside the
+     rounded box instead of running into the corners. */
+  border-radius: 4px;
+  padding: 3px;
+  background: var(--red);
   cursor: pointer;
   transition: transform 0.2s ease;
   display: block;
