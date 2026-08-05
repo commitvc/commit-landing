@@ -9,7 +9,7 @@ const INSIGHTS_LOGIN_URL = 'https://insights.commit.fund';
 export const metadata: Metadata = {
   title: 'Insights',
   description:
-    'Insights is the operating system of >commit — repository data, community signals, and direct access to the team for portfolio founders, and a real-time portfolio view for limited partners.',
+    "Insights is >commit's operating system for portfolio founders — repository metrics, qualitative insight, competitive analysis, a community hub, warm intro requests into the advisors & CTO network, and direct access to the team for hiring and marketing support.",
   alternates: { canonical: '/insights' },
 };
 
@@ -32,24 +32,29 @@ export default function InsightsPage() {
         {/* The nav tab already labels the page, so the h1 is hidden rather than
             dropped — the document still needs one for crawlers and screen readers. */}
         <h1 className="sr-only">Insights</h1>
-        <p className={styles.tagline}>Insights is the operating system of &gt;commit.</p>
+        <p className={styles.tagline}>
+          Insights is &gt;commit&rsquo;s operating system for portfolio founders.
+        </p>
         <p className={styles.lede}>
-          One platform reserved for portfolio founders and limited partners, where the data,
-          tooling, community and more come together.
+          One platform where data, tooling, and community around your project come together.
         </p>
 
         <div className={styles.section}>
-          <h2 className={styles.sectionHeading}># for portfolio founders</h2>
+          <h2 className={styles.sectionHeading}># data &amp; signal</h2>
           <p>
-            Quantitative and qualitative insights on your repositories and the communities around
-            them — plus direct access to the &gt;commit team for marketing, sales, hiring,
-            mentoring, and everything in between.
+            Repository metrics and qualitative insight on your project and the communities around
+            it, plus competitive analysis on your market — everything you need to know where you
+            stand.
           </p>
         </div>
 
         <div className={styles.section}>
-          <h2 className={styles.sectionHeading}># for limited partners</h2>
-          <p>A real-time view of the portfolio: every company, every milestone, as it happens.</p>
+          <h2 className={styles.sectionHeading}># team &amp; network</h2>
+          <p>
+            A community hub to reach other &gt;commit founders, warm intro requests into the
+            advisors &amp; CTO network, and direct access to the team for hiring and marketing
+            support.
+          </p>
         </div>
 
         <div className={styles.ctaRow}>
