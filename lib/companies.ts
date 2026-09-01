@@ -434,9 +434,19 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
-    slug: 'agent-mux',
+    // Renamed from the `agent-mux` slug; /companies/agent-mux/ 301s here via a
+    // redirect stub route.
+    slug: 'agentmux',
     company: 'Stealth',
     oneLiner: 'The Code Editor for AI Agents',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
+    slug: 'agentops',
+    company: 'Stealth',
+    oneLiner: 'AI agent runtime control',
     folder: 'active',
     avatar: '',
     stealth: true,
