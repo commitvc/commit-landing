@@ -23,7 +23,8 @@
 - [Macrodata Labs](https://commit.fund/companies/macrodata/): Training-data infrastructure for physical AI. Open-source Refiner framework turns raw multimodal robotics data into high-quality training datasets, local to elastic serverless. By the creators of FineWeb. Paris.
 - [UMA](https://commit.fund/companies/uma/): Humanoid robots with human-level dexterity. Team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with humanoid-robotics hardware experience.
 - [ZML](https://commit.fund/companies/zml/): Production inference stack that decouples AI from proprietary hardware. Compiles LLMs (Llama, Gemma, Qwen, Mistral) to run at peak speed across NVIDIA, AMD, Google TPU, Intel, and Apple chips. Founder: Steeve Morin. Paris.
-- [Stealth — The Code Editor for AI Agents](https://commit.fund/companies/agent-mux/): Stealth Fund I investment. Identity disclosed at launch.
+- [Stealth — The Code Editor for AI Agents](https://commit.fund/companies/agentmux/): Stealth Fund I investment. Identity disclosed at launch.
+- [Stealth — AI agent runtime control](https://commit.fund/companies/agentops/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — AI research infrastructure](https://commit.fund/companies/ailabd/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Open-source backup platform](https://commit.fund/companies/backup/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Specifications framework](https://commit.fund/companies/specs/): Stealth Fund I investment. Identity disclosed at launch.
@@ -62,7 +63,7 @@
 - Geography: Europe and the US
 - Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Thomas Saudemont (Tech Lead)
 - Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
-- Active Fund I commitments: 7 (3 announced — Macrodata Labs, UMA, ZML; 4 stealth — disclosure pending)
+- Active Fund I commitments: 8 (3 announced — Macrodata Labs, UMA, ZML; 5 stealth — disclosure pending)
 - Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure
 
 ## Contact
