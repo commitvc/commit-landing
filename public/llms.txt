@@ -23,7 +23,7 @@
 - [Macrodata Labs](https://commit.fund/companies/macrodata/): Training-data infrastructure for physical AI. Open-source Refiner framework turns raw multimodal robotics data into high-quality training datasets, local to elastic serverless. By the creators of FineWeb. Paris.
 - [UMA](https://commit.fund/companies/uma/): Humanoid robots with human-level dexterity. Team blends AI research from DeepMind, Tesla Autopilot, and HuggingFace with humanoid-robotics hardware experience.
 - [ZML](https://commit.fund/companies/zml/): Production inference stack that decouples AI from proprietary hardware. Compiles LLMs (Llama, Gemma, Qwen, Mistral) to run at peak speed across NVIDIA, AMD, Google TPU, Intel, and Apple chips. Founder: Steeve Morin. Paris.
-- [Stealth — The Code Editor for AI Agents](https://commit.fund/companies/agentmux/): Stealth Fund I investment. Identity disclosed at launch.
+- [Stealth — Code editor for AI agents](https://commit.fund/companies/agentmux/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — AI agent runtime control](https://commit.fund/companies/agentops/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — AI research infrastructure](https://commit.fund/companies/ailabd/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Open-source backup platform](https://commit.fund/companies/backup/): Stealth Fund I investment. Identity disclosed at launch.
