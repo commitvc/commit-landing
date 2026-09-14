@@ -468,6 +468,14 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
+    slug: 'tee',
+    company: 'Stealth',
+    oneLiner: 'Verifiable trusted execution environment',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
     slug: 'macrodata',
     company: 'Macrodata Labs',
     oneLiner: 'Every strong model starts with great data',
