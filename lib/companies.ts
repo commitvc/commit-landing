@@ -438,7 +438,7 @@ export const COMPANIES: readonly Company[] = [
     // redirect stub route.
     slug: 'agentmux',
     company: 'Stealth',
-    oneLiner: 'The Code Editor for AI Agents',
+    oneLiner: 'Code editor for AI agents',
     folder: 'active',
     avatar: '',
     stealth: true,
@@ -463,6 +463,14 @@ export const COMPANIES: readonly Company[] = [
     slug: 'ailabd',
     company: 'Stealth',
     oneLiner: 'AI research infrastructure',
+    folder: 'active',
+    avatar: '',
+    stealth: true,
+  },
+  {
+    slug: 'tee',
+    company: 'Stealth',
+    oneLiner: 'Verifiable trusted execution environment',
     folder: 'active',
     avatar: '',
     stealth: true,
