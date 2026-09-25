@@ -4,29 +4,8 @@ import { CliStateProvider } from '@/components/cli-terminal/CliStateContext';
 import { PostHogProvider } from '@/components/posthog-provider';
 import { RedRiverButton } from '@/components/red-river-button/RedRiverButton';
 import { organizationJsonLd, SITE_URL, websiteJsonLd } from '@/lib/structured-data';
-import { THEME_STORAGE_KEY } from '@/lib/theme';
 import { meslo } from './fonts';
 import '../styles/globals.css';
-
-// Replays a stored `theme` choice onto <html> before first paint, so a reload
-// doesn't flash the previous theme. Must stay a plain synchronous inline
-// script — next/script defers, which is exactly the flash we're avoiding.
-// Absence of a stored value is meaningful: it leaves `data-theme` unset so the
-// prefers-color-scheme path in globals.css decides.
-//
-// The `.commit.fund` cookie first, then localStorage of the same name. The
-// cookie is the only store the sibling subdomains share, so it is the only one
-// that can carry a choice made on insights.commit.fund — and reading it first is
-// what makes that choice win here. localStorage is the fallback for a visitor
-// who picked a theme before the cookie existed, and a cookie value is copied
-// into it so the two stay in step. See lib/theme.ts for the write side.
-//
-// Reading localStorage first looks equivalent and is not: our own flips write
-// both stores, so a returning visitor always has a localStorage value, and it
-// would mask every later choice the cookie brings back from insights.
-const THEME_BOOTSTRAP = `(function(){try{var k=${JSON.stringify(
-  THEME_STORAGE_KEY,
-)};var m=document.cookie.match('(?:^|; )'+k+'=(light|dark)');var t=m&&m[1];if(t){try{localStorage.setItem(k,t)}catch(e){}}else{t=localStorage.getItem(k)}if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t}}catch(e){}})();`;
 
 // Shared OG/Twitter image. Canonical 1200×630 PNG so every unfurling
 // platform (Twitter `summary_large_image`, Facebook, LinkedIn, iMessage,
@@ -80,16 +59,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    // suppressHydrationWarning: THEME_BOOTSTRAP sets `data-theme` on this
-    // element before React hydrates, so the attribute legitimately differs from
-    // the SSR'd markup and React would otherwise log a hydration mismatch on
-    // every load. Scoped one level deep, so it only covers <html>'s own attrs.
-    <html lang="en" className={meslo.variable} suppressHydrationWarning>
+    <html lang="en" className={meslo.variable}>
       <head>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: must run synchronously before first paint to avoid a theme flash.
-          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }}
-        />
         <script
           type="application/ld+json"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be raw JSON.

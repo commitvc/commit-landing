@@ -17,7 +17,6 @@ import {
 } from './filesystem';
 import { decrypt } from './tea';
 import { TEAM } from './team';
-import { toggleTheme } from './theme';
 
 export type CommandContext = {
   fs: FsDir;
@@ -330,22 +329,6 @@ const firework: Command = {
   },
 };
 
-const theme: Command = {
-  name: 'theme',
-  description: 'Switch between the dark and light theme',
-  run() {
-    // Purely a DOM + localStorage flip — see lib/theme.ts for why no React
-    // state is involved. Safe to touch `document` here: commands only ever
-    // run from the client-side terminal, never during SSR.
-    const next = toggleTheme();
-    return (
-      <span>
-        theme: <span className="purple">{next}</span>
-      </span>
-    );
-  },
-};
-
 const header: Command = {
   name: 'header',
   description: 'Toggle between the welcome banner and the compact header',
@@ -417,7 +400,6 @@ export const ALL_COMMANDS: readonly Command[] = [
   help,
   neofetch,
   secret,
-  theme,
   whois,
 ];
 
