@@ -51,8 +51,8 @@ export default function HomePage() {
           <strong>Abel Samot</strong> (Partner), and <strong>Thomas Saudemont</strong> (Tech Lead).
         </p>
         <p>
-          Active Fund I commitments to date: 9 — three announced (UMA — humanoid robotics, Macrodata
-          Labs — training-data infrastructure, ZML — AI inference), six stealth (disclosure
+          Active Fund I commitments to date: 10 — three announced (UMA — humanoid robotics, Macrodata
+          Labs — training-data infrastructure, ZML — AI inference), seven stealth (disclosure
           pending).
         </p>
         <p>
