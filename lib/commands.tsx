@@ -281,9 +281,9 @@ const whois: Command = {
         <br />
         <Yellow>Vehicle:</Yellow> &gt;commit (Société de Libre Partenariat)
         <br />
-        <Yellow>Manager:</Yellow> Red River West SAS
+        <Yellow>Manager:</Yellow> RRW SAS (Red River West)
         <br />
-        {'                 '}9 rue des Colonnes du Trône, 75012 Paris, France
+        {'                 '}25 rue du Quatre-Septembre, 75002 Paris, France
         <br />
         <Yellow>Focus:</Yellow> Pre-seed and seed commercial open source startups
         <br />

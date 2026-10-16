@@ -9,7 +9,7 @@ The terminal SHALL support a `whois` command. Running `whois commit.fund` SHALL 
 
 #### Scenario: `whois commit.fund` returns structured output
 - **WHEN** user runs `whois commit.fund`
-- **THEN** the terminal renders a block containing: Domain, Vehicle, Manager (Red River West SAS with address), Focus, and Contact fields
+- **THEN** the terminal renders a block containing: Domain, Vehicle, Manager (RRW SAS, the Red River West management company, with address), Focus, and Contact fields
 
 #### Scenario: `whois` does not appear in `help` output
 - **WHEN** user runs `help`
