@@ -285,8 +285,6 @@ const whois: Command = {
         <br />
         {'                 '}9 rue des Colonnes du Trône, 75012 Paris, France
         <br />
-        {'                 '}AMF Ref: GP-24000012
-        <br />
         <Yellow>Focus:</Yellow> Pre-seed and seed commercial open source startups
         <br />
         <Yellow>Contact:</Yellow> hey@commit.fund
