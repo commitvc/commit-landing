@@ -279,13 +279,11 @@ const whois: Command = {
       <div className="command-output">
         <Yellow>Domain:</Yellow> commit.fund
         <br />
-        <Yellow>Vehicle:</Yellow> &gt;commit (Fonds Professionnel de Capital Investissement)
+        <Yellow>Vehicle:</Yellow> commit (Société de libre partenariat)
         <br />
-        <Yellow>Manager:</Yellow> Red River West SAS
+        <Yellow>Manager:</Yellow> RRW SAS (Red River West)
         <br />
-        {'                 '}9 rue des Colonnes du Trône, 75012 Paris, France
-        <br />
-        {'                 '}AMF Ref: GP-24000012
+        {'                 '}25 rue du Quatre-Septembre, 75002 Paris, France
         <br />
         <Yellow>Focus:</Yellow> Pre-seed and seed commercial open source startups
         <br />
