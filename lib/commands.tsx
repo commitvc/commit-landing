@@ -279,7 +279,7 @@ const whois: Command = {
       <div className="command-output">
         <Yellow>Domain:</Yellow> commit.fund
         <br />
-        <Yellow>Vehicle:</Yellow> &gt;commit (Fonds Professionnel de Capital Investissement)
+        <Yellow>Vehicle:</Yellow> &gt;commit (Société de Libre Partenariat)
         <br />
         <Yellow>Manager:</Yellow> Red River West SAS
         <br />
