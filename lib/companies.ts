@@ -434,14 +434,31 @@ export const COMPANIES: readonly Company[] = [
     stealth: true,
   },
   {
-    // Renamed from the `agent-mux` slug; /companies/agent-mux/ 301s here via a
-    // redirect stub route.
-    slug: 'agentmux',
-    company: 'Stealth',
-    oneLiner: 'Code editor for AI agents',
+    // Disclosed 2026-10. Was the stealth `agentmux` entry (originally
+    // `agent-mux`); both old /companies/ paths 301 here via redirect stubs.
+    slug: 'paradev',
+    company: 'Paradev',
+    oneLiner: 'Run an army of coding agents',
     folder: 'active',
-    avatar: '',
-    stealth: true,
+    avatar: '/companies/paradev.png',
+    website: 'https://paradev.com',
+    github: 'https://github.com/ParadevAI/Paradev',
+    docs: 'https://docs.paradev.com',
+    discord: 'https://discord.gg/cZeD9WYcV7',
+    stage: 'Seed',
+    location: 'San Francisco',
+    founders: [
+      { name: 'Kiet Ho', short: 'Kiet' },
+      { name: 'Avi Peltz', short: 'Avi' },
+      { name: 'Satya Patel', short: 'Satya' },
+    ],
+    firstCommit: '2025-10-21',
+    license: 'Elastic-2.0',
+    language: 'TypeScript',
+    about:
+      'Paradev (formerly Superset) is an agentic IDE for orchestrating coding agents in parallel. One workspace runs Claude Code, Codex, or any other coding agent on your own subscription, each in an isolated Git worktree so they never step on each other’s files, with built-in PR review, remote workspaces, and scheduled automations. Built by three former CTOs of YC-backed companies.',
+    seoDescription:
+      'Agentic IDE that runs Claude Code, Codex, and any coding agent in parallel, each in its own worktree. >commit Fund I.',
   },
   {
     slug: 'agentops',
