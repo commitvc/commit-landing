@@ -29,6 +29,7 @@
 - [Stealth — Open-source backup platform](https://commit.fund/companies/backup/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Registry for AI agent skills](https://commit.fund/companies/skills/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Specifications framework](https://commit.fund/companies/specs/): Stealth Fund I investment. Identity disclosed at launch.
+- [Stealth — AI software engineering platform](https://commit.fund/companies/swe/): Stealth Fund I investment. Identity disclosed at launch.
 - [Stealth — Verifiable trusted execution environment](https://commit.fund/companies/tee/): Stealth Fund I investment. Identity disclosed at launch.
 
 ## Pre-commit (companies the team backed before the fund)
@@ -65,7 +66,7 @@
 - Geography: Europe and the US
 - Team: Olivier Huez (Partner), Max Corbani (Partner), Abel Samot (Partner), Thomas Saudemont (Tech Lead)
 - Notable prior backings by team members: Graphcore, Riskified (NYSE IPO), Via (NYSE IPO)
-- Active Fund I commitments: 10 (4 announced — Macrodata Labs, Paradev, UMA, ZML; 6 stealth — disclosure pending)
+- Active Fund I commitments: 11 (4 announced — Macrodata Labs, Paradev, UMA, ZML; 7 stealth — disclosure pending)
 - Industry: Venture Capital — Open Source Software, Developer Tools, AI Infrastructure
 
 ## Contact
