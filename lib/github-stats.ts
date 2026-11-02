@@ -42,12 +42,12 @@ export type RepoStats = {
   language?: string;
 };
 
-export type DownloadKind = 'npm' | 'pypi' | 'docker' | 'ghcr' | 'gh-releases';
+export type DownloadKind = 'npm' | 'pypi' | 'docker' | 'ghcr' | 'gh-releases' | 'gh-installers';
 
 export type DownloadStat = {
   kind: DownloadKind;
   count: number;
-  /** Per-month for npm/pypi, cumulative for docker/ghcr/gh-releases. Used to
+  /** Per-month for npm/pypi, cumulative for everything else. Used to
    *  pick the right trailing label ("/mo" vs nothing) at the render site. */
   period: 'month' | 'total';
 };
@@ -241,5 +241,7 @@ export function downloadLabel(kind: DownloadKind): string {
       return 'GHCR PULLS';
     case 'gh-releases':
       return 'RELEASE DOWNLOADS';
+    case 'gh-installers':
+      return 'APP DOWNLOADS';
   }
 }
