@@ -1,0 +1,18 @@
+.main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  /* Lets .video size against the space left under the header. */
+  container-type: size;
+}
+
+.video {
+  display: block;
+  /* Largest 16:9 box that fits both the width and the height of .main. */
+  width: min(100%, 1280px, calc(100cqh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
