@@ -1,0 +1,17 @@
+.main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 16px;
+}
+
+.video {
+  display: block;
+  /* Largest 16:9 box that fits both the width and the height of the
+     viewport (minus .main's vertical padding). */
+  width: min(100%, 1280px, calc((100dvh - 6rem) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
