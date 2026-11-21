@@ -23,13 +23,21 @@ export type Founder = {
  *                              Rust or Go CLI, typically. A language registry
  *                              would only see the fraction who install that
  *                              way; see the note on ghReleaseDownloads.
+ *   'gh-installers:<owner>/<repo>' — cumulative downloads of desktop installers
+ *                              (.dmg, .exe, .msi, .AppImage, .deb, .rpm) across
+ *                              all releases. Use for Electron-style apps, where
+ *                              `gh-releases` would mostly count the
+ *                              auto-updater: every running copy polls
+ *                              latest-*.yml and pulls an update .zip on each
+ *                              release, which outnumbers real installs ~30:1.
  */
 export type PackageRef =
   | `npm:${string}`
   | `pypi:${string}`
   | `docker:${string}`
   | `ghcr:${string}`
-  | `gh-releases:${string}`;
+  | `gh-releases:${string}`
+  | `gh-installers:${string}`;
 
 export type Company = {
   slug: string;
@@ -445,6 +453,9 @@ export const COMPANIES: readonly Company[] = [
     github: 'https://github.com/ParadevAI/Paradev',
     docs: 'https://docs.paradev.com',
     discord: 'https://discord.gg/cZeD9WYcV7',
+    // Desktop installers only — see `gh-installers` on PackageRef. The repo
+    // also ships the CLI as release tarballs, an order of magnitude smaller.
+    package: 'gh-installers:ParadevAI/Paradev',
     stage: 'Seed',
     location: 'San Francisco',
     founders: [

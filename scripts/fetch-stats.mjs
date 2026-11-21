@@ -153,6 +153,36 @@ async function ghReleaseDownloads(repo) {
   return total > 0 ? total : null;
 }
 
+// Installer extensions only. Deliberately excludes .zip: on macOS the Electron
+// auto-updater downloads the -mac.zip on every release, so zips count updates,
+// not installs, and outnumber the .dmg several times over.
+const INSTALLER_RE = /\.(dmg|exe|msi|AppImage|deb|rpm)$/;
+
+/**
+ * Desktop-app installs: installer assets summed across *every* release page.
+ * Unlike ghReleaseDownloads this follows pagination — an app that ships often
+ * passes 100 releases quickly, and refusing would leave it with no number.
+ */
+async function ghInstallerDownloads(repo) {
+  let url = `https://api.github.com/repos/${repo}/releases?per_page=100`;
+  let total = 0;
+  for (let page = 0; url && page < 20; page++) {
+    const { json, headers } = await getJson(url, { auth: true });
+    if (!Array.isArray(json)) return null;
+    for (const release of json) {
+      if (release.prerelease || release.draft) continue;
+      for (const asset of release.assets ?? []) {
+        if (INSTALLER_RE.test(asset.name) && typeof asset.download_count === 'number')
+          total += asset.download_count;
+      }
+    }
+    url = headers.get('link')?.match(/<([^>]+)>; rel="next"/)?.[1] ?? null;
+  }
+  // Still more pages after the cap: a partial sum would be quietly too low.
+  if (url) return null;
+  return total > 0 ? total : null;
+}
+
 /**
  * GHCR publishes pull counts on the HTML package page only — no JSON API — so
  * this is a scrape. Previously the numbers were pasted into a file by hand and
@@ -180,6 +210,12 @@ async function fetchDownload(pkg) {
     return { kind: 'ghcr', count: await ghcrPulls(pkg.slice(5)), period: 'total' };
   if (pkg.startsWith('gh-releases:'))
     return { kind: 'gh-releases', count: await ghReleaseDownloads(pkg.slice(12)), period: 'total' };
+  if (pkg.startsWith('gh-installers:'))
+    return {
+      kind: 'gh-installers',
+      count: await ghInstallerDownloads(pkg.slice(14)),
+      period: 'total',
+    };
   return null;
 }
 

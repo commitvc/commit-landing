@@ -8,92 +8,109 @@
  *
  * To refresh: `pnpm fetch-stats` (needs GITHUB_TOKEN, or a logged-in `gh`).
  *
- * Last fetched: 2026-08-04
+ * Last fetched: 2026-11-02
  */
 import type { CompanyStats } from './github-stats';
 
 export const BAKED_STATS: Record<string, CompanyStats> = {
   atuin: {
     repo: {
-      stars: 31_019,
-      forks: 918,
-      openIssues: 375,
-      contributors: 316,
+      stars: 32_177,
+      forks: 1_020,
+      openIssues: 448,
+      contributors: 339,
       license: 'MIT',
       language: 'Rust',
     },
-    download: { kind: 'gh-releases', count: 1_386_151, period: 'total' },
+    download: { kind: 'gh-releases', count: 1_784_003, period: 'total' },
   },
   'better-auth': {
     repo: {
-      stars: 29_452,
-      forks: 2_772,
-      openIssues: 641,
-      contributors: 903,
+      stars: 30_550,
+      forks: 3_051,
+      openIssues: 949,
+      contributors: 991,
       license: 'MIT',
       language: 'TypeScript',
     },
-    download: { kind: 'npm', count: 24_484_541, period: 'month' },
+    download: { kind: 'npm', count: 48_143_094, period: 'month' },
   },
   macrodata: {
     repo: {
-      stars: 109,
-      forks: 11,
-      openIssues: 27,
-      contributors: 5,
+      stars: 160,
+      forks: 19,
+      openIssues: 32,
+      contributors: 6,
       license: 'Apache-2.0',
       language: 'Python',
     },
-    download: { kind: 'pypi', count: 344, period: 'month' },
+    download: { kind: 'pypi', count: 844, period: 'month' },
   },
   mastra: {
     repo: {
-      stars: 26_910,
-      forks: 2_563,
-      openIssues: 631,
-      contributors: 591,
+      stars: 29_275,
+      forks: 3_068,
+      openIssues: 710,
+      contributors: 702,
       language: 'TypeScript',
     },
-    download: { kind: 'npm', count: 5_196_180, period: 'month' },
+    download: { kind: 'npm', count: 8_589_619, period: 'month' },
   },
   pandasai: {
-    repo: { stars: 23_686, forks: 2_338, openIssues: 21, contributors: 112, language: 'Python' },
-    download: { kind: 'pypi', count: 191_449, period: 'month' },
+    repo: { stars: 23_925, forks: 2_344, openIssues: 23, contributors: 112, language: 'Python' },
+    download: { kind: 'pypi', count: 31_394, period: 'month' },
   },
   pangolin: {
-    repo: { stars: 21_985, forks: 742, openIssues: 101, contributors: 106, language: 'TypeScript' },
-    download: { kind: 'docker', count: 3_678_003, period: 'total' },
+    repo: { stars: 23_293, forks: 807, openIssues: 127, contributors: 131, language: 'TypeScript' },
+    download: { kind: 'docker', count: 6_238_419, period: 'total' },
+  },
+  paradev: {
+    repo: {
+      stars: 15_835,
+      forks: 1_412,
+      openIssues: 1_149,
+      contributors: 140,
+      language: 'TypeScript',
+    },
+    download: { kind: 'gh-installers', count: 211_853, period: 'total' },
   },
   pyannote: {
     repo: {
-      stars: 10_373,
-      forks: 1_093,
-      openIssues: 32,
-      contributors: 76,
+      stars: 10_750,
+      forks: 1_130,
+      openIssues: 36,
+      contributors: 77,
       license: 'MIT',
       language: 'Jupyter Notebook',
     },
-    download: { kind: 'pypi', count: 2_239_418, period: 'month' },
+    download: { kind: 'pypi', count: 1_053_003, period: 'month' },
   },
   sourcebot: {
-    repo: { stars: 3_655, forks: 331, openIssues: 166, contributors: 54, language: 'TypeScript' },
-    download: { kind: 'ghcr', count: 650_879, period: 'total' },
+    repo: {
+      stars: 4_017,
+      forks: 376,
+      openIssues: 96,
+      contributors: 66,
+      license: 'MIT',
+      language: 'Python',
+    },
+    download: { kind: 'ghcr', count: 1_133_500, period: 'total' },
   },
   twenty: {
     repo: {
-      stars: 54_246,
-      forks: 8_342,
-      openIssues: 141,
-      contributors: 704,
+      stars: 60_294,
+      forks: 9_906,
+      openIssues: 148,
+      contributors: 791,
       language: 'TypeScript',
     },
-    download: { kind: 'docker', count: 1_897_845, period: 'total' },
+    download: { kind: 'docker', count: 3_191_827, period: 'total' },
   },
   whitecircle: {
     repo: {
-      stars: 72,
-      forks: 5,
-      openIssues: 0,
+      stars: 81,
+      forks: 8,
+      openIssues: 3,
       contributors: 9,
       license: 'Apache-2.0',
       language: 'Python',
@@ -102,13 +119,13 @@ export const BAKED_STATS: Record<string, CompanyStats> = {
   },
   zml: {
     repo: {
-      stars: 3_956,
-      forks: 172,
-      openIssues: 39,
-      contributors: 32,
+      stars: 4_217,
+      forks: 201,
+      openIssues: 48,
+      contributors: 37,
       license: 'Apache-2.0',
       language: 'Zig',
     },
-    download: { kind: 'docker', count: 4_647, period: 'total' },
+    download: { kind: 'docker', count: 11_172, period: 'total' },
   },
 } as const;
